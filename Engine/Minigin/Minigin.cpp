@@ -94,14 +94,15 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 	while (loop)
 	{
-		loop = input.ProcessInput();
-
 		const auto current_time = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<float> elapsed_time = current_time - last_time;
-		const float delta_time = elapsed_time.count();
+		float delta_time = elapsed_time.count();
+		if ( delta_time > 1.f ) { delta_time = 1.f; }
 
 		last_time = current_time;
 		lag += delta_time;
+
+		loop = input.ProcessInput();
 
 		while ( lag >= fixed_time_step )
 		{
@@ -110,6 +111,8 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		}
 
 		sceneManager.Update();
+		sceneManager.LateUpdate();
+
 		renderer.Render();
 
 		const auto sleep_time = current_time + std::chrono::milliseconds( static_cast<int>(fixed_time_step) ) - std::chrono::high_resolution_clock::now();
