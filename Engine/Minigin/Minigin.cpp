@@ -11,6 +11,7 @@
 #include "ResourceManager.h"
 #include <iostream>
 #include <chrono>
+#include "GameTime.h"
 #include <thread>
 
 SDL_Window* g_window{};
@@ -94,28 +95,25 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 	while (loop)
 	{
+		loop = input.ProcessInput();
+
 		const auto current_time = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float> elapsed_time = current_time - last_time;
-		float delta_time = elapsed_time.count();
-		if ( delta_time > 1.f ) { delta_time = 1.f; }
+		const auto delta_time = std::chrono::duration<float>(current_time - last_time).count();
 
 		last_time = current_time;
 		lag += delta_time;
-
-		loop = input.ProcessInput();
 
 		while ( lag >= fixed_time_step )
 		{
 			sceneManager.FixedUpdate( fixed_time_step );
 			lag -= fixed_time_step;
 		}
+		GameTime::GetInstance().SetDeltaTime(delta_time);
 
 		sceneManager.Update();
-		sceneManager.LateUpdate();
-
 		renderer.Render();
 
-		const auto sleep_time = current_time + std::chrono::milliseconds( static_cast<int>(fixed_time_step) ) - std::chrono::high_resolution_clock::now();
-		std::this_thread::sleep_for( sleep_time );
+		//const auto sleep_time = current_time + std::chrono::milliseconds( fixed_time_step ) - std::chrono::high_resolution_clock::now();
+		//this_thread::sleep_for( sleep_time );
 	}
 }

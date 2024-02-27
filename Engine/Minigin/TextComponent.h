@@ -1,43 +1,41 @@
 #pragma once
 #include <string>
+#include "BaseComponent.h"
+#include "Transform.h"
+#include "Font.h"
+#include "Texture2D.h"
 #include <memory>
 
 namespace dae
 {
-	class Font;
-	class Texture2D;
-	class Component;
-	class GameObject;
-	class Transform;
+	class BaseComponent;
 
-	class TextComponent final: public Component
+	class TextComponent: public BaseComponent
 	{
-	public:
-
-		TextComponent(GameObject* gameObject);
-
+		public:
+		TextComponent() = default;
 		virtual ~TextComponent() = default;
-		TextComponent( const TextComponent& other )=delete;
-		TextComponent( TextComponent&& other ) = delete;
-		TextComponent& operator=( const TextComponent& other ) = delete;
-		TextComponent& operator=( TextComponent&& other ) = delete;
 
-		void Update() override;
-		void Render() const override;
+		TextComponent(const TextComponent& other) = delete;
+		TextComponent(TextComponent&& other) = delete;
+		TextComponent& operator=(const TextComponent& other) = delete;
+		TextComponent& operator=(TextComponent&& other) = delete;
 
-		void SetText( const std::string& text );
-		void SetPosition( float x, float y );
+		virtual void Update() override;
+		virtual void Render() const override;
 
-		void SetFont( std::shared_ptr<Font> font );
+		virtual void SetText(const std::string& text);
+		virtual void SetPosition(float x, float y);
+		virtual void SetFont( const std::string& text);
+		virtual void SetSize(int size);
 
-	private:
-		bool m_NeedsUpdate;
-		std::string m_Text;
-		Transform m_Transform{};
-		std::shared_ptr<Font> m_Font;
-		std::shared_ptr<Texture2D> m_TextTexture;
-
-		GameObject* m_pGameObject = nullptr;
+		private:
+			bool m_NeedsUpdate;
+			std::string m_Text;
+			Transform m_Transform{};
+			std::shared_ptr<Font> m_Font;
+			std::shared_ptr<Texture2D> m_TextTexture;
+			int m_Size;
 	};
 }
 

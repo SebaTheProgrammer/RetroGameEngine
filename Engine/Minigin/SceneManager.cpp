@@ -1,27 +1,18 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-void dae::SceneManager::FixedUpdate( float fixedTime )
-{
-	//Physics and networking
-	fixedTime += fixedTime;
-}
-
 void dae::SceneManager::Update()
 {
-	//update
 	for(auto& scene : m_Scenes)
 	{
 		scene->Update();
 	}
 }
 
-void dae::SceneManager::LateUpdate()
+void dae::SceneManager::FixedUpdate( float fixedTime )
 {
-	//extra update for example the camera
-
+	fixedTime += fixedTime;
 }
-
 
 void dae::SceneManager::Render()
 {

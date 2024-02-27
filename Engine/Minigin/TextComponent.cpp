@@ -1,17 +1,11 @@
 #include "TextComponent.h"
-#include <stdexcept>
-#include <SDL_ttf.h>
 #include "Renderer.h"
 #include "Font.h"
 #include "Texture2D.h"
-#include "GameObject.h"
-#include "Component.h"
-
-dae::TextComponent::TextComponent( GameObject* gameObject ):
-	m_NeedsUpdate( true ), m_Text( "" ), m_Font( nullptr ), m_TextTexture( nullptr )
-{
-	m_pGameObject = gameObject;
-}
+#include <SDL_ttf.h>
+#include <stdexcept>
+#include "ResourceManager.h"
+#include "GameTime.h"
 
 void dae::TextComponent::Update()
 {
@@ -54,8 +48,12 @@ void dae::TextComponent::SetPosition( float x, float y )
 	m_Transform.SetPosition( x, y, 0.0f );
 }
 
-void dae::TextComponent::SetFont( std::shared_ptr<Font> font )
+void dae::TextComponent::SetFont( const std::string& text )
 {
-	m_Font = std::move( font );
-	m_NeedsUpdate = true;
+	m_Font = dae::ResourceManager::GetInstance().LoadFont( text, m_Size );
+}
+
+void dae::TextComponent::SetSize( int size )
+{
+	m_Size = size;
 }

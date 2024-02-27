@@ -2,26 +2,43 @@
 #include "GameObject.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
+#include "BaseComponent.h"
 
 dae::GameObject::~GameObject() = default;
 
+void dae::GameObject::AddComponent( BaseComponent* pComponent )
+{
+	m_pComponents.push_back(pComponent);
+}
+
+void dae::GameObject::RemoveComponent( BaseComponent* pComponent )
+{
+	auto it = std::find( m_pComponents.begin(), m_pComponents.end(), pComponent );
+
+	if ( it != m_pComponents.end() )
+	{
+		m_pComponents.erase( it );
+	}
+}
+
 void dae::GameObject::Update()
 {
-	/*for ( int index{ 0 };index< m_Components.size();++index )
+	for ( BaseComponent* pComponent : m_pComponents )
 	{
-		m_Components[ index ].Update();
-	}*/
+		pComponent->Update();
+	}
 }
 
 void dae::GameObject::Render() const
 {
 	const auto& pos = m_Transform.GetPosition();
-	Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
-
-	/*for ( int index{ 0 }; index < m_Components.size(); ++index )
+	if ( m_Texture != nullptr ) {
+		Renderer::GetInstance().RenderTexture( *m_Texture, pos.x, pos.y );
+	}
+	for ( const BaseComponent* pComponent : m_pComponents )
 	{
-		m_Components[ index ].Render();
-	}*/
+		pComponent->Render();
+	}
 }
 
 void dae::GameObject::SetTexture(const std::string& filename)
