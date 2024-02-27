@@ -3,6 +3,7 @@
 #include "Texture2D.h"
 #include <string>
 #include <memory>
+#include "GameObject.h"
 
 namespace dae
 {
@@ -18,9 +19,10 @@ namespace dae
 		void Update() override;
 		void Render() const override;
 
+		void SetTexture(const std::string& filename);
+
 		private:
-				std::shared_ptr<Texture2D> m_pTexture;
-				//GameObject* m_pGameObject;
+			std::shared_ptr<Texture2D> m_pTexture;
 	};
 }
 

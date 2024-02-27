@@ -4,11 +4,19 @@
 #include "Renderer.h"
 #include "BaseComponent.h"
 
-dae::GameObject::~GameObject() = default;
+dae::GameObject::~GameObject() 
+{
+	for (auto pComponent : m_pComponents)
+	{
+		delete pComponent;
+		pComponent= nullptr;
+	}
+	m_pComponents.clear();
+}
 
 void dae::GameObject::AddComponent( BaseComponent* pComponent )
 {
-	m_pComponents.push_back(pComponent);
+	m_pComponents.emplace_back(pComponent);
 }
 
 void dae::GameObject::RemoveComponent( BaseComponent* pComponent )
@@ -23,27 +31,18 @@ void dae::GameObject::RemoveComponent( BaseComponent* pComponent )
 
 void dae::GameObject::Update()
 {
-	for ( BaseComponent* pComponent : m_pComponents )
-	{
-		pComponent->Update();
-	}
+		for( auto pComponent : m_pComponents )
+		{
+			pComponent->Update();
+		}
 }
 
 void dae::GameObject::Render() const
 {
-	const auto& pos = m_Transform.GetPosition();
-	if ( m_Texture != nullptr ) {
-		Renderer::GetInstance().RenderTexture( *m_Texture, pos.x, pos.y );
-	}
-	for ( const BaseComponent* pComponent : m_pComponents )
+	for ( auto pComponent : m_pComponents )
 	{
 		pComponent->Render();
 	}
-}
-
-void dae::GameObject::SetTexture(const std::string& filename)
-{
-	m_Texture = ResourceManager::GetInstance().LoadTexture(filename);
 }
 
 void dae::GameObject::SetPosition(float x, float y)

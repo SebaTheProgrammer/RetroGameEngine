@@ -1,7 +1,11 @@
 #pragma once
+#include "GameObject.h"
+#include <memory>
 
 namespace dae
 {
+	class GameObject;
+
 	class BaseComponent
 	{
 	public:
@@ -16,21 +20,9 @@ namespace dae
 		virtual void Update() = 0;
 		virtual void Render() const = 0;
 
+		virtual void SetParent( std::shared_ptr<GameObject> parent ) { m_pGameObject = parent; }
 	protected:
-		//virtual void Initialize() = 0;
-		//virtual void LateInitialize() = 0;
-		//virtual void Start() = 0;
-		//virtual void FixedUpdate() = 0;
-		//virtual void PreRender() = 0;
-		//virtual void PostRender() = 0;
-		//virtual void Destroy() = 0;
-		//virtual void OnCollision() = 0;
-		//virtual void OnEnable() = 0;
-		//virtual void OnDisable() = 0;
-
-
-	private:
-		//GameObject* m_pGameObject;
+		std::shared_ptr < GameObject> m_pGameObject;
 	};
 }
 
