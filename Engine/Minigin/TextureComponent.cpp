@@ -10,16 +10,19 @@ dae::TextureComponent::TextureComponent( const std::string& filename )
 
 void dae::TextureComponent::Update()
 {
-
+	if ( m_pTexture )
+	{
+		m_X = m_pGameObject->GetLocalTransform().GetPosition().x + m_pGameObject->GetTransform().GetPosition().x;
+		m_Y = m_pGameObject->GetLocalTransform().GetPosition().y + m_pGameObject->GetTransform().GetPosition().y;
+	}
 }
 
 void dae::TextureComponent::Render() const
 {
-	if( m_pTexture )
-		{
-		const auto pos = m_pGameObject->GetTransform().GetPosition();
-		Renderer::GetInstance().RenderTexture( *m_pTexture, pos.x, pos.y );
-		}
+	if ( m_pTexture )
+	{
+		Renderer::GetInstance().RenderTexture( *m_pTexture, m_X, m_Y );
+	}
 }
 
 void dae::TextureComponent::SetTexture( const std::string& filename )

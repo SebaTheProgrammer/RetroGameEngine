@@ -23,6 +23,8 @@ namespace dae
 
 		private:
 			std::shared_ptr<Texture2D> m_pTexture;
+			float m_X;
+			float m_Y;
 	};
 }
 

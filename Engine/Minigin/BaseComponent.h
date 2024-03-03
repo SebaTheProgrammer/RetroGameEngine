@@ -20,7 +20,7 @@ namespace dae
 		virtual void Update() = 0;
 		virtual void Render() const = 0;
 
-		virtual void SetParent( std::shared_ptr<GameObject> parent ) { m_pGameObject = parent; }
+		virtual void SetParent( std::shared_ptr<GameObject> parent );
 	protected:
 		std::shared_ptr < GameObject> m_pGameObject;
 	};

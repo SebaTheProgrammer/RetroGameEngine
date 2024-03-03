@@ -75,6 +75,9 @@
     <ClInclude Include="TextureComponent.h">
       <Filter>Objects\Components\Rest</Filter>
     </ClInclude>
+    <ClInclude Include="TransformCircleComponent.h">
+      <Filter>Objects\Components\Rest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -118,6 +121,12 @@
     </ClCompile>
     <ClCompile Include="TextureComponent.cpp">
       <Filter>Objects\Components\Rest</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformCircleComponent.cpp">
+      <Filter>Objects\Components\Rest</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseComponent.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -17,8 +17,5 @@ namespace dae
 		FPSComponent& operator=( FPSComponent&& other ) = delete;
 
 		void Update() override;
-
-		private:
-			std::string m_Text;
 	};
 }

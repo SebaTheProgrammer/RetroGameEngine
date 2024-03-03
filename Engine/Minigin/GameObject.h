@@ -13,7 +13,7 @@ namespace dae
 	public:
 
 		GameObject() = default;
-		virtual ~GameObject();
+		virtual ~GameObject() = default;
 		GameObject( const GameObject& other ) = delete;
 		GameObject( GameObject&& other ) = delete;
 		GameObject& operator=( const GameObject& other ) = delete;
@@ -22,11 +22,13 @@ namespace dae
 		virtual void Update();
 		virtual void Render() const;
 
-		void SetPosition(float x, float y);
+		void SetPosition(float x, float y, float z = 0);
+		void SetLocalPosition( float x, float y, float z = 0 );
 		Transform& GetTransform() { return m_Transform; }
+		Transform& GetLocalTransform() { return m_LocalTransform; }
 
-		void AddComponent( BaseComponent* pComponent);
-		void RemoveComponent(BaseComponent* pComponent);
+		void AddComponent( std::shared_ptr< BaseComponent> pComponent);
+		void RemoveComponent( std::shared_ptr< BaseComponent> pComponent);
 
 		template<typename T>
 		T* AddComponent()
@@ -81,9 +83,19 @@ namespace dae
 			return nullptr;
 		}
 
+		void AddChild(std::shared_ptr<GameObject> pChild);
+		void RemoveChild(std::shared_ptr<GameObject> pChild);
+		void UpdateChildren();
+		void RenderChildren() const;
+
+		void SetParent( std::shared_ptr<GameObject> pParent );
+
 	private:
 		Transform m_Transform{};
+		Transform m_LocalTransform{};
 
-		std::vector<BaseComponent*> m_pComponents{};
+		std::vector < std::shared_ptr<BaseComponent>> m_pComponents{};
+		std::vector < std::shared_ptr<GameObject>> m_pChildren{};
+		std::shared_ptr<GameObject> m_pParent{};
 	};
 }
