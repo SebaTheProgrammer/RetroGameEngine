@@ -2,18 +2,22 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "GameObject.h"
+#include <iostream>
 
-dae::TextureComponent::TextureComponent( const std::string& filename )
+dae::TextureComponent::TextureComponent( GameObject* parentGameObject, const std::string& fileName )
+	: BaseComponent( parentGameObject )
 {
-		m_pTexture = ResourceManager::GetInstance().LoadTexture( filename );
+		m_pTexture = ResourceManager::GetInstance().LoadTexture( fileName );
 }
 
 void dae::TextureComponent::Update()
 {
 	if ( m_pTexture )
 	{
-		m_X = m_pGameObject->GetLocalTransform().GetPosition().x + m_pGameObject->GetTransform().GetPosition().x;
-		m_Y = m_pGameObject->GetLocalTransform().GetPosition().y + m_pGameObject->GetTransform().GetPosition().y;
+		const auto& pos = m_LocalTransform.GetPosition() + GetOwner()->GetWorldTransform().GetPosition();
+
+		m_X = pos.x;
+		m_Y = pos.y;
 	}
 }
 

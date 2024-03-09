@@ -2,6 +2,7 @@
 #include "GameObject.h"
 
 #include <algorithm>
+#include <iostream>
 
 using namespace dae;
 
@@ -13,7 +14,7 @@ Scene::~Scene() = default;
 
 void Scene::Add(std::shared_ptr<GameObject> object)
 {
-	m_Objects.emplace_back(std::move(object));
+	m_Objects.emplace_back(object);
 }
 
 void Scene::Remove(std::shared_ptr<GameObject> object)
@@ -24,6 +25,14 @@ void Scene::Remove(std::shared_ptr<GameObject> object)
 void Scene::RemoveAll()
 {
 	m_Objects.clear();
+}
+
+void Scene::Initialize()
+{
+	for ( auto& gameObject : m_Objects )
+	{
+		gameObject->Initialize();
+	}
 }
 
 void Scene::Update()
@@ -38,6 +47,13 @@ void dae::Scene::FixedUpdate()
 {
 
 }
+void Scene::LateUpdate()
+{
+	for ( auto& gameObject : m_Objects )
+	{
+		gameObject->LateUpdate();
+	}
+}
 
 void Scene::Render() const
 {
@@ -46,4 +62,38 @@ void Scene::Render() const
 		object->Render();
 	}
 }
+
+void Scene::AttatchToRoot( std::shared_ptr<GameObject> gameObject )
+{
+	m_Objects.emplace_back( gameObject );
+}
+
+void Scene::DettatchFromRoot( GameObject* gameObject )
+{
+	auto it = m_Objects.begin();
+	while ( it != m_Objects.end() )
+	{
+		auto& child = *it;
+		if ( child.get() == gameObject )
+		{
+			it = m_Objects.erase( it );
+			return;
+		}
+		++it;
+	}
+}
+
+std::shared_ptr<GameObject> Scene::GetChildSharedPtr( GameObject* child )
+{
+	for ( auto& currentChild : m_Objects )
+	{
+		if ( currentChild.get() == child )
+		{
+			return currentChild;
+		}
+	}
+	return nullptr;
+}
+
+
 

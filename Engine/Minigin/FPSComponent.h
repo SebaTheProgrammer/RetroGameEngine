@@ -1,14 +1,17 @@
 #pragma once
 #include <string>
 #include "TextComponent.h"
+#include "BaseComponent.h"
 
 namespace dae
 {
+	class BaseComponent;
+
 	class FPSComponent : public TextComponent
 	{
 
 	public:
-		FPSComponent() = default;
+		FPSComponent( GameObject* const parentGameObject, const std::string& text, std::shared_ptr<Font> font );
 		virtual ~FPSComponent() = default;
 
 		FPSComponent( const FPSComponent& other ) = delete;
@@ -16,6 +19,6 @@ namespace dae
 		FPSComponent& operator=( const FPSComponent& other ) = delete;
 		FPSComponent& operator=( FPSComponent&& other ) = delete;
 
-		void Update() override;
+		virtual void Update() override;
 	};
 }

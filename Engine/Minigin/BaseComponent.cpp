@@ -1,9 +1,6 @@
 #include "BaseComponent.h"
 
-void dae::BaseComponent::SetParent( std::shared_ptr<GameObject> parent )
+dae::BaseComponent::BaseComponent( GameObject* pParent ): 
+	m_pGameObject{ pParent }
 {
-	if ( parent != nullptr ) 
-	{
-		m_pGameObject = parent;
-	}
 }

@@ -13,7 +13,7 @@ namespace dae
 	class TextureComponent : public BaseComponent
 	{
 		public:
-		TextureComponent(const std::string& filename);
+		TextureComponent( GameObject* parentGameObject, const std::string& fileName );
 		virtual ~TextureComponent() = default;
 
 		void Update() override;

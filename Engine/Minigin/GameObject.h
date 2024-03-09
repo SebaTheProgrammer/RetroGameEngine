@@ -1,7 +1,8 @@
 #pragma once
 #include <memory>
-#include "Transform.h"
 #include <vector>
+#include "Transform.h"
+#include "BaseComponent.h"
 
 namespace dae
 {
@@ -13,89 +14,84 @@ namespace dae
 	public:
 
 		GameObject() = default;
-		virtual ~GameObject() = default;
+
+		~GameObject();
 		GameObject( const GameObject& other ) = delete;
 		GameObject( GameObject&& other ) = delete;
 		GameObject& operator=( const GameObject& other ) = delete;
 		GameObject& operator=( GameObject&& other ) = delete;
 
-		virtual void Update();
-		virtual void Render() const;
 
-		void SetPosition(float x, float y, float z = 0);
-		void SetLocalPosition( float x, float y, float z = 0 );
-		Transform& GetTransform() { return m_Transform; }
-		Transform& GetLocalTransform() { return m_LocalTransform; }
+		void Initialize();
 
-		void AddComponent( std::shared_ptr< BaseComponent> pComponent);
-		void RemoveComponent( std::shared_ptr< BaseComponent> pComponent);
+		void Update();
+		void FixedUpdate();
+		void LateUpdate();
+
+		void Render() const;
+
+		bool AddComponent( std::shared_ptr<BaseComponent> component );
 
 		template<typename T>
-		T* AddComponent()
+		std::shared_ptr<T> GetComponent()
 		{
-			static_assert(std::is_base_of<BaseComponent, T>::value, "T must be a component");
-
-			for (BaseComponent* pComponent : m_pComponents)
+			for ( auto& component : m_pComponents )
 			{
-				T* pDerived = dynamic_cast<T*>(pComponent);
-				if (pDerived)
+				if ( auto castedComponent = std::dynamic_pointer_cast< T >( component ) )
 				{
-					return pDerived;
-				}
-			}
-
-			T* pComponent = new T();
-			m_pComponents.push_back(pComponent);
-			pComponent->SetGameObject(this);
-			return pComponent;
-		}
-
-		template <typename T>
-		T* GetComponent()
-		{
-			static_assert(std::is_base_of<BaseComponent, T>::value, "T must be a component");
-
-			for (BaseComponent* pComponent : m_pComponents)
-			{
-				T* pDerived = dynamic_cast<T*>(pComponent);
-				if (pDerived)
-				{
-					return pDerived;
+					return castedComponent;
 				}
 			}
 			return nullptr;
 		}
-
-		template <typename T>
-		T* RemoveComponent()
+		template<typename T>
+		void RemoveComponent()
 		{
-			static_assert(std::is_base_of<BaseComponent, T>::value, "T must be a component");
-
-			for (size_t i{}; i < m_pComponents.size(); ++i)
+			for ( auto it = m_pComponents.begin(); it != m_pComponents.end(); ++it )
 			{
-				T* pDerived = dynamic_cast<T*>(m_pComponents[i]);
-				if (pDerived)
+				if ( std::dynamic_pointer_cast< T >( *it ) )
 				{
-					m_pComponents.erase(m_pComponents.begin() + i);
-					return pDerived;
+					m_pComponents.erase( it );
+					return;
 				}
 			}
-			return nullptr;
 		}
 
-		void AddChild(std::shared_ptr<GameObject> pChild);
-		void RemoveChild(std::shared_ptr<GameObject> pChild);
-		void UpdateChildren();
-		void RenderChildren() const;
+		void ClearComponents() { m_pComponents.clear(); }
 
-		void SetParent( std::shared_ptr<GameObject> pParent );
+		void SetParent( GameObject* parent, bool keepWorldPosition = true );
+		GameObject* GetParent() const { return m_Parent; }
+
+		size_t GetChildCount() const { return m_pChildren.size(); }
+		std::shared_ptr<GameObject> GetChildSharedPtr( GameObject* child ) const;
+		const std::vector<std::shared_ptr<GameObject>>& GetChildren() const { return m_pChildren; }
+
+		void SetLocalTransform( Transform transform );
+		void SetLocalTransform( float x,float y,float z );
+		void SetWorldTransformDirty();
+
+		Transform GetLocalTransform() const { return m_LocalTransform; }
+		Transform GetWorldTransform();
 
 	private:
-		Transform m_Transform{};
+		Transform m_WorldTransform{};
 		Transform m_LocalTransform{};
+		bool m_IsTransformDirty{false};
 
-		std::vector < std::shared_ptr<BaseComponent>> m_pComponents{};
-		std::vector < std::shared_ptr<GameObject>> m_pChildren{};
-		std::shared_ptr<GameObject> m_pParent{};
+		std::vector<std::shared_ptr<BaseComponent>> m_pComponents{};
+		std::vector<std::shared_ptr<GameObject>> m_pChildren{};
+		GameObject* m_Parent{};
+
+
+		void AddChild( std::shared_ptr<GameObject>child );
+		void RemoveChild( GameObject* child );
+		void UpdateChildren();
+		void LateUpdateChildren();
+		void RenderChildren() const;
+
+		void UpdateWorldTransform();
+
+		bool IsChild( GameObject* gameObject );
 	};
 }
+

@@ -87,7 +87,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
-	// todo: this update loop could use some work.
 	bool loop = true;
 	auto last_time = std::chrono::high_resolution_clock::now();
 	float lag = 0.0f;
@@ -105,12 +104,14 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 		while ( lag >= fixed_time_step )
 		{
-			sceneManager.FixedUpdate( fixed_time_step );
+			sceneManager.FixedUpdate();
 			lag -= fixed_time_step;
 		}
 		GameTime::GetInstance().SetDeltaTime(delta_time);
 
 		sceneManager.Update();
+		sceneManager.LateUpdate();
+
 		renderer.Render();
 
 		const auto sleep_time = current_time + std::chrono::milliseconds( static_cast< int >(fixed_time_step) ) - std::chrono::high_resolution_clock::now();

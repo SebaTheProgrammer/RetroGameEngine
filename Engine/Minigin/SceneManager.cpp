@@ -3,28 +3,29 @@
 
 void dae::SceneManager::Update()
 {
-	for(auto& scene : m_Scenes)
-	{
-		scene->Update();
-	}
+	m_Scenes[ m_CurrentSceneIndex ]->Update();
 }
 
-void dae::SceneManager::FixedUpdate( float fixedTime )
+void dae::SceneManager::FixedUpdate()
 {
-	fixedTime += fixedTime;
+	m_Scenes[ m_CurrentSceneIndex ]->FixedUpdate();;
+}
+
+void dae::SceneManager::LateUpdate()
+{
+	m_Scenes[ m_CurrentSceneIndex ]->LateUpdate();
 }
 
 void dae::SceneManager::Render()
 {
-	for (const auto& scene : m_Scenes)
-	{
-		scene->Render();
-	}
+	m_Scenes[ m_CurrentSceneIndex ]->Render();
 }
 
-dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
+dae::Scene& dae::SceneManager::CreateScene( const std::string& name )
 {
-	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
-	m_Scenes.push_back(scene);
+	const auto& scene = std::shared_ptr<Scene>( new Scene( name ) );
+	m_Scenes.push_back( scene );
+	++m_CurrentSceneIndex;
+
 	return *scene;
 }

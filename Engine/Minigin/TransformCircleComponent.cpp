@@ -2,46 +2,24 @@
 #include "GameTime.h"
 #include <iostream>
 
+constexpr float PI_F = 3.14159265f;
+
+dae::TransformCircleComponent::TransformCircleComponent( GameObject* const parentGameObject, float radius, float rotationSpeed )
+	: BaseComponent( parentGameObject )
+	, m_Radius{ radius }
+	, m_RotationSpeed{ rotationSpeed }
+{
+}
+
 void dae::TransformCircleComponent::Update()
 {
-	const float deltaTime = dae::GameTime::GetInstance().GetDeltaTime();
-	const auto pos = m_pGameObject->GetLocalTransform().GetPosition();
+	m_CurrentAngle += GameTime::GetInstance().GetDeltaTime() * m_RotationSpeed;
+	while ( m_CurrentAngle >= 2 * PI_F ) m_CurrentAngle -= 2 * PI_F;
 
-	m_X = pos.x + cosf( m_Angle ) * m_Radius;
-	m_Y = pos.y + sinf( m_Angle ) * m_Radius;
-	if ( m_Clockwise )
-	{
-		m_Angle += m_Speed * deltaTime;
-	}
-	else
-	{
-		m_Angle -= m_Speed * deltaTime;
-	}
 
-	m_pGameObject->SetLocalPosition( m_X, m_Y, 0);
-}
+	float xPos{ cosf( m_CurrentAngle ) * m_Radius };
+	float yPos{ sinf( m_CurrentAngle ) * m_Radius };
 
-void dae::TransformCircleComponent::Render() const
-{
-	
-}
+	GetOwner()->SetLocalTransform( xPos, yPos, 0.f );
 
-void dae::TransformCircleComponent::SetRadius( float radius )
-{
-	m_Radius = radius;
-}
-
-void dae::TransformCircleComponent::SetSpeed( float speed )
-{
-	m_Speed = speed;
-}
-
-void dae::TransformCircleComponent::SetAngle( float angle )
-{
-	m_Angle = angle;
-}
-
-void dae::TransformCircleComponent::SetDirection( bool clockwise )
-{
-	m_Clockwise = clockwise;
 }

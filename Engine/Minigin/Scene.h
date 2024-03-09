@@ -12,8 +12,12 @@ namespace dae
 		void Remove(std::shared_ptr<GameObject> object);
 		void RemoveAll();
 
+		void Initialize();
+
 		void Update();
 		void FixedUpdate();
+		void LateUpdate();
+
 		void Render() const;
 
 		~Scene();
@@ -22,6 +26,9 @@ namespace dae
 		Scene& operator=(const Scene& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
 
+		void AttatchToRoot( std::shared_ptr<GameObject> gameObject );
+		void DettatchFromRoot( GameObject* gameObject );
+		std::shared_ptr<GameObject> GetChildSharedPtr( GameObject* child );
 	private: 
 		explicit Scene(const std::string& name);
 

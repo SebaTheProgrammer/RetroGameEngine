@@ -7,6 +7,15 @@
 #include "ResourceManager.h"
 #include "GameTime.h"
 
+dae::TextComponent::TextComponent( GameObject* parentGameObject, const std::string& text, std::shared_ptr<Font> font)
+	: BaseComponent( parentGameObject )
+	, m_NeedsUpdate( true )
+	, m_Text( text )
+	, m_Font( std::move( font ) )
+	, m_TextTexture( nullptr )
+{ 
+}
+
 void dae::TextComponent::Update()
 {
 	if ( m_NeedsUpdate )
@@ -48,12 +57,4 @@ void dae::TextComponent::SetPosition( float x, float y )
 	m_Transform.SetPosition( x, y, 0.0f );
 }
 
-void dae::TextComponent::SetFont( const std::string& text )
-{
-	m_Font = dae::ResourceManager::GetInstance().LoadFont( text, m_Size );
-}
 
-void dae::TextComponent::SetSize( int size )
-{
-	m_Size = size;
-}

@@ -11,14 +11,20 @@ namespace dae
 	{
 	public:
 		Scene& CreateScene(const std::string& name);
-
+		Scene* GetCurrentScene() { return m_Scenes[ m_CurrentSceneIndex ].get(); }
+		void SetCurrentScene(int index) { m_CurrentSceneIndex = index; }
+		
 		void Update();
-		void FixedUpdate(float fixedTime);
+		void FixedUpdate();
+		void LateUpdate();
 
 		void Render();
+
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
+
 		std::vector<std::shared_ptr<Scene>> m_Scenes;
+		int m_CurrentSceneIndex{ -1 };
 	};
 }

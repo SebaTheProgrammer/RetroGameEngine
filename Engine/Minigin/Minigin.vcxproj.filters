@@ -126,7 +126,7 @@
       <Filter>Objects\Components\Rest</Filter>
     </ClCompile>
     <ClCompile Include="BaseComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Objects\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
