@@ -178,6 +178,7 @@
     <ClInclude Include="..\3rdParty\imgui_impl_opengl3.h" />
     <ClInclude Include="..\3rdParty\imgui_impl_sdl2.h" />
     <ClInclude Include="..\3rdParty\imgui_internal.h" />
+    <ClInclude Include="..\3rdParty\imgui_plot.h" />
     <ClInclude Include="..\3rdParty\imstb_rectpack.h" />
     <ClInclude Include="..\3rdParty\imstb_textedit.h" />
     <ClInclude Include="..\3rdParty\imstb_truetype.h" />

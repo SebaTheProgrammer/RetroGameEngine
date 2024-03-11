@@ -4,6 +4,7 @@
 
 bool dae::InputManager::ProcessInput()
 {
+	//TODO? It works without this?
 	//ZeroMemory( &m_CurrentState, sizeof( XINPUT_STATE ) );
 	//XInputGetState( 0, &m_CurrentState );
 
