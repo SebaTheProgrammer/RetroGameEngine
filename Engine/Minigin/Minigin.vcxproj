@@ -117,7 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>opengl32.lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\3rdParty;opengl32.lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -173,22 +173,16 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\3rdParty\imconfig.h" />
-    <ClInclude Include="..\3rdParty\imgui.h" />
-    <ClInclude Include="..\3rdParty\imgui_impl_opengl3.h" />
-    <ClInclude Include="..\3rdParty\imgui_impl_sdl2.h" />
-    <ClInclude Include="..\3rdParty\imgui_internal.h" />
-    <ClInclude Include="..\3rdParty\imgui_plot.h" />
-    <ClInclude Include="..\3rdParty\imstb_rectpack.h" />
-    <ClInclude Include="..\3rdParty\imstb_textedit.h" />
-    <ClInclude Include="..\3rdParty\imstb_truetype.h" />
     <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTime.h" />
+    <ClInclude Include="InputCommands.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="InputStructs.h" />
     <ClInclude Include="Minigin.h" />
+    <ClInclude Include="MovenmentComponent.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
@@ -201,13 +195,6 @@
     <ClInclude Include="TransformCircleComponent.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\3rdParty\imgui.cpp" />
-    <ClCompile Include="..\3rdParty\imgui_demo.cpp" />
-    <ClCompile Include="..\3rdParty\imgui_draw.cpp" />
-    <ClCompile Include="..\3rdParty\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="..\3rdParty\imgui_impl_sdl2.cpp" />
-    <ClCompile Include="..\3rdParty\imgui_tables.cpp" />
-    <ClCompile Include="..\3rdParty\imgui_widgets.cpp" />
     <ClCompile Include="BaseComponent.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FPSComponent.cpp" />
@@ -215,6 +202,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minigin.cpp" />
+    <ClCompile Include="MovenmentComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />

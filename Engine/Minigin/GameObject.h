@@ -67,7 +67,8 @@ namespace dae
 		const std::vector<std::shared_ptr<GameObject>>& GetChildren() const { return m_pChildren; }
 
 		void SetLocalTransform( Transform transform );
-		void SetLocalTransform( float x,float y,float z );
+		void AddLocalTransform( Transform transform );
+
 		void SetWorldTransformDirty();
 
 		Transform GetLocalTransform() const { return m_LocalTransform; }

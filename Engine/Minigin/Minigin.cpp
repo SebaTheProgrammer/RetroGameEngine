@@ -90,17 +90,19 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	bool loop = true;
 	auto last_time = std::chrono::high_resolution_clock::now();
 	float lag = 0.0f;
-	float fixed_time_step = 16.f;
+
+	float targetFPS = 60;
+	float fixed_time_step = 1 / targetFPS * 1000.f;
 
 	while (loop)
 	{
-		loop = input.ProcessInput();
-
 		const auto current_time = std::chrono::high_resolution_clock::now();
 		const auto delta_time = std::chrono::duration<float>(current_time - last_time).count();
 
 		last_time = current_time;
 		lag += delta_time;
+
+		loop = input.ProcessInput();
 
 		while ( lag >= fixed_time_step )
 		{

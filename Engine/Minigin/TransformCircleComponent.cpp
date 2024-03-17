@@ -20,6 +20,6 @@ void dae::TransformCircleComponent::Update()
 	float xPos{ cosf( m_CurrentAngle ) * m_Radius };
 	float yPos{ sinf( m_CurrentAngle ) * m_Radius };
 
-	GetOwner()->SetLocalTransform( xPos, yPos, 0.f );
+	GetOwner()->SetLocalTransform( {xPos, yPos} );
 
 }

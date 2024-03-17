@@ -73,10 +73,7 @@ void dae::GameObject::SetParent( GameObject* parent, bool keepWorldPosition )
 		}
 		else
 		{
-			SetLocalTransform(
-				GetWorldTransform().GetPosition().x + parent->GetWorldTransform().GetPosition().x,
-				GetWorldTransform().GetPosition().y + parent->GetWorldTransform().GetPosition().y,
-				GetWorldTransform().GetPosition().z + parent->GetWorldTransform().GetPosition().z );
+			SetLocalTransform(GetWorldTransform() + parent->GetWorldTransform().GetPosition());
 		}
 	}
 	else
@@ -173,15 +170,17 @@ void dae::GameObject::SetLocalTransform( Transform transform )
 	SetWorldTransformDirty();
 }
 
-void dae::GameObject::SetLocalTransform( float x, float y, float z )
+void dae::GameObject::AddLocalTransform( Transform transform )
 {
-	m_LocalTransform.SetPosition( x, y, z );
+	m_LocalTransform += transform;
+	//std::cout<<m_LocalTransform.GetPosition().x<<":"<< m_LocalTransform.GetPosition().y << std::endl;
 	SetWorldTransformDirty();
 }
 
 void dae::GameObject::SetWorldTransformDirty()
 {
 	m_IsTransformDirty = true;
+
 	for ( auto& child : m_pChildren )
 	{
 		child->SetWorldTransformDirty();
@@ -203,10 +202,7 @@ void dae::GameObject::UpdateWorldTransform()
 	{
 		if ( m_Parent != nullptr )
 		{
-			m_WorldTransform.SetPosition(
-				m_Parent->GetWorldTransform().GetPosition().x + m_Parent->GetLocalTransform().GetPosition().x,
-				m_Parent->GetWorldTransform().GetPosition().y + m_Parent->GetLocalTransform().GetPosition().y,
-				m_Parent->GetWorldTransform().GetPosition().z + m_Parent->GetLocalTransform().GetPosition().z );
+			m_WorldTransform = m_Parent->GetWorldTransform() + m_LocalTransform;
 		}
 		else
 		{
@@ -237,6 +233,7 @@ bool dae::GameObject::AddComponent( std::shared_ptr<BaseComponent> component )
 {
 	if ( component.get() )
 	{
+		//component.setowner?
 		m_pComponents.emplace_back( component );
 		return true;
 	}
