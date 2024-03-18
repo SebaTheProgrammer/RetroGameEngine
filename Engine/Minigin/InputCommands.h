@@ -35,7 +35,7 @@ namespace dae
 
 		MoveCommand( GameObject* gameObject, glm::vec2 direction ) : GameObjectCommand( gameObject )
 		{
-			m_Direction = glm::normalize( glm::vec2{ direction.x, -direction.y } );
+			m_Direction = glm::normalize( glm::vec2{ direction.x, direction.y } );
 		}
 
 		virtual void Execute() override

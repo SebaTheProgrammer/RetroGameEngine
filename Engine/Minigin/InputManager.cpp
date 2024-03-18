@@ -2,6 +2,10 @@
 #include "InputManager.h"
 #pragma comment(lib, "xinput.lib")
 
+dae::InputManager::InputManager()
+{
+}
+
 bool dae::InputManager::ProcessInput()
 {
 	SDL_Event e;
@@ -13,7 +17,7 @@ bool dae::InputManager::ProcessInput()
 
 	CopyMemory( &m_PreviousState, &m_CurrentState, sizeof( XINPUT_STATE ) );
 	ZeroMemory( &m_CurrentState, sizeof( XINPUT_STATE ) );
-	XInputGetState( 0, &m_CurrentState );	//I GOT AN ERROR HERE
+	XInputGetState( 0, &m_CurrentState );
 
 	int buttonChanges{ m_CurrentState.Gamepad.wButtons ^ m_PreviousState.Gamepad.wButtons };
 	m_ButtonsPressedThisFrame = buttonChanges & m_CurrentState.Gamepad.wButtons;
