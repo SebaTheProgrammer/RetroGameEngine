@@ -5,10 +5,6 @@ dae::HealthComponent::HealthComponent( GameObject* const parentGameObject, int h
 {
 }
 
-void dae::HealthComponent::Update()
-{
-}
-
 void dae::HealthComponent::TakeDamage( int damage )
 {
 	m_Health -= damage;

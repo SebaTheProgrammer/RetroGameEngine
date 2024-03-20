@@ -14,8 +14,6 @@ namespace dae
 		HealthComponent& operator=( const HealthComponent& other ) = delete;
 		HealthComponent& operator=( HealthComponent&& other ) = delete;
 
-		virtual void Update() override;
-
 		void TakeDamage( int damage );
 		void Heal( int heal );
 

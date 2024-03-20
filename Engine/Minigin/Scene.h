@@ -26,8 +26,8 @@ namespace dae
 		Scene& operator=(const Scene& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
 
-		void AttatchToRoot( std::shared_ptr<GameObject> gameObject );
-		void DettatchFromRoot( GameObject* gameObject );
+		void AttachToRoot( std::shared_ptr<GameObject> gameObject );
+		void DettachFromRoot( GameObject* gameObject );
 		std::shared_ptr<GameObject> GetChildSharedPtr( GameObject* child );
 	private: 
 		explicit Scene(const std::string& name);

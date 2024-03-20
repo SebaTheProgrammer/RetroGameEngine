@@ -63,12 +63,12 @@ void Scene::Render() const
 	}
 }
 
-void Scene::AttatchToRoot( std::shared_ptr<GameObject> gameObject )
+void Scene::AttachToRoot( std::shared_ptr<GameObject> gameObject )
 {
 	m_Objects.emplace_back( gameObject );
 }
 
-void Scene::DettatchFromRoot( GameObject* gameObject )
+void Scene::DettachFromRoot( GameObject* gameObject )
 {
 	auto it = m_Objects.begin();
 	while ( it != m_Objects.end() )

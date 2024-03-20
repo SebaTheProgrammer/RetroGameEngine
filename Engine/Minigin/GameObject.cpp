@@ -64,7 +64,7 @@ void dae::GameObject::SetParent( GameObject* parent, bool keepWorldPosition )
 	{
 		return;
 	}
-	//pos
+
 	if ( keepWorldPosition )
 	{
 		if ( parent == nullptr )
@@ -73,46 +73,37 @@ void dae::GameObject::SetParent( GameObject* parent, bool keepWorldPosition )
 		}
 		else
 		{
-			SetLocalTransform(GetWorldTransform() + parent->GetWorldTransform().GetPosition());
+			SetLocalTransform( GetWorldTransform() + parent->GetWorldTransform().GetPosition() );
 		}
 	}
 	else
 	{
 		SetWorldTransformDirty();
 	}
-	//clearing previous parent
-	std::shared_ptr<GameObject> thisPtr{};
-	if ( m_Parent )
 
-	{
-		thisPtr = m_Parent->GetChildSharedPtr( this );
-	}
-	else
-	{
-		auto scene{ SceneManager::GetInstance().GetCurrentScene() };
-		thisPtr = scene->GetChildSharedPtr( this );
-	}
+	std::shared_ptr<GameObject> thisSharedPtr{};
 	if ( m_Parent )
 	{
+		thisSharedPtr = m_Parent->GetChildSharedPtr( this );
 		m_Parent->RemoveChild( this );
 	}
 	else
 	{
-		auto scene{ SceneManager::GetInstance().GetCurrentScene() };
-		scene->DettatchFromRoot( this );
+		auto currentScene = SceneManager::GetInstance().GetCurrentScene();
+		thisSharedPtr = currentScene->GetChildSharedPtr( this );
+		currentScene->DettachFromRoot( this );
 	}
 
-	//setting new parent
+	// Set the new parent
 	m_Parent = parent;
-
 	if ( m_Parent )
 	{
-		m_Parent->AddChild( thisPtr );
+		m_Parent->AddChild( thisSharedPtr );
 	}
 	else
 	{
-		auto scene{ SceneManager::GetInstance().GetCurrentScene() };
-		scene->AttatchToRoot( thisPtr );
+		auto currentScene = SceneManager::GetInstance().GetCurrentScene();
+		currentScene->AttachToRoot( thisSharedPtr );
 	}
 }
 

@@ -86,6 +86,9 @@
     <ClInclude Include="MovenmentComponent.h">
       <Filter>Objects\Components\Rest</Filter>
     </ClInclude>
+    <ClInclude Include="HealthComponent.h">
+      <Filter>Objects\Components\Rest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -137,6 +140,9 @@
       <Filter>InputSystem</Filter>
     </ClCompile>
     <ClCompile Include="MovenmentComponent.cpp">
+      <Filter>Objects\Components\Rest</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthComponent.cpp">
       <Filter>Objects\Components\Rest</Filter>
     </ClCompile>
   </ItemGroup>
