@@ -5,11 +5,12 @@
 
 namespace dae
 {
+	class GameActor;
 	class Observer
 	{
 		public:
 		virtual ~Observer() = default;
-		virtual void Notify( GameEvents event, GameActor* gameobject ) = 0;
+		virtual void Notify( GameEvents event, dae::GameActor* gameobject ) = 0;
 	};
 }
 

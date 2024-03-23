@@ -21,8 +21,8 @@ namespace dae
 
 		const float m_Radius{};
 
-		float m_CurrentAngle{}; // in radians
-		float m_RotationSpeed{}; // radians per second
+		float m_CurrentAngle{};
+		float m_RotationSpeed{};
 	};
 }
 

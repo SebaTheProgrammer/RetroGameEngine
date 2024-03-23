@@ -35,6 +35,8 @@ void dae::TextComponent::Update()
 		m_TextTexture = std::make_shared<Texture2D>( texture );
 		m_NeedsUpdate = false;
 	}
+
+	m_Transform = m_LocalTransform.GetPosition() + GetOwner()->GetWorldTransform().GetPosition();
 }
 
 void dae::TextComponent::Render() const

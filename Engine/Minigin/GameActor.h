@@ -4,6 +4,8 @@
 
 namespace dae
 {
+	class Observer;
+
 	class GameActor
 	{
 	public:
@@ -11,15 +13,12 @@ namespace dae
 		{
 			m_observers.push_back( observer );
 		}
-		void RemoveObserver( Observer* observer ) 
+		void RemoveObserver( Observer* observer )
 		{
 			m_observers.erase( std::remove( m_observers.begin(), m_observers.end(), observer ), m_observers.end() );
 		}
 	protected:
-		void NotifyObservers( GameEvents event ) {
-			for ( auto observer : m_observers )
-				observer->Notify( event, this );
-		}
+
 	private:
 		std::vector<Observer*> m_observers;
 	};

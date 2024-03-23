@@ -24,6 +24,9 @@
     <Filter Include="InputSystem">
       <UniqueIdentifier>{6ce657aa-1997-4f29-80bb-a666117684c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Observers">
+      <UniqueIdentifier>{921f4acc-1e12-444d-8194-73d487e61bcb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -89,6 +92,15 @@
     <ClInclude Include="HealthComponent.h">
       <Filter>Objects\Components\Rest</Filter>
     </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEvents.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameActor.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -144,6 +156,15 @@
     </ClCompile>
     <ClCompile Include="HealthComponent.cpp">
       <Filter>Objects\Components\Rest</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEvents.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="GameActor.cpp">
+      <Filter>Observers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
