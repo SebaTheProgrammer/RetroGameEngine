@@ -101,6 +101,9 @@
     <ClInclude Include="GameActor.h">
       <Filter>Observers</Filter>
     </ClInclude>
+    <ClInclude Include="Achievement.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">

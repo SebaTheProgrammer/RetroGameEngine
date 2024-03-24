@@ -5,6 +5,7 @@ namespace dae
 {
 	class GameEvents
 	{
+	public:
 		enum EventType {
 			LEVEL_STARTED,
 			PLAYER_SPAWNED,

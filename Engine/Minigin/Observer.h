@@ -11,6 +11,7 @@ namespace dae
 		public:
 		virtual ~Observer() = default;
 		virtual void Notify( GameEvents event, dae::GameActor* gameobject ) = 0;
+		virtual void Notify( GameEvents::EventType event, GameActor* actor ) = 0;
 	};
 }
 
