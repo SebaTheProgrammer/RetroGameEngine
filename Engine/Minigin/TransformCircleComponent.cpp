@@ -16,10 +16,8 @@ void dae::TransformCircleComponent::Update()
 	m_CurrentAngle += GameTime::GetInstance().GetDeltaTime() * m_RotationSpeed;
 	while ( m_CurrentAngle >= 2 * PI_F ) m_CurrentAngle -= 2 * PI_F;
 
-
 	float xPos{ cosf( m_CurrentAngle ) * m_Radius };
 	float yPos{ sinf( m_CurrentAngle ) * m_Radius };
 
 	GetOwner()->SetLocalTransform( {xPos, yPos} );
-
 }

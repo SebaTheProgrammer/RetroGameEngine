@@ -3,7 +3,8 @@
 
 #include "GameObject.h"
 #include "MovenmentComponent.h"
-
+#include "HealthComponent.h"
+#include "ScoreComponent.h"
 namespace dae
 {
 	class Command
@@ -50,5 +51,64 @@ namespace dae
 
 		glm::vec2 m_Direction;
 
+	};
+
+	class DealDamageCommand : public GameObjectCommand
+	{
+	public:
+		DealDamageCommand( GameObject* gameObject, int damage ) : GameObjectCommand( gameObject ) 
+		{
+			m_Damage = damage;
+		}
+
+		virtual void Execute() override
+		{
+			if ( auto healthComp{ GetGameObject()->GetComponent<dae::HealthComponent>() } )
+			{
+				healthComp->TakeDamage( m_Damage );
+			}
+		}
+
+	private:
+		
+		int m_Damage{};
+	};
+
+	class HealCommand : public GameObjectCommand
+	{
+	public:
+		HealCommand( GameObject* gameObject, int heal ) : GameObjectCommand( gameObject )
+		{
+			m_Heal = heal;
+		}
+
+		virtual void Execute() override
+		{
+			if ( auto healthComp{ GetGameObject()->GetComponent<dae::HealthComponent>() } )
+			{
+				healthComp->Heal( m_Heal );
+			}
+		}
+	private:
+		int m_Heal{};
+	};
+
+	class AddScoreCommand : public GameObjectCommand
+	{
+	public:
+		AddScoreCommand( GameObject* gameObject, int score ) : GameObjectCommand( gameObject )
+		{
+			m_Score = score;
+		}
+
+		virtual void Execute() override
+		{
+			if ( auto scoreComp{ GetGameObject()->GetComponent<dae::ScoreComponent>() } )
+			{
+				scoreComp->AddScore( m_Score );
+			}
+		}
+		private:
+		int m_Score{};
 	};
 }

@@ -18,7 +18,6 @@ namespace dae
 		MovenmentComponent& operator=( const MovenmentComponent& other ) = delete;
 		MovenmentComponent& operator=( MovenmentComponent&& other ) = delete;
 
-
 		void Move( glm::vec2 direction );
 
 	private:
