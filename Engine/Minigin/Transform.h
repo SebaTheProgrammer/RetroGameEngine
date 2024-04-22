@@ -18,7 +18,12 @@ namespace dae
 		Transform& operator=( Transform&& other ) = default;
 
 		const glm::vec3& GetPosition() const { return m_Position; }
-		void SetPosition(float x, float y, float z);
+		void SetPosition( const float x, const float y, const float z )
+		{
+			m_Position.x = x;
+			m_Position.y = y;
+			m_Position.z = z;
+		}
 	
 		Transform operator+( Transform other )
 		{
