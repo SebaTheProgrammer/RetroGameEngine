@@ -6,8 +6,8 @@ namespace dae
 	class GameEvents
 	{
 	public:
-
-		enum EventType {
+		enum EventType 
+		{
 			LEVEL_STARTED,
 			PLAYER_SPAWNED,
 			PLAYER_DIED,
@@ -29,9 +29,9 @@ namespace dae
 
 		template<typename... Args>
 		void Invoke( Args&&... args ) {
-			//for ( auto& listener : m_listeners ) {
-				//listener->OnEvent( m_event, std::forward<Args>( args )... );
-			//}
+			for ( auto& listener : m_listeners ) {
+				listener->OnEvent( m_event, std::forward<Args>( args )... );
+			}
 		}
 
 		template<typename... Args>
@@ -42,7 +42,6 @@ namespace dae
 	private:
 	Event m_event;
 	std::vector<void*> m_listeners;
-
 	};
 
 	class IGameEventListener

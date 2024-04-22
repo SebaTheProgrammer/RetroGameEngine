@@ -30,6 +30,9 @@
     <Filter Include="Observers\Events">
       <UniqueIdentifier>{aeec0910-c68c-453d-95ab-800bd1d32156}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SoundSystem">
+      <UniqueIdentifier>{7e47f848-027c-4a09-ad40-d19344d75822}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -101,9 +104,6 @@
     <ClInclude Include="GameActor.h">
       <Filter>Observers</Filter>
     </ClInclude>
-    <ClInclude Include="Achievement.h">
-      <Filter>Observers</Filter>
-    </ClInclude>
     <ClInclude Include="GameEvents.h">
       <Filter>Observers\Events</Filter>
     </ClInclude>
@@ -113,7 +113,18 @@
     <ClInclude Include="OnTextChangedEvent.h">
       <Filter>Observers\Events</Filter>
     </ClInclude>
-    <ClInclude Include="ScoreComponent.h" />
+    <ClInclude Include="ScoreComponent.h">
+      <Filter>Objects\Components\Rest</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSystem.h">
+      <Filter>SoundSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLSoundSystem.h">
+      <Filter>SoundSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="NullSoundSystem.h">
+      <Filter>SoundSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -170,11 +181,8 @@
     <ClCompile Include="HealthComponent.cpp">
       <Filter>Objects\Components\Rest</Filter>
     </ClCompile>
-    <ClCompile Include="GameActor.cpp">
-      <Filter>Observers</Filter>
-    </ClCompile>
     <ClCompile Include="ScoreComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Objects\Components\Rest</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

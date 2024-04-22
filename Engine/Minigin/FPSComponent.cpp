@@ -9,7 +9,6 @@ dae::FPSComponent::FPSComponent( GameObject* const parentGameObject, const std::
 {
 }
 
-
 void dae::FPSComponent::Update()
 {
 	TextComponent::Update();
