@@ -152,14 +152,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cube.cpp" />
-    <ClCompile Include="LevelManager.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PyramidCubes.cpp" />
     <ClCompile Include="QBert.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h" />
-    <ClInclude Include="LevelManager.h" />
+    <ClInclude Include="Level.h" />
     <ClInclude Include="PyramidCubes.h" />
     <ClInclude Include="QBert.h" />
   </ItemGroup>

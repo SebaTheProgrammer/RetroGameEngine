@@ -6,7 +6,7 @@
 class QBert : public dae::BaseComponent
 {
 	public:
-	QBert( dae::GameObject* parentGameObject, bool keyboardinput);
+	QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, bool keyboardinput);
 	virtual ~QBert() = default;
 
 	void Update() override;
@@ -14,7 +14,7 @@ class QBert : public dae::BaseComponent
 
 private:
 	bool m_KeyBoardInput;
-	//std::shared_ptr<dae::AnimatedTextureComponent> m_pTexture;
+	std::shared_ptr<dae::AnimatedTextureComponent> m_pTexture;
 
 	float m_X;
 	float m_Y;

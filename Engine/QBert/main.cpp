@@ -12,6 +12,7 @@
 #include "PyramidCubes.h"
 #include "InputManager.h"
 #include "InputCommands.h"
+#include "Level.h"
 
 void load()
 {
@@ -33,27 +34,20 @@ void load()
 
 
 	//LEVEL 1
-	auto& level = dae::SceneManager::GetInstance().CreateScene( "Level1" );
-	auto bg = std::make_shared<dae::GameObject>();
-	auto bgTexture = std::make_shared < dae::TextureComponent>( bg.get(), "bg.png" );
-	bg->AddComponent( bgTexture );
-	level.Add( bg );
-
-	auto pyramid = std::make_shared<dae::GameObject>();
-	auto pyramidLevel = std::make_shared<PyramidCubes>( pyramid.get(), 7, 0 );
-	pyramid->AddComponent( pyramidLevel );
-	pyramid->SetLocalTransform( { 300, 140 } );
-	level.Add( pyramid );
-	level.Add( Qbert );
+	auto& level1 = dae::SceneManager::GetInstance().CreateScene( "Level1" );
+	auto goLevel = std::make_shared<dae::GameObject>();
+	goLevel->SetLocalTransform( { 300, 140 } );
+	auto level = std::make_shared <Level>( goLevel.get(),0,7,0 );
+	goLevel->AddComponent( level );
+	level1.Add( goLevel );
 
 	//LEVEL 2
 	auto& level2 = dae::SceneManager::GetInstance().CreateScene( "Level2" );
-	auto pyramid2 = std::make_shared<dae::GameObject>();
-	auto pyramidLevel2 = std::make_shared<PyramidCubes>( pyramid2.get(), 5, 1 );
-	pyramid2->AddComponent( pyramidLevel2 );
-	pyramid2->SetLocalTransform( { 300, 140 } );
-	level2.Add( pyramid2 );
-	level2.Add( Qbert );
+	auto goLevel2 = std::make_shared<dae::GameObject>();
+	goLevel2->SetLocalTransform( { 300, 140 } );
+	auto Level2 = std::make_shared <Level>( goLevel2.get(), 0, 4, 1 );
+	goLevel2->AddComponent( Level2 );
+	level2.Add( goLevel2 );
 
 	//for debug purposes
 	auto levelswitcher = std::make_shared<dae::GameObject>();

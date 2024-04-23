@@ -1,12 +1,14 @@
 #include "QBert.h"
 
-QBert::QBert( dae::GameObject* parentGameObject, bool keyboardinput )
+QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, bool keyboardinput )
 	:BaseComponent( parentGameObject )
 	, m_KeyBoardInput( keyboardinput )
+	, m_X( 0 )
+	, m_Y( 0 )
 
 {
-	//m_pTexture = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, texture, 1, 1, 1, 0, 0.0f );
-	//GetOwner()->AddComponent( m_pTexture );
+	m_pTexture = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, texture, 1, 1, 1, 0, 0.0f );
+	GetOwner()->AddComponent( m_pTexture );
 
 
 	//REMAKE THE MOVEMENT

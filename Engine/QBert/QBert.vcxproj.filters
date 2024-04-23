@@ -36,7 +36,7 @@
     <ClCompile Include="QBert.cpp">
       <Filter>Level\Player</Filter>
     </ClCompile>
-    <ClCompile Include="LevelManager.cpp">
+    <ClCompile Include="Level.cpp">
       <Filter>Level</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,7 +50,7 @@
     <ClInclude Include="QBert.h">
       <Filter>Level\Player</Filter>
     </ClInclude>
-    <ClInclude Include="LevelManager.h">
+    <ClInclude Include="Level.h">
       <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>

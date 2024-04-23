@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseComponent.h"
 #include <GameObject.h>
+class Cube;
 
 class PyramidCubes : public dae::BaseComponent
 {
@@ -29,7 +30,7 @@ private:
 	int m_Size;
 	int m_WhichLevel;
 
-	std::vector<std::shared_ptr<dae::BaseComponent>> m_pCubes;
+	std::vector<std::shared_ptr<Cube>> m_pCubes;
 
 	float m_Scale = 1.5f;
 };

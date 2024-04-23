@@ -61,9 +61,9 @@ void PyramidCubes::SetLevel( const int level )
 
 void PyramidCubes::CompleteLevel()
 {
-    for ( const auto& cube : m_pCubes )
+    for ( auto& cube : m_pCubes )
     {
-		std::static_pointer_cast<Cube>( cube )->Won();
+        cube->Won();
 	}
 }
 
