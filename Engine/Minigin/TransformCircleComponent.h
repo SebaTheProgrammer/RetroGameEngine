@@ -18,7 +18,6 @@ namespace dae
 			virtual void Update() override;
 
 	private:
-
 		const float m_Radius{};
 
 		float m_CurrentAngle{};

@@ -25,6 +25,7 @@ bool dae::InputManager::ProcessInput()
 
 	//Keyboard input handling
 	const uint8_t* pKeyboardState = SDL_GetKeyboardState( nullptr );
+
 	for ( auto& inputBinding : m_InputBindingsKeyBoard )
 	{
 		if ( !inputBinding.command )

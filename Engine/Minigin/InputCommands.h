@@ -5,6 +5,8 @@
 #include "MovenmentComponent.h"
 #include "HealthComponent.h"
 #include "ScoreComponent.h"
+#include "SceneManager.h"
+
 namespace dae
 {
 	class Command
@@ -110,5 +112,22 @@ namespace dae
 		}
 		private:
 		int m_Score{};
+	};
+
+	class OpenLevelCommand : public GameObjectCommand
+	{
+	public:
+		OpenLevelCommand( GameObject* gameObject, int level) : GameObjectCommand( gameObject )
+		{
+			m_Level = level;
+		}
+
+		virtual void Execute() override
+		{
+			dae::SceneManager::GetInstance().SetCurrentScene( m_Level );
+		}
+
+		private:
+			int m_Level{};
 	};
 }

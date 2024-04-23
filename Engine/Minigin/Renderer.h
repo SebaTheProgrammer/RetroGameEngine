@@ -22,6 +22,8 @@ namespace dae
 		void RenderTexture(const Texture2D& texture, float x, float y) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
 
+		void RenderTexture( const Texture2D& texture, const float x, const float y, const float width, const float height, const SDL_Rect* sourceRect ) const;
+
 		SDL_Renderer* GetSDLRenderer() const { return m_Renderer; };
 
 		const SDL_Color& GetBackgroundColor() const { return m_clearColor; }
