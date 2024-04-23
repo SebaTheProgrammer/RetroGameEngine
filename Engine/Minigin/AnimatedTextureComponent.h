@@ -7,7 +7,7 @@ namespace dae
 	class AnimatedTextureComponent : public BaseComponent
 	{
 		public:
-		AnimatedTextureComponent( GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, float scale, int rows, int columns, int level, float frameTime = 0 );
+		AnimatedTextureComponent( GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, float scale, int rows, int columns, int currentColumn, float frameTime = 0 );
 		virtual ~AnimatedTextureComponent() = default;
 
 		AnimatedTextureComponent( const AnimatedTextureComponent& other ) = delete;
@@ -21,6 +21,8 @@ namespace dae
 		void Animate( float frameTime ) { m_FrameTime = frameTime; }
 
 		void NextFrame();
+
+		void Mirror( bool mirror ) { m_Mirror = mirror; }
 
 	private:
 		std::shared_ptr<dae::Texture2D> m_pTexture;
@@ -38,6 +40,8 @@ namespace dae
 		float m_Y;
 
 		float m_Scale;
+
+		bool m_Mirror = false;
 	};
 }
 

@@ -13,7 +13,7 @@ namespace dae
 	{
 	public:
 
-		GameObject() = default;
+		GameObject( int sceneIndex = -1) { m_SceneIndex = sceneIndex; };
 
 		~GameObject();
 		GameObject( const GameObject& other ) = delete;
@@ -74,6 +74,8 @@ namespace dae
 		Transform GetLocalTransform() const { return m_LocalTransform; }
 		Transform GetWorldTransform();
 
+		int GetSceneIndex() const { return m_SceneIndex; }
+
 	private:
 		Transform m_WorldTransform{};
 		Transform m_LocalTransform{};
@@ -93,6 +95,8 @@ namespace dae
 		void UpdateWorldTransform();
 
 		bool IsChild( GameObject* gameObject );
+
+		int m_SceneIndex{ -1 };
 	};
 }
 

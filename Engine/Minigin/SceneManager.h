@@ -13,7 +13,8 @@ namespace dae
 		Scene& CreateScene(const std::string& name);
 		Scene* GetCurrentScene() { return m_Scenes[ m_CurrentSceneIndex ].get(); }
 		void SetCurrentScene(int index) { m_CurrentSceneIndex = index; }
-		
+		int GetCurrentSceneIndex() { return m_CurrentSceneIndex; }
+
 		void Update();
 		void FixedUpdate();
 		void LateUpdate();

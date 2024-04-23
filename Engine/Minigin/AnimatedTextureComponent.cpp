@@ -3,7 +3,7 @@
 #include "Renderer.h"
 #include "GameTime.h"
 
-dae::AnimatedTextureComponent::AnimatedTextureComponent( GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, float scale, int rows, int columns, int level, float frameTime )
+dae::AnimatedTextureComponent::AnimatedTextureComponent( GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, float scale, int rows, int columns, int currentColumn, float frameTime )
 :
 	BaseComponent( parentGameObject )
 	, m_pTexture( texture )
@@ -11,7 +11,7 @@ dae::AnimatedTextureComponent::AnimatedTextureComponent( GameObject* parentGameO
 	, m_Columns( columns )
 	, m_FrameTime( frameTime )
 	, m_CurrentRow( 0 )
-	, m_CurrentColumn( level )
+	, m_CurrentColumn( currentColumn )
 	, m_AccumulatedTime( 0 )
 	, m_X( 0 )
 	, m_Y( 0 )
@@ -23,27 +23,24 @@ dae::AnimatedTextureComponent::AnimatedTextureComponent( GameObject* parentGameO
 
 void dae::AnimatedTextureComponent::Update()
 {
-	if ( m_pTexture ) {
-		// Update position based on the local and world transform
+	if ( m_pTexture ) 
+	{
 		const auto& pos = m_LocalTransform.GetPosition() + GetOwner()->GetWorldTransform().GetPosition();
 		m_X = pos.x;
 		m_Y = pos.y;
 
-		// Check frame time to avoid division by zero and incorrect accumulation
 		if ( m_FrameTime > 0.0f ) {
 			m_AccumulatedTime += GameTime::GetInstance().GetDeltaTime();
 
-			if ( m_AccumulatedTime >= m_FrameTime ) {
-				// Reset accumulated time
+			if ( m_AccumulatedTime >= m_FrameTime ) 
+			{
 				m_AccumulatedTime -= m_FrameTime;
 
-				// Update column and handle wrap-around
 				m_CurrentColumn++;
 				if ( m_CurrentColumn >= m_ActiveColumns ) {
 					m_CurrentColumn = 0;
 					m_CurrentRow++;
 
-					// Update row and handle wrap-around
 					if ( m_CurrentRow >= m_ActiveRows ) {
 						m_CurrentRow = 0;
 					}
@@ -69,8 +66,16 @@ void dae::AnimatedTextureComponent::Render() const
 	sourceRect.w = wichlevelIndexWidth;
 	sourceRect.h = wichlevelIndexHeight;
 
-	// Render the texture using the calculated source rect
-	dae::Renderer::GetInstance().RenderTexture( *m_pTexture, m_X, m_Y, float( wichlevelIndexHeight ) * m_Scale, float( wichlevelIndexWidth ) * m_Scale, &sourceRect );
+	//mirror
+	if ( m_Mirror ) 
+	{
+		SDL_RendererFlip flip = SDL_FLIP_HORIZONTAL;
+		dae::Renderer::GetInstance().RenderTexture( *m_pTexture, m_X, m_Y, float( wichlevelIndexHeight ) * m_Scale, float( wichlevelIndexWidth ) * m_Scale, &sourceRect, flip );
+	}
+	else 
+	{
+		dae::Renderer::GetInstance().RenderTexture( *m_pTexture, m_X, m_Y, float( wichlevelIndexHeight ) * m_Scale, float( wichlevelIndexWidth ) * m_Scale, &sourceRect );
+	}
 }
 
 void dae::AnimatedTextureComponent::NextFrame()

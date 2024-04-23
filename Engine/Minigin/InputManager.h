@@ -34,9 +34,9 @@ namespace dae
 		}
 
 		template<typename CommandType>
-		void BindActionKeyBoard( SDL_Scancode key, CommandType command )
+		void BindActionKeyBoard( SDL_Scancode key, CommandType command )// InputTypeKeyBoard inputType
 		{
-			InputBindingKeyBoard inputBinding{ key, command };
+			InputBindingKeyBoard inputBinding{ key, command };//inputType
 			m_InputBindingsKeyBoard.emplace_back( inputBinding );
 		}
 
@@ -48,12 +48,21 @@ namespace dae
 		XINPUT_STATE m_CurrentState{};
 		XINPUT_STATE m_PreviousState{};
 
-		int m_ButtonsPressedThisFrame{};
-		int m_ButtonsReleasedThisFrame{};
+		uint8_t m_PreviousKeyboardState[ SDL_NUM_SCANCODES ] = { 0 };
 
-		bool IsDownThisFrame( unsigned int button ) const;
-		bool IsUpThisFrame( unsigned int button ) const;
-		bool IsPressed( unsigned int button ) const;
+		int m_ButtonsPressedThisFrameGP{};
+		int m_ButtonsReleasedThisFrameGP{};
+
+		bool IsDownThisFrameGP( unsigned int button ) const;
+		bool IsUpThisFrameGP( unsigned int button ) const;
+		bool IsPressedGP( unsigned int button ) const;
+
+		int m_ButtonsPressedThisFrameKB{};
+		int m_ButtonsReleasedThisFrameKB{};
+
+		bool IsDownThisFrameKB( unsigned int button ) const;
+		bool IsUpThisFrameKB( unsigned int button ) const;
+		bool IsPressedKB( unsigned int button ) const;
 	};
 
 }

@@ -128,6 +128,9 @@
     <ClInclude Include="AnimatedTextureComponent.h">
       <Filter>Objects\Components\Rest</Filter>
     </ClInclude>
+    <ClInclude Include="SingleMovementComponent.h">
+      <Filter>Objects\Components\Rest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -185,6 +188,9 @@
       <Filter>Objects\Components\Rest</Filter>
     </ClCompile>
     <ClCompile Include="AnimatedTextureComponent.cpp">
+      <Filter>Objects\Components\Rest</Filter>
+    </ClCompile>
+    <ClCompile Include="SingleMovementComponent.cpp">
       <Filter>Objects\Components\Rest</Filter>
     </ClCompile>
   </ItemGroup>

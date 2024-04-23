@@ -20,11 +20,14 @@ bool dae::InputManager::ProcessInput()
 	XInputGetState( 0, &m_CurrentState );
 
 	int buttonChanges{ m_CurrentState.Gamepad.wButtons ^ m_PreviousState.Gamepad.wButtons };
-	m_ButtonsPressedThisFrame = buttonChanges & m_CurrentState.Gamepad.wButtons;
-	m_ButtonsReleasedThisFrame = buttonChanges & ( ~m_CurrentState.Gamepad.wButtons );
+	m_ButtonsPressedThisFrameGP = buttonChanges & m_CurrentState.Gamepad.wButtons;
+	m_ButtonsReleasedThisFrameGP = buttonChanges & ( ~m_CurrentState.Gamepad.wButtons );
 
 	//Keyboard input handling
 	const uint8_t* pKeyboardState = SDL_GetKeyboardState( nullptr );
+
+	const uint8_t* currentKeyboardState = SDL_GetKeyboardState( NULL );
+	memcpy( m_PreviousKeyboardState, currentKeyboardState, SDL_NUM_SCANCODES );
 
 	for ( auto& inputBinding : m_InputBindingsKeyBoard )
 	{
@@ -35,6 +38,38 @@ bool dae::InputManager::ProcessInput()
 		{
 			inputBinding.command->Execute();
 		}
+
+		/*switch ( inputBinding.inputType )
+		{
+		case InputTypeKeyBoard::IsPressed:
+		{
+			if ( IsPressedKB( inputBinding.key ) )
+			{
+				
+			}
+		}
+		case InputTypeKeyBoard::IsDownThisFrame:
+		{
+			if ( IsDownThisFrameKB( inputBinding.key ) )
+			{
+				if ( pKeyboardState[ inputBinding.key ] )
+				{
+					inputBinding.command->Execute();
+				}
+			}
+			break;
+		}
+		case InputTypeKeyBoard::IsUpThisFrame:
+		{
+			if ( IsUpThisFrameKB( inputBinding.key ) )
+			{
+				if ( pKeyboardState[ inputBinding.key ] )
+				{
+					inputBinding.command->Execute();
+				}
+			}
+			break;
+		}*/
 	}
 
 	//Controller input handling
@@ -47,7 +82,7 @@ bool dae::InputManager::ProcessInput()
 		{
 		case InputTypeGamePad::IsPressed:
 		{
-			if ( IsPressed( inputBinding.key ) )
+			if ( IsPressedGP( inputBinding.key ) )
 			{
 				inputBinding.command->Execute();
 			}
@@ -55,7 +90,7 @@ bool dae::InputManager::ProcessInput()
 		}
 		case InputTypeGamePad::IsDownThisFrame:
 		{
-			if ( IsDownThisFrame( inputBinding.key ) )
+			if ( IsDownThisFrameGP( inputBinding.key ) )
 			{
 				inputBinding.command->Execute();
 			}
@@ -63,7 +98,7 @@ bool dae::InputManager::ProcessInput()
 		}
 		case InputTypeGamePad::IsUpThisFrame:
 		{
-			if ( IsUpThisFrame( inputBinding.key ) )
+			if ( IsUpThisFrameGP( inputBinding.key ) )
 			{
 				inputBinding.command->Execute();
 			}
@@ -77,15 +112,29 @@ bool dae::InputManager::ProcessInput()
 	return true;
 }
 
-bool dae::InputManager::IsDownThisFrame( unsigned int button ) const
+bool dae::InputManager::IsDownThisFrameGP( unsigned int button ) const
 {
-	return m_ButtonsPressedThisFrame & button;
+	return m_ButtonsPressedThisFrameGP & button;
 }
-bool dae::InputManager::IsUpThisFrame( unsigned int button ) const
+bool dae::InputManager::IsUpThisFrameGP( unsigned int button ) const
 {
-	return m_ButtonsReleasedThisFrame & button;
+	return m_ButtonsReleasedThisFrameGP & button;
 }
-bool dae::InputManager::IsPressed( unsigned int button ) const
+bool dae::InputManager::IsPressedGP( unsigned int button ) const
 {
 	return m_CurrentState.Gamepad.wButtons & button;
+}
+
+bool dae::InputManager::IsPressedKB( unsigned int key ) const
+{
+	return SDL_GetKeyboardState( NULL )[ key ] != 0;
+}
+bool dae::InputManager::IsDownThisFrameKB( unsigned int key ) const
+{
+	return SDL_GetKeyboardState( NULL )[ key ] != 0 && m_PreviousKeyboardState[ key ] == 0;
+}
+
+bool dae::InputManager::IsUpThisFrameKB( unsigned int key ) const
+{
+	return SDL_GetKeyboardState( NULL )[ key ] == 0 && m_PreviousKeyboardState[ key ] != 0;
 }

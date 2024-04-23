@@ -13,7 +13,6 @@ enum class InputTypeGamePad
 struct InputBindingGamePad
 {
 	int key;
-
 	InputTypeGamePad inputType;
 	std::shared_ptr<dae::Command> command;
 
@@ -26,14 +25,23 @@ struct InputBindingGamePad
 	}
 };
 
+//enum class InputTypeKeyBoard
+//{
+//	IsPressed,
+//	IsDownThisFrame,
+//	IsUpThisFrame
+//};
+
 struct InputBindingKeyBoard
 {
 	SDL_Scancode key;
+	//InputTypeKeyBoard inputType;
 	std::shared_ptr<dae::Command> command;
 
 	template<typename CommandType>
-	InputBindingKeyBoard( SDL_Scancode keyIn, CommandType commandIn )
+	InputBindingKeyBoard( SDL_Scancode keyIn, CommandType commandIn )// InputTypeKeyBoard inputTypeIn
 		: key{ keyIn }
+		//inputType{ inputTypeIn }
 	{
 		command = std::make_shared<CommandType>( commandIn );
 	}

@@ -6,7 +6,7 @@
 
 namespace dae
 {
-	class MovenmentComponent final : public BaseComponent
+	class MovenmentComponent : public BaseComponent
 	{
 	public:
 
@@ -18,7 +18,7 @@ namespace dae
 		MovenmentComponent& operator=( const MovenmentComponent& other ) = delete;
 		MovenmentComponent& operator=( MovenmentComponent&& other ) = delete;
 
-		void Move( glm::vec2 direction );
+		virtual void Move( glm::vec2 direction );
 
 	private:
 

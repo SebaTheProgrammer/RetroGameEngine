@@ -71,13 +71,24 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 
 void dae::Renderer::RenderTexture( const Texture2D& texture, const float x, const float y, const float width, const float height, const SDL_Rect* sourceRect ) const
 {
-	// Define the destination rectangle
 	SDL_Rect dst{};
 	dst.x = static_cast< int >( x );
 	dst.y = static_cast< int >( y );
 	dst.w = static_cast< int >( width );
 	dst.h = static_cast< int >( height );
 
-	// Render the texture with the specified source and destination rectangles
 	SDL_RenderCopy( GetSDLRenderer(), texture.GetSDLTexture(), sourceRect, &dst );
 }
+
+void dae::Renderer::RenderTexture( const Texture2D& texture, const float x, const float y, const float width, const float height, const SDL_Rect* sourceRect, SDL_RendererFlip flip ) const
+{
+	SDL_Rect dst{};
+	dst.x = static_cast< int >( x );
+	dst.y = static_cast< int >( y );
+	dst.w = static_cast< int >( width );
+	dst.h = static_cast< int >( height );
+
+	SDL_RenderCopyEx( GetSDLRenderer(), texture.GetSDLTexture(), sourceRect, &dst, 0, nullptr, flip );
+}
+
+

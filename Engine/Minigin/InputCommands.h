@@ -6,6 +6,7 @@
 #include "HealthComponent.h"
 #include "ScoreComponent.h"
 #include "SceneManager.h"
+#include "SingleMovementComponent.h"
 
 namespace dae
 {
@@ -43,16 +44,43 @@ namespace dae
 
 		virtual void Execute() override
 		{
-			if ( auto movementComp{ GetGameObject()->GetComponent<dae::MovenmentComponent>() } )
+			if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1)
 			{
-				movementComp->Move( m_Direction );
+				if ( auto movementComp{ GetGameObject()->GetComponent<dae::MovenmentComponent>() } )
+				{
+					movementComp->Move( m_Direction );
+				}
 			}
 		}
 
 	private:
 
 		glm::vec2 m_Direction;
+	};
 
+	class SingleMoveCommand : public GameObjectCommand
+	{
+	public:
+
+		SingleMoveCommand( GameObject* gameObject, glm::vec2 direction ) : GameObjectCommand( gameObject )
+		{
+			m_Direction = direction;
+		}
+
+		virtual void Execute() override
+		{
+			if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
+			{
+				if ( auto movementComp{ GetGameObject()->GetComponent<dae::SingleMovementComponent>() } )
+				{
+					movementComp->SingleMove( m_Direction );
+				}
+			}
+		}
+
+	private:
+
+		glm::vec2 m_Direction;
 	};
 
 	class DealDamageCommand : public GameObjectCommand
@@ -65,9 +93,12 @@ namespace dae
 
 		virtual void Execute() override
 		{
-			if ( auto healthComp{ GetGameObject()->GetComponent<dae::HealthComponent>() } )
+			if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
 			{
-				healthComp->TakeDamage( m_Damage );
+				if ( auto healthComp{ GetGameObject()->GetComponent<dae::HealthComponent>() } )
+				{
+					healthComp->TakeDamage( m_Damage );
+				}
 			}
 		}
 
@@ -86,9 +117,12 @@ namespace dae
 
 		virtual void Execute() override
 		{
-			if ( auto healthComp{ GetGameObject()->GetComponent<dae::HealthComponent>() } )
+			if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
 			{
-				healthComp->Heal( m_Heal );
+				if ( auto healthComp{ GetGameObject()->GetComponent<dae::HealthComponent>() } )
+				{
+					healthComp->Heal( m_Heal );
+				}
 			}
 		}
 	private:
@@ -105,9 +139,12 @@ namespace dae
 
 		virtual void Execute() override
 		{
-			if ( auto scoreComp{ GetGameObject()->GetComponent<dae::ScoreComponent>() } )
+			if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
 			{
-				scoreComp->AddScore( m_Score );
+				if ( auto scoreComp{ GetGameObject()->GetComponent<dae::ScoreComponent>() } )
+				{
+					scoreComp->AddScore( m_Score );
+				}
 			}
 		}
 		private:
