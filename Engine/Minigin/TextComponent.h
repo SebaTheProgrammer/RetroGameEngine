@@ -15,7 +15,7 @@ namespace dae
 	class TextComponent : public BaseComponent
 	{
 	public:
-		TextComponent( GameObject* parentGameObject, const std::string& text, std::shared_ptr<Font> font );
+		TextComponent( GameObject* parentGameObject, const std::string& text, std::shared_ptr<Font> font, bool standStill = false );
 		virtual ~TextComponent() = default;
 
 		TextComponent( const TextComponent& other ) = delete;
@@ -32,6 +32,7 @@ namespace dae
 
 	private:
 		bool m_NeedsUpdate;
+		bool m_StandStill;
 		std::string m_Text;
 		Transform m_Transform{};
 		std::shared_ptr<Font> m_Font;

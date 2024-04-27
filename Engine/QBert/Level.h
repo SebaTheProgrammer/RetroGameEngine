@@ -23,12 +23,7 @@ private:
 	std::shared_ptr<PyramidCubes > m_pPyramid;
 	std::shared_ptr < dae::TextureComponent> m_Background;
 
-	//Players
+	//Player
 	dae::GameObject* m_QbertGameObject;
-
-	//Stats
-	std::shared_ptr<PlayerStats> m_pStats;
-	std::shared_ptr < dae::TextComponent> m_pHealthDisplay;
-
 
 };

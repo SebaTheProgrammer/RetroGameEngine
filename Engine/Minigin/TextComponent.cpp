@@ -8,12 +8,13 @@
 #include "GameTime.h"
 #include <iostream>
 
-dae::TextComponent::TextComponent( GameObject* parentGameObject, const std::string& text, std::shared_ptr<Font> font)
+dae::TextComponent::TextComponent( GameObject* parentGameObject, const std::string& text, std::shared_ptr<Font> font, bool standStill)
 	: BaseComponent( parentGameObject )
 	, m_NeedsUpdate( true )
 	, m_Text( text )
 	, m_Font( std::move( font ) )
 	, m_TextTexture( nullptr )
+	, m_StandStill(standStill)
 { 
 }
 
@@ -36,7 +37,14 @@ void dae::TextComponent::Update()
 		m_TextTexture = std::make_shared<Texture2D>( texture );
 		m_NeedsUpdate = false;
 
-		m_Transform = m_LocalTransform.GetPosition() + GetOwner()->GetWorldTransform().GetPosition();
+		if ( m_StandStill ) 
+		{
+			m_Transform = m_LocalTransform.GetPosition();
+		}
+		else
+		{
+			m_Transform = m_LocalTransform.GetPosition() + GetOwner()->GetWorldTransform().GetPosition();
+		}
 	}
 }
 

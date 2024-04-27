@@ -24,8 +24,7 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 
 	//players
 	multiplayer = multiplayer;
-
-	m_QbertGameObject = new dae::GameObject( level + 1 );
+	m_QbertGameObject = new dae::GameObject(level + 1);
 	m_QbertGameObject->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x, parentGameObject->GetLocalTransform().GetPosition().y - 40 } );
 	auto qbert = std::shared_ptr<QBert>{};
 
@@ -38,15 +37,15 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 	m_QbertGameObject->AddComponent( qbert );
 
 	//Stats
-	m_pStats = std::make_shared<PlayerStats>( m_QbertGameObject, 3 );
-	m_QbertGameObject->AddComponent( m_pStats );
-	qbert->AddObserver( m_pStats.get() );
+	auto stats = std::make_shared<PlayerStats>( m_QbertGameObject, 3);
+	m_QbertGameObject->AddComponent( stats );
+	qbert->AddObserver( stats.get() );
 
 	auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 );
-	m_pHealthDisplay = std::make_shared<dae::TextComponent>( m_QbertGameObject, "Health: " + std::to_string( m_pStats->GetLives() ), font );
-	m_pHealthDisplay->SetLocalPosition( -250, -50 );
-	m_QbertGameObject->AddComponent( m_pHealthDisplay );
-	m_pHealthDisplay->SetText( "Health: " + std::to_string( m_pStats->GetLives()) );
+	auto healthDisplay = std::make_shared<dae::TextComponent>( m_QbertGameObject, "Health: " + std::to_string(stats->GetLives()), font, true);
+	healthDisplay->SetLocalPosition( 50, 50 );
+	m_QbertGameObject->AddComponent( healthDisplay );
+	healthDisplay->SetText( "Health: " + std::to_string( stats->GetLives()) );
 
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_C, InputTypeKeyBoard::IsDownThisFrame, DamagePlayerCommand{ m_QbertGameObject, qbert.get()});
 }
@@ -63,6 +62,7 @@ void Level::Update()
 	m_pPyramid->Update();
 
 	m_QbertGameObject->Update();
+
 }
 
 void Level::Render() const
