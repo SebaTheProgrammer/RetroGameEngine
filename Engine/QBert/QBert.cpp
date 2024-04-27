@@ -8,6 +8,7 @@ QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D>
 	, m_Y( 0 )
 
 {
+	//all the textures, how can we make this more efficient?
 	m_pTextureIdle = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureIdle, m_Scale, 1, 8, 0, m_FrameTime );
 	GetOwner()->AddComponent( m_pTextureIdle );
 	m_pTextureJump = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureJump, m_Scale, 1, 8, 0, m_FrameTime );
@@ -17,26 +18,26 @@ QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D>
 	m_pTextureJumpBack = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureJumpBack, m_Scale, 1, 6, 0, m_FrameTime );
 	GetOwner()->AddComponent( m_pTextureJumpBack );
 
+	//movement
 	m_pMovenment = std::make_shared<dae::MovenmentComponent>( parentGameObject, m_Speed );
 	GetOwner()->AddComponent( m_pMovenment );
-
 	m_pSingleMovenment = std::make_shared<dae::SingleMovementComponent>( parentGameObject, m_Speed, 1.f );
 	GetOwner()->AddComponent( m_pSingleMovenment );
 
-	//REMAKE THE MOVEMENT FOR PRESSES
+	//REMAKE THE MOVEMENT FOR ONE SINGLE PRESSES
 	if ( m_KeyBoardInput )
 	{
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, dae::SingleMoveCommand{ GetOwner(), glm::vec2{-1.f, -1.f} } );
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_A, dae::SingleMoveCommand{ GetOwner(), glm::vec2{-1.f, 1.f} } );
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, dae::SingleMoveCommand{ GetOwner(), glm::vec2{1.f, 1.f} } );
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_D, dae::SingleMoveCommand{ GetOwner(), glm::vec2{1.f, -1.f} } );
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, dae::SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, -1.2f} } );
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_A, dae::SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f} } );
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, dae::SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f} } );
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_D, dae::SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f} } );
 	}
 	else
 	{
-		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(), glm::vec2{0.f, -1.f} } );
-		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(), glm::vec2{-1.f, 0.f} } );
-		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(), glm::vec2{1.f, 0.f} } );
-		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(), glm::vec2{0.f, 1.f} } );
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(),  glm::vec2{-0.75f, -1.2f} } );
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f} } );
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f} } );
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f} } );
 	}
 
 	m_pTextureIdle->Mirror( true );

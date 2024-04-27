@@ -13,6 +13,8 @@
 #include "InputManager.h"
 #include "InputCommands.h"
 #include "Level.h"
+#include "ResourceManager.h"
+#include <TextComponent.h>
 
 void load()
 {
@@ -22,6 +24,17 @@ void load()
 	auto texture = std::make_shared < dae::TextureComponent>( go.get(), "background.tga" );
 	go->AddComponent( texture );
 	mainMenu.Add( go );
+
+	auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 );
+	auto font2 = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 );
+	auto text = std::make_shared<dae::GameObject>( 0 );
+	text->AddComponent( std::make_shared<dae::TextComponent>( text.get(), "Main Menu", font ) );
+	text->SetLocalTransform( { 10, 10 } );
+	mainMenu.Add( text );
+	auto text2 = std::make_shared<dae::GameObject>( 0 );
+	text2->AddComponent( std::make_shared<dae::TextComponent>( text2.get(), "Press 0 (menu),1,2 or 3 to switch level (debug purposes)", font2 ) );
+	text2->SetLocalTransform( { 10, 80 } );
+	mainMenu.Add( text2 );
 
 	//LEVEL 1
 	auto& level1 = dae::SceneManager::GetInstance().CreateScene( "Level1" );
@@ -55,7 +68,7 @@ void load()
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_3, dae::OpenLevelCommand{ levelswitcher.get(), 3 } );
 	//
 
-	dae::SceneManager::GetInstance().SetCurrentScene( 1 );
+	dae::SceneManager::GetInstance().SetCurrentScene( 0 );
 }
 
 int main( int, char* [] ) {

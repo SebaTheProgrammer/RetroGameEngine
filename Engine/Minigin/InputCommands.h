@@ -83,6 +83,29 @@ namespace dae
 		glm::vec2 m_Direction;
 	};
 
+	class AnimationCommand : public GameObjectCommand
+	{
+	public:
+		AnimationCommand( GameObject* gameObject, int animation ) : GameObjectCommand( gameObject )
+		{
+			m_Animation = animation;
+		}
+
+		virtual void Execute() override
+		{
+			if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
+			{
+				if ( auto animationComp{ GetGameObject()->GetComponent<dae::AnimatedTextureComponent>() } )
+				{
+					//animationComp->SetAnimation( m_Animation );
+				}
+			}
+		}
+
+		private:
+			int m_Animation{};
+	};
+
 	class DealDamageCommand : public GameObjectCommand
 	{
 	public:

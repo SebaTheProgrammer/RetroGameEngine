@@ -44,7 +44,7 @@ private:
 
 	const float m_Scale = 1.2f;
 	const float m_FrameTime = 0.3f;
-	const float m_Speed = 50.f;
+	const float m_Speed = 47.f;
 
 	AnimationState m_CurrentState = AnimationState::Idle;
 };
