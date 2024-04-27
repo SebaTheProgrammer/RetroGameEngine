@@ -1,4 +1,5 @@
 #include "QBert.h"
+#include "ResourceManager.h"
 
 QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureIdle, std::shared_ptr<dae::Texture2D> textureJump,
 	std::shared_ptr<dae::Texture2D> textureIdleBack, std::shared_ptr<dae::Texture2D> textureJumpBack, bool keyboardinput )
@@ -10,13 +11,9 @@ QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D>
 {
 	//all the textures, how can we make this more efficient?
 	m_pTextureIdle = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureIdle, m_Scale, 1, 8, 0, m_FrameTime );
-	GetOwner()->AddComponent( m_pTextureIdle );
 	m_pTextureJump = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureJump, m_Scale, 1, 8, 0, m_FrameTime );
-	GetOwner()->AddComponent( m_pTextureJump );
 	m_pTextureIdleBack = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureIdleBack, m_Scale, 1, 8, 0, m_FrameTime );
-	GetOwner()->AddComponent( m_pTextureIdleBack );
 	m_pTextureJumpBack = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureJumpBack, m_Scale, 1, 6, 0, m_FrameTime );
-	GetOwner()->AddComponent( m_pTextureJumpBack );
 
 	//movement
 	m_pMovenment = std::make_shared<dae::MovenmentComponent>( parentGameObject, m_Speed );
@@ -38,8 +35,18 @@ QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D>
 		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f} } );
 		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f} } );
 	}
-
+	//testing mirror
 	m_pTextureIdle->Mirror( true );
+
+	////Stats
+	//m_pStats = std::make_shared<PlayerStats>( parentGameObject, 3 );
+	//GetOwner()->AddComponent( m_pStats );
+	//AddObserver( m_pStats.get() );
+
+	//auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 );
+	//m_pHealthDisplay = std::make_shared<dae::TextComponent>( parentGameObject, "", font );
+	//m_pHealthDisplay->SetText( "Health: " + std::to_string( m_pStats->GetLives() ) );
+	//GetOwner()->AddComponent( m_pHealthDisplay );
 }
 
 void QBert::Update()
@@ -78,4 +85,9 @@ void QBert::Render() const
 		m_pTextureJumpBack->Render();
 		break;
 	}
+}
+
+void QBert::GetsHit()
+{
+	NotifyObservers( dae::EventType::PLAYER_HIT, GetOwner() );
 }

@@ -164,7 +164,6 @@ void dae::GameObject::SetLocalTransform( Transform transform )
 void dae::GameObject::AddLocalTransform( Transform transform )
 {
 	m_LocalTransform += transform;
-	//std::cout<<m_LocalTransform.GetPosition().x<<":"<< m_LocalTransform.GetPosition().y << std::endl;
 	SetWorldTransformDirty();
 }
 
@@ -224,7 +223,6 @@ bool dae::GameObject::AddComponent( std::shared_ptr<BaseComponent> component )
 {
 	if ( component.get() )
 	{
-		//component.setowner?
 		m_pComponents.emplace_back( component );
 		return true;
 	}

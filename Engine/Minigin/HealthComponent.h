@@ -1,7 +1,6 @@
 #pragma once
 #include "BaseComponent.h"
-#include "OnDeathEvent.h"
-#include "OnTextChangedEvent.h"
+
 namespace dae
 {
 	class OnDeathEvent;

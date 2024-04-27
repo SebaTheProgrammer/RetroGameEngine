@@ -22,6 +22,9 @@
     <Filter Include="Level\Pyramid">
       <UniqueIdentifier>{7c1e46b0-0b2f-4937-aaec-570d2a946182}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Level\Player\Commands">
+      <UniqueIdentifier>{853e7f2f-3d25-41de-8340-3650f72ef225}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,6 +42,12 @@
     <ClCompile Include="Level.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="..\Minigin\SingleMovementComponent.cpp">
+      <Filter>Level\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStats.cpp">
+      <Filter>Level\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PyramidCubes.h">
@@ -52,6 +61,15 @@
     </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Minigin\SingleMovementComponent.h">
+      <Filter>Level\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStats.h">
+      <Filter>Level\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="DamagePlayerCommand.h">
+      <Filter>Level\Player\Commands</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

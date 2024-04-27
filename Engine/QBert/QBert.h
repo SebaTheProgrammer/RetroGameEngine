@@ -4,8 +4,11 @@
 #include <AnimatedTextureComponent.h>
 #include <MovenmentComponent.h>
 #include <SingleMovementComponent.h>
+#include "GameActor.h"
+#include "PlayerStats.h"
+#include <TextComponent.h>
 
-class QBert : public dae::BaseComponent
+class QBert : public dae::BaseComponent, public dae::GameActor
 {
 	public:
 	QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureIdle, std::shared_ptr<dae::Texture2D> textureJump,
@@ -15,6 +18,8 @@ class QBert : public dae::BaseComponent
 
 	void Update() override;
 	void Render() const override;
+
+	void GetsHit();
 
 	enum class AnimationState
 	{
@@ -28,6 +33,8 @@ class QBert : public dae::BaseComponent
 
 private:
 	bool m_KeyBoardInput;
+
+	//all the textures, how can we make this more efficient?
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdle;
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureJump;
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdleBack;
@@ -35,6 +42,10 @@ private:
 
 	std::shared_ptr<dae::MovenmentComponent> m_pMovenment;
 	std::shared_ptr<dae::SingleMovementComponent> m_pSingleMovenment;
+
+	//Stats
+	std::shared_ptr<PlayerStats> m_pStats;
+	std::shared_ptr < dae::TextComponent> m_pHealthDisplay;
 	//hitbox
 	//lives
 	//ect

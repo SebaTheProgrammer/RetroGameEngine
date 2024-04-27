@@ -36,11 +36,13 @@ void load()
 	text2->SetLocalTransform( { 10, 80 } );
 	mainMenu.Add( text2 );
 
+	//SHOULD I MAKE THIS LIKE THIS? One baselevel component? Or add 1000 things here?
+
 	//LEVEL 1
 	auto& level1 = dae::SceneManager::GetInstance().CreateScene( "Level1" );
 	auto goLevel = std::make_shared<dae::GameObject>(1);
 	goLevel->SetLocalTransform( { 300, 130 } );
-	auto level = std::make_shared <Level>( goLevel.get(),0,5,0 );
+	auto level = std::make_shared <Level>( goLevel.get(),false,5,0 );
 	goLevel->AddComponent( level );
 	level1.Add( goLevel );
 
@@ -48,7 +50,7 @@ void load()
 	auto& level2 = dae::SceneManager::GetInstance().CreateScene( "Level2" );
 	auto goLevel2 = std::make_shared<dae::GameObject>(2);
 	goLevel2->SetLocalTransform( { 300, 130 } );
-	auto Level2 = std::make_shared <Level>( goLevel2.get(), 0, 7, 1 );
+	auto Level2 = std::make_shared <Level>( goLevel2.get(), false, 7, 1 );
 	goLevel2->AddComponent( Level2 );
 	level2.Add( goLevel2 );
 
@@ -56,7 +58,7 @@ void load()
 	auto& level3 = dae::SceneManager::GetInstance().CreateScene( "Level3" );
 	auto goLevel3 = std::make_shared<dae::GameObject>(3);
 	goLevel3->SetLocalTransform( { 300, 130 } );
-	auto Level3 = std::make_shared <Level>( goLevel3.get(), 0, 7, 2 );
+	auto Level3 = std::make_shared <Level>( goLevel3.get(), true, 7, 2 );
 	goLevel3->AddComponent( Level3 );
 	level3.Add( goLevel3 );
 

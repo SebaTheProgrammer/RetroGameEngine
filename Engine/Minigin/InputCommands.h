@@ -26,7 +26,6 @@ namespace dae
 		GameObjectCommand( GameObject* gameObject ) : m_pGameObject{ gameObject } {}
 		virtual ~GameObjectCommand() {}
 
-	protected:
 		GameObject* GetGameObject() const { return m_pGameObject; }
 
 	private:
@@ -63,6 +62,11 @@ namespace dae
 	public:
 
 		SingleMoveCommand( GameObject* gameObject, glm::vec2 direction ) : GameObjectCommand( gameObject )
+		{
+			m_Direction = direction;
+		}
+
+		void SetDirection( glm::vec2 direction )
 		{
 			m_Direction = direction;
 		}

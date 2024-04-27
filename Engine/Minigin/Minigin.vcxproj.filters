@@ -27,9 +27,6 @@
     <Filter Include="Observers">
       <UniqueIdentifier>{921f4acc-1e12-444d-8194-73d487e61bcb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Observers\Events">
-      <UniqueIdentifier>{aeec0910-c68c-453d-95ab-800bd1d32156}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SoundSystem">
       <UniqueIdentifier>{7e47f848-027c-4a09-ad40-d19344d75822}</UniqueIdentifier>
     </Filter>
@@ -104,15 +101,6 @@
     <ClInclude Include="GameActor.h">
       <Filter>Observers</Filter>
     </ClInclude>
-    <ClInclude Include="GameEvents.h">
-      <Filter>Observers\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="OnDeathEvent.h">
-      <Filter>Observers\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="OnTextChangedEvent.h">
-      <Filter>Observers\Events</Filter>
-    </ClInclude>
     <ClInclude Include="ScoreComponent.h">
       <Filter>Objects\Components\Rest</Filter>
     </ClInclude>
@@ -128,8 +116,8 @@
     <ClInclude Include="AnimatedTextureComponent.h">
       <Filter>Objects\Components\Rest</Filter>
     </ClInclude>
-    <ClInclude Include="SingleMovementComponent.h">
-      <Filter>Objects\Components\Rest</Filter>
+    <ClInclude Include="GameEvents.h">
+      <Filter>Observers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -188,9 +176,6 @@
       <Filter>Objects\Components\Rest</Filter>
     </ClCompile>
     <ClCompile Include="AnimatedTextureComponent.cpp">
-      <Filter>Objects\Components\Rest</Filter>
-    </ClCompile>
-    <ClCompile Include="SingleMovementComponent.cpp">
       <Filter>Objects\Components\Rest</Filter>
     </ClCompile>
   </ItemGroup>

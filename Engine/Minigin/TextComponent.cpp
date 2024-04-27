@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include "ResourceManager.h"
 #include "GameTime.h"
+#include <iostream>
 
 dae::TextComponent::TextComponent( GameObject* parentGameObject, const std::string& text, std::shared_ptr<Font> font)
 	: BaseComponent( parentGameObject )
