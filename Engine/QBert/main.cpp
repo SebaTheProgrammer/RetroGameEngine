@@ -62,10 +62,10 @@ void load()
 
 	//for debug purposes
 	auto levelswitcher = std::make_shared<dae::GameObject>(-1);
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_0, dae::OpenLevelCommand{ levelswitcher.get(), 0 } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_1, dae::OpenLevelCommand{ levelswitcher.get(), 1 } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_2, dae::OpenLevelCommand{ levelswitcher.get(), 2 } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_3, dae::OpenLevelCommand{ levelswitcher.get(), 3 } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_0, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 0 } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_1, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 1 } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_2, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 2 } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_3, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 3 } );
 	//
 
 	dae::SceneManager::GetInstance().SetCurrentScene( 0 );

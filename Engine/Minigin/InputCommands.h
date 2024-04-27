@@ -95,7 +95,7 @@ namespace dae
 		{
 			if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
 			{
-				if ( auto animationComp{ GetGameObject()->GetComponent<dae::AnimatedTextureComponent>() } )
+				//if ( auto animationComp{ GetGameObject()->GetComponent<dae::AnimatedTextureComponent>() } )
 				{
 					//animationComp->SetAnimation( m_Animation );
 				}

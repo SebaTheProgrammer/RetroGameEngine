@@ -24,13 +24,12 @@ QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D>
 	m_pSingleMovenment = std::make_shared<dae::SingleMovementComponent>( parentGameObject, m_Speed, 1.f );
 	GetOwner()->AddComponent( m_pSingleMovenment );
 
-	//REMAKE THE MOVEMENT FOR ONE SINGLE PRESSES
 	if ( m_KeyBoardInput )
 	{
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, dae::SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, -1.2f} } );
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_A, dae::SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f} } );
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, dae::SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f} } );
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_D, dae::SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f} } );
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, InputTypeKeyBoard::IsPressed, dae::SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, -1.2f} } );
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_A, InputTypeKeyBoard::IsPressed, dae::SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f} } );
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsPressed, dae::SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f} } );
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_D, InputTypeKeyBoard::IsPressed, dae::SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f} } );
 	}
 	else
 	{

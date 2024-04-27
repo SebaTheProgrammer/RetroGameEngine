@@ -34,9 +34,9 @@ namespace dae
 		}
 
 		template<typename CommandType>
-		void BindActionKeyBoard( SDL_Scancode key, CommandType command )// InputTypeKeyBoard inputType
+		void BindActionKeyBoard( SDL_Scancode key, InputTypeKeyBoard inputType, CommandType command )
 		{
-			InputBindingKeyBoard inputBinding{ key, command };//inputType
+			InputBindingKeyBoard inputBinding{ key,inputType, command };
 			m_InputBindingsKeyBoard.emplace_back( inputBinding );
 		}
 

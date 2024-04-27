@@ -27,25 +27,22 @@ bool dae::InputManager::ProcessInput()
 	const uint8_t* pKeyboardState = SDL_GetKeyboardState( nullptr );
 
 	const uint8_t* currentKeyboardState = SDL_GetKeyboardState( NULL );
-	memcpy( m_PreviousKeyboardState, currentKeyboardState, SDL_NUM_SCANCODES );
 
 	for ( auto& inputBinding : m_InputBindingsKeyBoard )
 	{
 		if ( !inputBinding.command )
 			continue;
 
-		if ( pKeyboardState[ inputBinding.key ] )
-		{
-			inputBinding.command->Execute();
-		}
-
-		/*switch ( inputBinding.inputType )
+		switch ( inputBinding.inputType )
 		{
 		case InputTypeKeyBoard::IsPressed:
 		{
 			if ( IsPressedKB( inputBinding.key ) )
 			{
-				
+				if ( pKeyboardState[ inputBinding.key ] )
+				{
+					inputBinding.command->Execute();
+				}
 			}
 		}
 		case InputTypeKeyBoard::IsDownThisFrame:
@@ -69,7 +66,8 @@ bool dae::InputManager::ProcessInput()
 				}
 			}
 			break;
-		}*/
+		}
+		}
 	}
 
 	//Controller input handling
@@ -109,6 +107,7 @@ bool dae::InputManager::ProcessInput()
 		}
 	}
 
+	memcpy( m_PreviousKeyboardState, currentKeyboardState, SDL_NUM_SCANCODES );
 	return true;
 }
 
