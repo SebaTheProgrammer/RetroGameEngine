@@ -42,6 +42,7 @@ namespace dae
 		float m_Scale;
 
 		bool m_Mirror = false;
+		bool m_StandStill = false;
 	};
 }
 

@@ -45,8 +45,8 @@
     <ClCompile Include="..\Minigin\SingleMovementComponent.cpp">
       <Filter>Level\Player</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerStats.cpp">
-      <Filter>Level\Player</Filter>
+    <ClCompile Include="LevelHandeler.cpp">
+      <Filter>Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,11 +65,11 @@
     <ClInclude Include="..\Minigin\SingleMovementComponent.h">
       <Filter>Level\Player</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerStats.h">
-      <Filter>Level\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="DamagePlayerCommand.h">
+    <ClInclude Include="PlayerCommands.h">
       <Filter>Level\Player\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelHandeler.h">
+      <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

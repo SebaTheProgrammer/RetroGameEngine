@@ -5,7 +5,8 @@
 #include "ResourceManager.h"
 #include "TextureComponent.h"
 #include "AnimatedTextureComponent.h"
-#include "DamagePlayerCommand.h"
+#include "PlayerCommands.h"
+#include "LevelHandeler.h"
 
 Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLevel, int level )
 	: dae::BaseComponent( parentGameObject )
@@ -14,13 +15,13 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 
 	//bg
 	std::string bgFilename = "bg" + std::to_string( level + 1 ) + ".png";
-	m_Background = std::make_shared<dae::TextureComponent>( parentGameObject, bgFilename );
-	m_Background->SetLocalPosition( -parentGameObject->GetLocalTransform().GetPosition().x, -parentGameObject->GetLocalTransform().GetPosition().y );
-	parentGameObject->AddComponent( m_Background );
+	auto background = std::make_shared<dae::TextureComponent>( parentGameObject, bgFilename );
+	background->SetLocalPosition( -parentGameObject->GetLocalTransform().GetPosition().x, -parentGameObject->GetLocalTransform().GetPosition().y );
+	parentGameObject->AddComponent( background );
 
 	//pyramid base
-	m_pPyramid = std::make_shared<PyramidCubes>( parentGameObject, howLongLevel, level );
-	parentGameObject->AddComponent( m_pPyramid );
+	auto pyramid = std::make_shared<PyramidCubes>( parentGameObject, howLongLevel, level );
+	parentGameObject->AddComponent( pyramid );
 
 	//players
 	multiplayer = multiplayer;
@@ -36,17 +37,18 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 		true ) );
 	m_QbertGameObject->AddComponent( qbert );
 
-	//Stats
-	auto stats = std::make_shared<PlayerStats>( m_QbertGameObject, 3);
-	m_QbertGameObject->AddComponent( stats );
+	//Stats/levelhandeler
+	auto stats = std::make_shared<LevelHandeler>( parentGameObject, 3);
+	parentGameObject->AddComponent( stats );
 	qbert->AddObserver( stats.get() );
 
 	auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 );
-	auto healthDisplay = std::make_shared<dae::TextComponent>( m_QbertGameObject, "Health: " + std::to_string(stats->GetLives()), font, true);
+	auto healthDisplay = std::make_shared<dae::TextComponent>( parentGameObject, "Health: " + std::to_string(stats->GetLives()), font, true);
 	healthDisplay->SetLocalPosition( 50, 50 );
-	m_QbertGameObject->AddComponent( healthDisplay );
+	parentGameObject->AddComponent( healthDisplay );
 	healthDisplay->SetText( "Health: " + std::to_string( stats->GetLives()) );
 
+	//Debug damage
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_C, InputTypeKeyBoard::IsDownThisFrame, DamagePlayerCommand{ m_QbertGameObject, qbert.get()});
 }
 
@@ -57,19 +59,10 @@ Level::~Level()
 
 void Level::Update()
 {
-	m_Background->Update();
-
-	m_pPyramid->Update();
-
 	m_QbertGameObject->Update();
-
 }
 
 void Level::Render() const
 {
-	m_Background->Render();
-
-	m_pPyramid->Render();
-
 	m_QbertGameObject->Render();
 }

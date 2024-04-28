@@ -155,16 +155,16 @@
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="PlayerStats.cpp" />
+    <ClCompile Include="LevelHandeler.cpp" />
     <ClCompile Include="PyramidCubes.cpp" />
     <ClCompile Include="QBert.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Minigin\SingleMovementComponent.h" />
     <ClInclude Include="Cube.h" />
-    <ClInclude Include="DamagePlayerCommand.h" />
+    <ClInclude Include="PlayerCommands.h" />
     <ClInclude Include="Level.h" />
-    <ClInclude Include="PlayerStats.h" />
+    <ClInclude Include="LevelHandeler.h" />
     <ClInclude Include="PyramidCubes.h" />
     <ClInclude Include="QBert.h" />
   </ItemGroup>

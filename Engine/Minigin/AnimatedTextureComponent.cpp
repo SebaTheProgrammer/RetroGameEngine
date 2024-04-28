@@ -25,11 +25,21 @@ void dae::AnimatedTextureComponent::Update()
 {
 	if ( m_pTexture ) 
 	{
-		const auto& pos = m_LocalTransform.GetPosition() + GetOwner()->GetWorldTransform().GetPosition();
-		m_X = pos.x;
-		m_Y = pos.y;
+		if ( m_StandStill )
+		{
+			const auto& pos = m_LocalTransform.GetPosition();
+			m_X = pos.x;
+			m_Y = pos.y;
+		}
+		else
+		{
+			const auto& pos = m_LocalTransform.GetPosition() + GetOwner()->GetWorldTransform().GetPosition();
+			m_X = pos.x;
+			m_Y = pos.y;
+		}
 
-		if ( m_FrameTime > 0.0f ) {
+		if ( m_FrameTime > 0.0f ) 
+		{
 			m_AccumulatedTime += GameTime::GetInstance().GetDeltaTime();
 
 			if ( m_AccumulatedTime >= m_FrameTime ) 

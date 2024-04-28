@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseComponent.h"
 #include "AnimatedTextureComponent.h"
+#include "Observer.h"
 
 class Cube : public dae::BaseComponent
 {
@@ -20,18 +21,19 @@ class Cube : public dae::BaseComponent
 	void SetLocalPosition( float x, float y);
 
 	void Won();
-
 	void LandedOnThisCube();
 
 	bool IsCompleted() const { return m_Completed; }
 
 	private:
+
+
 		std::shared_ptr<dae::AnimatedTextureComponent> m_pTexture;
 
 		float m_X;
 		float m_Y;
 
-		float m_WinFrameTime = 0.5f;
+		float m_WinFrameTime = 0.7f;
 
 		int m_CurrentFrame = 0;
 		int m_Level;

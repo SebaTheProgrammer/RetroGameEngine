@@ -3,11 +3,11 @@
 #include "Observer.h"
 #include "GameObject.h"
 
-class PlayerStats final : public dae::BaseComponent, public dae::Observer
+class LevelHandeler final : public dae::BaseComponent, public dae::Observer
 {
 	public:
-	PlayerStats( dae::GameObject* const parentGameObject, int lives );
-	~PlayerStats();
+	LevelHandeler( dae::GameObject* const parentGameObject, int lives );
+	~LevelHandeler();
 
 	void Update() override;
 	void Notify( dae::EventType event, dae::GameObject* gameObj ) override;

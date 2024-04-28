@@ -67,4 +67,11 @@ void PyramidCubes::CompleteLevel()
 	}
 }
 
+void PyramidCubes::WalkedOnCube( int cubeIndex )
+{
+	m_pCubes[cubeIndex]->LandedOnThisCube();
+
+    //TODO: check all cubes if done? If so, complete level
+}
+
 

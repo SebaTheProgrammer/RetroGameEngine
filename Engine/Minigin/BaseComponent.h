@@ -24,6 +24,7 @@ namespace dae
 		virtual void Render() const {};
 
 		inline void SetLocalPosition( float x, float y, float z = 0.f ) { m_LocalTransform.SetPosition( x, y, z ); }
+		inline void AddLocalPosition( float x, float y, float z = 0.f ) { m_LocalTransform.AddPosition( x, y, z ); }
 
 	protected:
 

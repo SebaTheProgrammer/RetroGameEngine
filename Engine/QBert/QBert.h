@@ -5,7 +5,7 @@
 #include <MovenmentComponent.h>
 #include <SingleMovementComponent.h>
 #include "GameActor.h"
-#include "PlayerStats.h"
+#include "LevelHandeler.h"
 #include <TextComponent.h>
 
 class QBert : public dae::BaseComponent, public dae::GameActor
@@ -20,6 +20,8 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 	void Render() const override;
 
 	void GetsHit();
+
+	int GetIndex() const { return m_Index; }
 
 	enum class AnimationState
 	{
@@ -44,7 +46,7 @@ private:
 	std::shared_ptr<dae::SingleMovementComponent> m_pSingleMovenment;
 
 	//Stats
-	std::shared_ptr<PlayerStats> m_pStats;
+	std::shared_ptr<LevelHandeler> m_pStats;
 	std::shared_ptr < dae::TextComponent> m_pHealthDisplay;
 	//hitbox
 	//lives
@@ -58,4 +60,6 @@ private:
 	const float m_Speed = 47.f;
 
 	AnimationState m_CurrentState = AnimationState::Idle;
+
+	int m_Index{ 0 };
 };

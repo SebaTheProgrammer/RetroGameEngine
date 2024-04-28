@@ -2,7 +2,6 @@
 #include "BaseComponent.h"
 #include <TextureComponent.h>
 #include "Texture2D.h"
-#include "PlayerStats.h"
 #include "TextComponent.h"
 
 class QBert;
@@ -20,8 +19,6 @@ public:
 private:
 	//Level
 	const int m_MAX_LEVEL = 5;
-	std::shared_ptr<PyramidCubes > m_pPyramid;
-	std::shared_ptr < dae::TextureComponent> m_Background;
 
 	//Player
 	dae::GameObject* m_QbertGameObject;

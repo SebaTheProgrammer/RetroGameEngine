@@ -24,6 +24,12 @@ namespace dae
 			m_Position.y = y;
 			m_Position.z = z;
 		}
+		void AddPosition( const float x, const float y, const float z = 0)
+		{
+			m_Position.x += x;
+			m_Position.y += y;
+			m_Position.z += z;
+		}
 	
 		Transform operator+( Transform other )
 		{

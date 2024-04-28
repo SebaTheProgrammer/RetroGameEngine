@@ -57,36 +57,6 @@ namespace dae
 		glm::vec2 m_Direction;
 	};
 
-	class SingleMoveCommand : public GameObjectCommand
-	{
-	public:
-
-		SingleMoveCommand( GameObject* gameObject, glm::vec2 direction ) : GameObjectCommand( gameObject )
-		{
-			m_Direction = direction;
-		}
-
-		void SetDirection( glm::vec2 direction )
-		{
-			m_Direction = direction;
-		}
-
-		virtual void Execute() override
-		{
-			if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
-			{
-				if ( auto movementComp{ GetGameObject()->GetComponent<dae::SingleMovementComponent>() } )
-				{
-					movementComp->SingleMove( m_Direction );
-				}
-			}
-		}
-
-	private:
-
-		glm::vec2 m_Direction;
-	};
-
 	class AnimationCommand : public GameObjectCommand
 	{
 	public:

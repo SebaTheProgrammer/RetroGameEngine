@@ -85,7 +85,6 @@ namespace dae
 		std::vector<std::shared_ptr<GameObject>> m_pChildren{};
 		GameObject* m_Parent{};
 
-
 		void AddChild( std::shared_ptr<GameObject>child );
 		void RemoveChild( GameObject* child );
 		void UpdateChildren();

@@ -1,6 +1,8 @@
 #pragma once
 #include "BaseComponent.h"
 #include <GameObject.h>
+#include "Observer.h"
+
 class Cube;
 
 class PyramidCubes : public dae::BaseComponent
@@ -24,6 +26,7 @@ public:
 	void SetScale( float scale ){ m_Scale = scale; }
 
 	void CompleteLevel();
+	void WalkedOnCube( int cubeIndex );
 
 private:
 	std::shared_ptr<dae::Texture2D> m_pTexture;

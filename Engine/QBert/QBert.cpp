@@ -1,5 +1,7 @@
 #include "QBert.h"
 #include "ResourceManager.h"
+#include "PyramidCubes.h"
+#include "PlayerCommands.h"
 
 QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureIdle, std::shared_ptr<dae::Texture2D> textureJump,
 	std::shared_ptr<dae::Texture2D> textureIdleBack, std::shared_ptr<dae::Texture2D> textureJumpBack, bool keyboardinput )
@@ -23,30 +25,20 @@ QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D>
 
 	if ( m_KeyBoardInput )
 	{
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, InputTypeKeyBoard::IsPressed, dae::SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, -1.2f} } );
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_A, InputTypeKeyBoard::IsPressed, dae::SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f} } );
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsPressed, dae::SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f} } );
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_D, InputTypeKeyBoard::IsPressed, dae::SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f} } );
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, InputTypeKeyBoard::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, -1.2f} } );
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_A, InputTypeKeyBoard::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f} } );
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f} } );
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_D, InputTypeKeyBoard::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f} } );
 	}
 	else
 	{
-		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(),  glm::vec2{-0.75f, -1.2f} } );
-		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f} } );
-		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f} } );
-		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed, dae::MoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f} } );
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed, SingleMoveCommand{ GetOwner(),  glm::vec2{-0.75f, -1.2f} } );
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f} } );
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f} } );
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f} } );
 	}
 	//testing mirror
 	m_pTextureIdle->Mirror( true );
-
-	////Stats
-	//m_pStats = std::make_shared<PlayerStats>( parentGameObject, 3 );
-	//GetOwner()->AddComponent( m_pStats );
-	//AddObserver( m_pStats.get() );
-
-	//auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 );
-	//m_pHealthDisplay = std::make_shared<dae::TextComponent>( parentGameObject, "", font );
-	//m_pHealthDisplay->SetText( "Health: " + std::to_string( m_pStats->GetLives() ) );
-	//GetOwner()->AddComponent( m_pHealthDisplay );
 }
 
 void QBert::Update()

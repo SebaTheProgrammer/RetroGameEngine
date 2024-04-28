@@ -15,6 +15,8 @@
 #include "Level.h"
 #include "ResourceManager.h"
 #include <TextComponent.h>
+#include "QBert.h"
+#include "PlayerCommands.h"
 
 void load()
 {
