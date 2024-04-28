@@ -1,5 +1,6 @@
 #include "Cube.h"
 #include "Renderer.h"
+#include <iostream>
 
 Cube::Cube( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, float scale, int level )
 	: BaseComponent( parentGameObject ), m_Level( level )
@@ -32,12 +33,12 @@ void Cube::Won()
 void Cube::LandedOnThisCube()
 {
 						//level 1 == 0
-	if ( m_CurrentFrame < m_Level+1 ) 
+	if ( m_CurrentFrame < m_Level + 1)
 	{
 		m_pTexture->NextFrame();
 		++m_CurrentFrame;
 	}
-	else
+	if( m_CurrentFrame > m_Level )
 	{
 		m_Completed = true;
 	}

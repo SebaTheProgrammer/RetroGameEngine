@@ -1,11 +1,10 @@
 #pragma once
 #include <string>
 #include "GameEvents.h"
+#include "GameObject.h"
 
 namespace dae
 {
-	class GameActor;
-
 	class Observer
 	{
 	public:

@@ -20,24 +20,37 @@ QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D>
 	//movement
 	m_pMovenment = std::make_shared<dae::MovenmentComponent>( parentGameObject, m_Speed );
 	GetOwner()->AddComponent( m_pMovenment );
-	m_pSingleMovenment = std::make_shared<dae::SingleMovementComponent>( parentGameObject, m_Speed, 1.f );
+	m_pSingleMovenment = std::make_shared<SingleMovementComponent>( parentGameObject, m_Speed, m_SpeedBetweenSteps );
 	GetOwner()->AddComponent( m_pSingleMovenment );
 
 	if ( m_KeyBoardInput )
 	{
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, InputTypeKeyBoard::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, -1.2f} } );
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_A, InputTypeKeyBoard::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f} } );
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f} } );
-		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_D, InputTypeKeyBoard::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f} } );
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, InputTypeKeyBoard::IsPressed, 
+			SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
+
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_A, InputTypeKeyBoard::IsPressed, 
+			SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown } );
+
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsPressed, 
+			SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown } );
+
+		dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_D, InputTypeKeyBoard::IsPressed, 
+			SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp } );
 	}
 	else
 	{
-		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed, SingleMoveCommand{ GetOwner(),  glm::vec2{-0.75f, -1.2f} } );
-		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f} } );
-		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f} } );
-		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed, SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f} } );
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed,
+			SingleMoveCommand{ GetOwner(),  glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
+
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsPressed,
+			SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown } );
+
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed,
+			SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown } );
+
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed,
+			SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp } );
 	}
-	//testing mirror
 	m_pTextureIdle->Mirror( true );
 }
 
@@ -82,4 +95,42 @@ void QBert::Render() const
 void QBert::GetsHit()
 {
 	NotifyObservers( dae::EventType::PLAYER_HIT, GetOwner() );
+}
+
+void QBert::Moved( SingleMovementComponent::Direction dir )
+{
+	switch ( dir )
+	{
+	case SingleMovementComponent::Direction::LeftUp:
+		SetAnimationState( AnimationState::IdleBack );
+		SetMirror( true );
+		break;
+	case SingleMovementComponent::Direction::RightDown:
+		SetAnimationState( AnimationState::Idle );
+		SetMirror( false );
+		break;
+	case SingleMovementComponent::Direction::LeftDown:
+		SetAnimationState( AnimationState::Idle );
+		SetMirror( true );
+		break;
+	case SingleMovementComponent::Direction::RightUp:
+		SetAnimationState( AnimationState::IdleBack );
+		SetMirror( false );
+		break;
+	}
+
+	NotifyObservers( dae::EventType::PLAYER_MOVED, GetOwner() );
+}
+
+void QBert::SetAnimationState( AnimationState state )
+{
+	m_CurrentState = state;
+}
+
+void QBert::SetMirror( bool mirror )
+{
+	m_pTextureIdle->Mirror( mirror );
+	m_pTextureJump->Mirror( mirror );
+	m_pTextureIdleBack->Mirror( mirror );
+	m_pTextureJumpBack->Mirror( mirror );
 }

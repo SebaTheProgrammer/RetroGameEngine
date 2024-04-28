@@ -33,43 +33,49 @@ void LevelHandeler::Update()
 
 void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 {
-	if ( QBert * qbert{ gameObj->GetComponent<QBert>().get()} )
+
+	switch ( event )
 	{
-		switch ( event )
+	case dae::EventType::PLAYER_DIED:
+		std::cout << "PLAYER DIED" << std::endl;
+		break;
+
+	case dae::EventType::PLAYER_OUT_OF_BOUNDS:
+
+		Notify( dae::EventType::PLAYER_HIT, gameObj );
+		//RESET POSITION
+
+		break;
+
+	case dae::EventType::PLAYER_HIT:
+		if ( m_Lives > 1 )
 		{
-		case dae::EventType::PLAYER_DIED:
-			std::cout << "PLAYER DIED" << std::endl;
-			GetOwner()->GetComponent<PyramidCubes>()->CompleteLevel();
-			break;
-
-		case dae::EventType::PLAYER_HIT:
-			if ( m_Lives > 1 )
-			{
-				--m_Lives;
-			}
-			else 
-			{
-				m_Lives = 0;
-				Notify( dae::EventType::PLAYER_DIED, gameObj );
-			}
-
-			break;
-
-		case dae::EventType::KILL_ENEMY:
-			m_Score += 100;
-			break;
-
-		case dae::EventType::PLAYER_WON:
-			GetOwner()->GetComponent<PyramidCubes>()->CompleteLevel();
-			break;
-
-		case dae::EventType::PLAYER_MOVED:
-			gameObj->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetIndex() );
-			break;
+			--m_Lives;
 		}
+		else
+		{
+			m_Lives = 0;
+			Notify( dae::EventType::PLAYER_DIED, gameObj );
+		}
+		break;
 
-		m_NeedsUpdate = true;
+	case dae::EventType::KILL_ENEMY:
+		m_Score += 100;
+		break;
+
+	case dae::EventType::PLAYER_WON:
+		GetOwner()->GetComponent<PyramidCubes>()->CompleteLevel();
+		break;
+
+	case dae::EventType::PLAYER_MOVED:
+		if ( QBert * qbert{ gameObj->GetComponent<QBert>().get() } )
+		{
+			GetOwner()->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetDirection() );
+		}
+		break;
 	}
+
+	m_NeedsUpdate = true;
 }
 
 void LevelHandeler::SetLives( int lives )

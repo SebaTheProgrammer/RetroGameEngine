@@ -21,7 +21,9 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 
 	void GetsHit();
 
-	int GetIndex() const { return m_Index; }
+	void Moved( SingleMovementComponent::Direction dir );
+
+	SingleMovementComponent::Direction GetDirection() const { return m_pSingleMovenment->GetDirection(); }
 
 	enum class AnimationState
 	{
@@ -31,7 +33,8 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 		JumpBack
 	};
 
-	void SetAnimationState( AnimationState state ) { m_CurrentState = state; }
+	void SetAnimationState( AnimationState state );
+	void SetMirror( bool mirror );
 
 private:
 	bool m_KeyBoardInput;
@@ -43,7 +46,7 @@ private:
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureJumpBack;
 
 	std::shared_ptr<dae::MovenmentComponent> m_pMovenment;
-	std::shared_ptr<dae::SingleMovementComponent> m_pSingleMovenment;
+	std::shared_ptr<SingleMovementComponent> m_pSingleMovenment;
 
 	//Stats
 	std::shared_ptr<LevelHandeler> m_pStats;
@@ -58,8 +61,7 @@ private:
 	const float m_Scale = 1.2f;
 	const float m_FrameTime = 0.3f;
 	const float m_Speed = 47.f;
+	const float m_SpeedBetweenSteps = 0.7f;
 
 	AnimationState m_CurrentState = AnimationState::Idle;
-
-	int m_Index{ 0 };
 };

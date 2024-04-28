@@ -3,7 +3,8 @@
 #include "Renderer.h"
 #include "GameTime.h"
 
-dae::AnimatedTextureComponent::AnimatedTextureComponent( GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, float scale, int rows, int columns, int currentColumn, float frameTime )
+dae::AnimatedTextureComponent::AnimatedTextureComponent( GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, 
+	float scale, int rows, int columns, int currentColumn, float frameTime )
 :
 	BaseComponent( parentGameObject )
 	, m_pTexture( texture )
@@ -69,7 +70,6 @@ void dae::AnimatedTextureComponent::Render() const
 	int wichlevelIndexWidth = textureWidth / m_Columns;
 	int wichlevelIndexHeight = textureHeight / m_Rows;
 
-	// Create the source rect
 	SDL_Rect sourceRect{};
 	sourceRect.x = wichlevelIndexWidth * m_CurrentColumn;
 	sourceRect.y = wichlevelIndexHeight * m_CurrentRow;
@@ -77,15 +77,10 @@ void dae::AnimatedTextureComponent::Render() const
 	sourceRect.h = wichlevelIndexHeight;
 
 	//mirror
-	if ( m_Mirror ) 
-	{
-		SDL_RendererFlip flip = SDL_FLIP_HORIZONTAL;
-		dae::Renderer::GetInstance().RenderTexture( *m_pTexture, m_X, m_Y, float( wichlevelIndexHeight ) * m_Scale, float( wichlevelIndexWidth ) * m_Scale, &sourceRect, flip );
-	}
-	else 
-	{
-		dae::Renderer::GetInstance().RenderTexture( *m_pTexture, m_X, m_Y, float( wichlevelIndexHeight ) * m_Scale, float( wichlevelIndexWidth ) * m_Scale, &sourceRect );
-	}
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
+	if ( m_Mirror ) { flip = SDL_FLIP_HORIZONTAL;}
+
+	dae::Renderer::GetInstance().RenderTexture( *m_pTexture, m_X, m_Y, float( wichlevelIndexHeight ) * m_Scale, float( wichlevelIndexWidth ) * m_Scale, &sourceRect, flip );
 }
 
 void dae::AnimatedTextureComponent::NextFrame()

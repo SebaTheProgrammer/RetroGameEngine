@@ -1,14 +1,16 @@
 #include "SingleMovementComponent.h"
 #include "GameTime.h"
+#include "../QBert/QBert.h"
+#include <iostream>
 
-dae::SingleMovementComponent::SingleMovementComponent( GameObject* const parentGameObject, float speed, float timeTakenForStep )
+SingleMovementComponent::SingleMovementComponent( dae::GameObject* const parentGameObject, float speed, float timeTakenForStep)
 	: MovenmentComponent( parentGameObject, speed )
 	, m_TimeBetweenSteps{ timeTakenForStep }
 	, m_Speed{ speed }
 {
 }
 
-void dae::SingleMovementComponent::SingleMove( glm::vec2 direction )
+void SingleMovementComponent::SingleMove( glm::vec2 direction, Direction dir )
 {
     //This is a simple way to make sure the movement is not interrupted
     //you also need to hold the key to have a old school feel
@@ -20,7 +22,7 @@ void dae::SingleMovementComponent::SingleMove( glm::vec2 direction )
 
         while ( m_ElapsedTime < 1.0f )
         {
-            float deltaTime = GameTime::GetInstance().GetDeltaTime();
+            float deltaTime = dae::GameTime::GetInstance().GetDeltaTime();
 
             m_ElapsedTime += deltaTime;
 
@@ -29,11 +31,15 @@ void dae::SingleMovementComponent::SingleMove( glm::vec2 direction )
             MovenmentComponent::Move( movementDelta );
         }
 
+        m_Direction = dir;
+
+        GetOwner()->GetComponent<QBert>().get()->Moved( m_Direction );
+
         m_MovementInProgress = false;
         m_ElapsedTime = 0.0f;
         m_MovementDelayTimer = m_TimeBetweenSteps;
     }
 
-    m_MovementDelayTimer -= GameTime::GetInstance().GetDeltaTime();
+    m_MovementDelayTimer -= dae::GameTime::GetInstance().GetDeltaTime();
 }
 

@@ -29,28 +29,30 @@ class SingleMoveCommand : public dae::GameObjectCommand
 {
 public:
 
-	SingleMoveCommand( dae::GameObject* gameObject, glm::vec2 direction ) : GameObjectCommand( gameObject )
+	SingleMoveCommand( dae::GameObject* gameObject, glm::vec2 direction, SingleMovementComponent::Direction dir ) : GameObjectCommand( gameObject )
 	{
 		m_Direction = direction;
+		m_Dir = dir;
 	}
 
-	void SetDirection( glm::vec2 direction )
+	void SetDirection( glm::vec2 direction, SingleMovementComponent::Direction dir )
 	{
 		m_Direction = direction;
+		m_Dir = dir;
 	}
 
 	virtual void Execute() override
 	{
 		if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
 		{
-			if ( auto movementComp{ GetGameObject()->GetComponent<dae::SingleMovementComponent>() } )
+			if ( auto movementComp{ GetGameObject()->GetComponent<SingleMovementComponent>() } )
 			{
-				movementComp->SingleMove( m_Direction );
+				movementComp->SingleMove( m_Direction, m_Dir );
 			}
 		}
 	}
 
 private:
-
+	SingleMovementComponent::Direction m_Dir;
 	glm::vec2 m_Direction;
 };

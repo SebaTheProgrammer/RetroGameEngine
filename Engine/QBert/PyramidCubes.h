@@ -2,10 +2,11 @@
 #include "BaseComponent.h"
 #include <GameObject.h>
 #include "Observer.h"
+#include "QBert.h"
 
 class Cube;
 
-class PyramidCubes : public dae::BaseComponent
+class PyramidCubes : public dae::BaseComponent, public dae::GameActor
 {
 public:
 	PyramidCubes( dae::GameObject* parentGameObject, int size, int wichLevel);
@@ -26,7 +27,7 @@ public:
 	void SetScale( float scale ){ m_Scale = scale; }
 
 	void CompleteLevel();
-	void WalkedOnCube( int cubeIndex );
+	void WalkedOnCube( SingleMovementComponent::Direction dir);
 
 private:
 	std::shared_ptr<dae::Texture2D> m_pTexture;
@@ -36,5 +37,10 @@ private:
 	std::vector<std::shared_ptr<Cube>> m_pCubes;
 
 	float m_Scale = 1.5f;
+
+	int m_QBertCubeIndex = 0;
+	int m_ActiveRow = 1;
+
+	int m_CompletedCubes = 0;
 };
 

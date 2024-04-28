@@ -14,6 +14,7 @@ namespace dae
 		LEVEL_ENDED,
 		KILL_ENEMY,
 		PLAYER_MOVED,
+		PLAYER_OUT_OF_BOUNDS
 	};
 }
 

@@ -34,9 +34,13 @@ void load()
 	text->SetLocalTransform( { 10, 10 } );
 	mainMenu.Add( text );
 	auto text2 = std::make_shared<dae::GameObject>( 0 );
-	text2->AddComponent( std::make_shared<dae::TextComponent>( text2.get(), "Press 0 (menu),1,2 or 3 to switch level (debug purposes)", font2 ) );
+	text2->AddComponent( std::make_shared<dae::TextComponent>( text2.get(), "Press 0 (menu), 1, 2 or 3 to switch level (debug purposes)", font2 ) );
 	text2->SetLocalTransform( { 10, 80 } );
 	mainMenu.Add( text2 );
+	auto text3 = std::make_shared<dae::GameObject>( 0 );
+	text3->AddComponent( std::make_shared<dae::TextComponent>( text3.get(), "Hold WASD to move, C to inflict damage", font2 ) );
+	text3->SetLocalTransform( { 10, 110 } );
+	mainMenu.Add( text3 );
 
 	//SHOULD I MAKE THIS LIKE THIS? One baselevel component? Or add 1000 things here?
 
@@ -60,7 +64,7 @@ void load()
 	auto& level3 = dae::SceneManager::GetInstance().CreateScene( "Level3" );
 	auto goLevel3 = std::make_shared<dae::GameObject>(3);
 	goLevel3->SetLocalTransform( { 300, 130 } );
-	auto Level3 = std::make_shared <Level>( goLevel3.get(), true, 7, 2 );
+	auto Level3 = std::make_shared <Level>( goLevel3.get(), false, 7, 2 );
 	goLevel3->AddComponent( Level3 );
 	level3.Add( goLevel3 );
 

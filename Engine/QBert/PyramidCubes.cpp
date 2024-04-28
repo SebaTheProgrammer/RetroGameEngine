@@ -2,6 +2,8 @@
 #include "ResourceManager.h"
 #include "Cube.h"
 #include <SDL.h>
+#include <iostream>
+#include <GameTime.h>
 
 PyramidCubes::PyramidCubes( dae::GameObject* parentGameObject, int size, int wichLevel )
 	: BaseComponent( parentGameObject )
@@ -31,7 +33,7 @@ void PyramidCubes::Render() const
 
 void PyramidCubes::SetLevel( const int level )
 {
-    m_WhichLevel= level;
+    m_WhichLevel = level;
     m_pCubes.clear();
 
     float initialX = 0;
@@ -65,13 +67,66 @@ void PyramidCubes::CompleteLevel()
     {
         cube->Won();
 	}
+
+   // float elapsedTime = 0.0f;
+
+    //while ( elapsedTime < 3.0f ) 
+    //{
+
+    //    float deltaTime = dae::GameTime::GetInstance().GetDeltaTime();
+    //    elapsedTime += deltaTime;
+    //}
+
+    //dae::SceneManager::GetInstance().SetCurrentScene( m_WhichLevel + 2 );
 }
 
-void PyramidCubes::WalkedOnCube( int cubeIndex )
+void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
 {
-	m_pCubes[cubeIndex]->LandedOnThisCube();
+    switch ( dir )
+    {
+    case SingleMovementComponent::Direction::LeftUp:
+        m_QBertCubeIndex -= ( m_ActiveRow);
+        m_ActiveRow -= 1;
+        break;
 
-    //TODO: check all cubes if done? If so, complete level
+    case SingleMovementComponent::Direction::RightDown:
+        m_QBertCubeIndex += ( m_ActiveRow + 1 );
+        m_ActiveRow += 1;
+        break;
+
+    case SingleMovementComponent::Direction::LeftDown:
+        m_QBertCubeIndex += m_ActiveRow;
+        m_ActiveRow += 1;
+        break;
+
+    case SingleMovementComponent::Direction::RightUp:
+        m_QBertCubeIndex -= (m_ActiveRow-1);
+        m_ActiveRow -= 1;
+        break;
+    }
+
+    if ( m_QBertCubeIndex >= 0 && m_QBertCubeIndex < m_pCubes.size() && m_pCubes[ m_QBertCubeIndex ] != nullptr )
+    {
+        m_pCubes[ m_QBertCubeIndex ]->LandedOnThisCube();
+    }
+    else 
+    {
+        NotifyObservers(dae::EventType::PLAYER_OUT_OF_BOUNDS, GetOwner() );
+    }
+
+    m_CompletedCubes = 0;
+    for ( const auto& cube : m_pCubes )
+    {
+        if ( cube->IsCompleted() )
+        {
+			m_CompletedCubes += 1;
+		}
+	}
+
+    if ( m_CompletedCubes == m_pCubes.size() ) 
+    {
+        NotifyObservers( dae::EventType::PLAYER_WON, GetOwner() );
+    }
 }
 
 

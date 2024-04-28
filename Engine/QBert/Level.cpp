@@ -20,7 +20,7 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 	parentGameObject->AddComponent( background );
 
 	//pyramid base
-	auto pyramid = std::make_shared<PyramidCubes>( parentGameObject, howLongLevel, level );
+	auto pyramid = std::make_shared<PyramidCubes>( parentGameObject, howLongLevel, level);
 	parentGameObject->AddComponent( pyramid );
 
 	//players
@@ -31,15 +31,17 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 
 	qbert = ( std::make_shared<QBert>( m_QbertGameObject,
 		dae::ResourceManager::GetInstance().LoadTexture( "qbertIdle.png" ),
-		dae::ResourceManager::GetInstance().LoadTexture( "qbertIdle.png" ),
-		dae::ResourceManager::GetInstance().LoadTexture( "qbertIdle.png" ),
-		dae::ResourceManager::GetInstance().LoadTexture( "qbertIdle.png" ),
+		dae::ResourceManager::GetInstance().LoadTexture( "qbertJump.png" ),
+		dae::ResourceManager::GetInstance().LoadTexture( "qbertBackFaceIdle.png" ),
+		dae::ResourceManager::GetInstance().LoadTexture( "qbertBackFaceJump.png" ),
 		true ) );
 	m_QbertGameObject->AddComponent( qbert );
 
-	//Stats/levelhandeler
+	//Levelhandeler
 	auto stats = std::make_shared<LevelHandeler>( parentGameObject, 3);
 	parentGameObject->AddComponent( stats );
+
+	pyramid->AddObserver( stats.get() );
 	qbert->AddObserver( stats.get() );
 
 	auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 );
