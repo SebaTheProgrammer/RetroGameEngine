@@ -4,7 +4,7 @@
 
 namespace dae
 {
-	/*class ServiceLocator final
+	class ServiceLocator final
 	{
 		static std::unique_ptr<dae::SoundSystem> _ss_instance;
 	public:
@@ -12,5 +12,5 @@ namespace dae
 		static void RegisterSoundSystem( std::unique_ptr<dae::SoundSystem>&& ss ) { _ss_instance = std::move( ss ); }
 
 		~ServiceLocator();
-	};*/
+	};
 }

@@ -11,8 +11,7 @@
 class QBert : public dae::BaseComponent, public dae::GameActor
 {
 	public:
-	QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureIdle, std::shared_ptr<dae::Texture2D> textureJump,
-		std::shared_ptr<dae::Texture2D> textureIdleBack, std::shared_ptr<dae::Texture2D> textureJumpBack,
+	QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureIdle, std::shared_ptr<dae::Texture2D> textureIdleBack,
 		bool keyboardinput);
 	virtual ~QBert() = default;
 
@@ -28,22 +27,20 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 	enum class AnimationState
 	{
 		Idle,
-		Jump,
 		IdleBack,
-		JumpBack
 	};
 
 	void SetAnimationState( AnimationState state );
 	void SetMirror( bool mirror );
+
+	void ResetPosition();
 
 private:
 	bool m_KeyBoardInput;
 
 	//all the textures, how can we make this more efficient?
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdle;
-	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureJump;
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdleBack;
-	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureJumpBack;
 
 	std::shared_ptr<dae::MovenmentComponent> m_pMovenment;
 	std::shared_ptr<SingleMovementComponent> m_pSingleMovenment;

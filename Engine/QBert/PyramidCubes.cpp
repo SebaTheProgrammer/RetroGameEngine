@@ -80,38 +80,48 @@ void PyramidCubes::CompleteLevel()
     //dae::SceneManager::GetInstance().SetCurrentScene( m_WhichLevel + 2 );
 }
 
+void PyramidCubes::ResetLevel()
+{
+	m_ActiveRow = 1;
+	m_QBertCubeIndex = 0;
+}
+
 void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
 {
-    switch ( dir )
+    int oldActiveRow = m_ActiveRow;
+
+    // Update cube index and active row based on movement direction
+    switch (dir) {
+        case SingleMovementComponent::Direction::LeftUp:
+            m_QBertCubeIndex -= oldActiveRow;
+            m_ActiveRow -= 1;
+            break;
+        case SingleMovementComponent::Direction::RightDown:
+            m_QBertCubeIndex += oldActiveRow + 1;
+            m_ActiveRow += 1;
+            break;
+        case SingleMovementComponent::Direction::LeftDown:
+            m_QBertCubeIndex += oldActiveRow;
+            m_ActiveRow += 1;
+            break;
+        case SingleMovementComponent::Direction::RightUp:
+            m_QBertCubeIndex -= oldActiveRow - 1;
+            m_ActiveRow -= 1;
+            break;
+    }
+
+    unsigned int rowStartIndex = ( (m_ActiveRow-1) * ( m_ActiveRow)) / 2;
+    unsigned int rowEndIndex = rowStartIndex + m_ActiveRow-1;
+
+    if ( (m_QBertCubeIndex < 0 || m_ActiveRow > m_Size) || (m_QBertCubeIndex < rowStartIndex || m_QBertCubeIndex > rowEndIndex) )
     {
-    case SingleMovementComponent::Direction::LeftUp:
-        m_QBertCubeIndex -= ( m_ActiveRow);
-        m_ActiveRow -= 1;
-        break;
-
-    case SingleMovementComponent::Direction::RightDown:
-        m_QBertCubeIndex += ( m_ActiveRow + 1 );
-        m_ActiveRow += 1;
-        break;
-
-    case SingleMovementComponent::Direction::LeftDown:
-        m_QBertCubeIndex += m_ActiveRow;
-        m_ActiveRow += 1;
-        break;
-
-    case SingleMovementComponent::Direction::RightUp:
-        m_QBertCubeIndex -= (m_ActiveRow-1);
-        m_ActiveRow -= 1;
-        break;
+        NotifyObservers(dae::EventType::PLAYER_OUT_OF_BOUNDS, GetOwner());
+        return;
     }
 
     if ( m_QBertCubeIndex >= 0 && m_QBertCubeIndex < m_pCubes.size() && m_pCubes[ m_QBertCubeIndex ] != nullptr )
     {
         m_pCubes[ m_QBertCubeIndex ]->LandedOnThisCube();
-    }
-    else 
-    {
-        NotifyObservers(dae::EventType::PLAYER_OUT_OF_BOUNDS, GetOwner() );
     }
 
     m_CompletedCubes = 0;
@@ -128,5 +138,4 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
         NotifyObservers( dae::EventType::PLAYER_WON, GetOwner() );
     }
 }
-
 

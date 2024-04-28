@@ -119,7 +119,8 @@
     </Link>
     <PostBuildEvent />
     <Lib>
-      <AdditionalDependencies>xinput.lib</AdditionalDependencies>
+      <AdditionalDependencies>xinput.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\vryen\Desktop\Retro_Engine\Engine\3rdParty\SDL2\include\SDL2_mixer\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -141,7 +142,8 @@
     </Link>
     <PostBuildEvent />
     <Lib>
-      <AdditionalDependencies>xinput.lib</AdditionalDependencies>
+      <AdditionalDependencies>xinput.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\vryen\Desktop\Retro_Engine\Engine\3rdParty\SDL2\include\SDL2_mixer\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -167,7 +169,8 @@
     </Link>
     <PostBuildEvent />
     <Lib>
-      <AdditionalDependencies>xinput.lib</AdditionalDependencies>
+      <AdditionalDependencies>xinput.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\vryen\Desktop\Retro_Engine\Engine\3rdParty\SDL2\include\SDL2_mixer\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -193,7 +196,8 @@
     </Link>
     <PostBuildEvent />
     <Lib>
-      <AdditionalDependencies>xinput.lib</AdditionalDependencies>
+      <AdditionalDependencies>xinput.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\vryen\Desktop\Retro_Engine\Engine\3rdParty\SDL2\include\SDL2_mixer\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -211,14 +215,13 @@
     <ClInclude Include="InputStructs.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MovenmentComponent.h" />
-    <ClInclude Include="NullSoundSystem.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ScoreComponent.h" />
-    <ClInclude Include="SDLSoundSystem.h" />
+    <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SoundSystem.h" />
     <ClInclude Include="TextComponent.h" />
@@ -243,6 +246,8 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
+    <ClCompile Include="ServiceLocator.cpp" />
+    <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureComponent.cpp" />

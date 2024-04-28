@@ -27,6 +27,7 @@ public:
 	void SetScale( float scale ){ m_Scale = scale; }
 
 	void CompleteLevel();
+	void ResetLevel();
 	void WalkedOnCube( SingleMovementComponent::Direction dir);
 
 private:

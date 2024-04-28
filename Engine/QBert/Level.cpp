@@ -7,6 +7,7 @@
 #include "AnimatedTextureComponent.h"
 #include "PlayerCommands.h"
 #include "LevelHandeler.h"
+#include <iostream>
 
 Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLevel, int level )
 	: dae::BaseComponent( parentGameObject )
@@ -31,9 +32,7 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 
 	qbert = ( std::make_shared<QBert>( m_QbertGameObject,
 		dae::ResourceManager::GetInstance().LoadTexture( "qbertIdle.png" ),
-		dae::ResourceManager::GetInstance().LoadTexture( "qbertJump.png" ),
 		dae::ResourceManager::GetInstance().LoadTexture( "qbertBackFaceIdle.png" ),
-		dae::ResourceManager::GetInstance().LoadTexture( "qbertBackFaceJump.png" ),
 		true ) );
 	m_QbertGameObject->AddComponent( qbert );
 

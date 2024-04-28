@@ -43,8 +43,9 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::PLAYER_OUT_OF_BOUNDS:
 
 		Notify( dae::EventType::PLAYER_HIT, gameObj );
-		//RESET POSITION
 
+		m_pQbert->ResetPosition();
+		GetOwner()->GetComponent<PyramidCubes>()->ResetLevel();
 		break;
 
 	case dae::EventType::PLAYER_HIT:
@@ -70,6 +71,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::PLAYER_MOVED:
 		if ( QBert * qbert{ gameObj->GetComponent<QBert>().get() } )
 		{
+			m_pQbert = qbert;
 			GetOwner()->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetDirection() );
 		}
 		break;

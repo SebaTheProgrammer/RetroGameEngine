@@ -3,21 +3,16 @@
 #include "PyramidCubes.h"
 #include "PlayerCommands.h"
 
-QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureIdle, std::shared_ptr<dae::Texture2D> textureJump,
-	std::shared_ptr<dae::Texture2D> textureIdleBack, std::shared_ptr<dae::Texture2D> textureJumpBack, bool keyboardinput )
+QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureIdle, std::shared_ptr<dae::Texture2D> textureIdleBack, bool keyboardinput )
 	:BaseComponent( parentGameObject )
 	, m_KeyBoardInput( keyboardinput )
 	, m_X( 0 )
 	, m_Y( 0 )
 
 {
-	//all the textures, how can we make this more efficient?
 	m_pTextureIdle = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureIdle, m_Scale, 1, 8, 0, m_FrameTime );
-	m_pTextureJump = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureJump, m_Scale, 1, 8, 0, m_FrameTime );
 	m_pTextureIdleBack = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureIdleBack, m_Scale, 1, 8, 0, m_FrameTime );
-	m_pTextureJumpBack = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureJumpBack, m_Scale, 1, 6, 0, m_FrameTime );
 
-	//movement
 	m_pMovenment = std::make_shared<dae::MovenmentComponent>( parentGameObject, m_Speed );
 	GetOwner()->AddComponent( m_pMovenment );
 	m_pSingleMovenment = std::make_shared<SingleMovementComponent>( parentGameObject, m_Speed, m_SpeedBetweenSteps );
@@ -61,14 +56,8 @@ void QBert::Update()
 	case AnimationState::Idle:
 		m_pTextureIdle->Update();
 		break;
-	case AnimationState::Jump:
-		m_pTextureJump->Update();
-		break;
 	case AnimationState::IdleBack:
 		m_pTextureIdleBack->Update();
-		break;
-	case AnimationState::JumpBack:
-		m_pTextureJumpBack->Update();
 		break;
 	}
 }
@@ -80,14 +69,8 @@ void QBert::Render() const
 	case AnimationState::Idle:
 		m_pTextureIdle->Render();
 		break;
-	case AnimationState::Jump:
-		m_pTextureJump->Render();
-		break;
 	case AnimationState::IdleBack:
 		m_pTextureIdleBack->Render();
-		break;
-	case AnimationState::JumpBack:
-		m_pTextureJumpBack->Render();
 		break;
 	}
 }
@@ -130,7 +113,11 @@ void QBert::SetAnimationState( AnimationState state )
 void QBert::SetMirror( bool mirror )
 {
 	m_pTextureIdle->Mirror( mirror );
-	m_pTextureJump->Mirror( mirror );
 	m_pTextureIdleBack->Mirror( mirror );
-	m_pTextureJumpBack->Mirror( mirror );
+}
+
+void QBert::ResetPosition()
+{
+	SetAnimationState( AnimationState::Idle );
+	GetOwner()->SetLocalTransform( { 300, 90 } );
 }

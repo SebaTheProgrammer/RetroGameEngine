@@ -18,14 +18,16 @@
 #include "QBert.h"
 #include "PlayerCommands.h"
 #include "ServiceLocator.h"
+#include "SoundSystem.h"
+
 void load()
 {
 	//Sound
-	/*dae::ServiceLocator::RegisterSoundSystem( std::make_unique<dae::SDLSoundSystem>() );
-	dae::AudioClip clip{ "../Data/coin.wav" };
-	auto& ss = dae::ServiceLocator::GetSoundSystem();
-	ss.AddAudioClip( 10, std::make_shared<dae::AudioClip>( clip ) );
-	ss.Play( 10, 100.f );*/
+	//dae::ServiceLocator::RegisterSoundSystem( std::make_unique<dae::SDLSoundSystem>() );
+	//auto clip = std::make_shared < dae::AudioClip>( "../Data/coin.wav" );
+	//auto& ss = dae::ServiceLocator::GetSoundSystem();
+	//ss.AddAudioClip( 10, clip );
+	//ss.Play( 10, 100.f );
 
 
 	//MAIN MENU

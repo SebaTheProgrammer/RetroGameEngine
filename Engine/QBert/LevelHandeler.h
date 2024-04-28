@@ -3,6 +3,8 @@
 #include "Observer.h"
 #include "GameObject.h"
 
+class QBert;
+
 class LevelHandeler final : public dae::BaseComponent, public dae::Observer
 {
 	public:
@@ -22,5 +24,7 @@ private:
 	bool m_NeedsUpdate;
 	int m_Lives;
 	int m_Score;
+
+	QBert* m_pQbert;
 };
 

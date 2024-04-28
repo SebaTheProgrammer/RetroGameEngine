@@ -107,17 +107,14 @@
     <ClInclude Include="SoundSystem.h">
       <Filter>SoundSystem</Filter>
     </ClInclude>
-    <ClInclude Include="SDLSoundSystem.h">
-      <Filter>SoundSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="NullSoundSystem.h">
-      <Filter>SoundSystem</Filter>
-    </ClInclude>
     <ClInclude Include="AnimatedTextureComponent.h">
       <Filter>Objects\Components\Rest</Filter>
     </ClInclude>
     <ClInclude Include="GameEvents.h">
       <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="ServiceLocator.h">
+      <Filter>SoundSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +174,12 @@
     </ClCompile>
     <ClCompile Include="AnimatedTextureComponent.cpp">
       <Filter>Objects\Components\Rest</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceLocator.cpp">
+      <Filter>SoundSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundSystem.cpp">
+      <Filter>SoundSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
