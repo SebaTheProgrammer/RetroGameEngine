@@ -17,9 +17,17 @@
 #include <TextComponent.h>
 #include "QBert.h"
 #include "PlayerCommands.h"
-
+#include "ServiceLocator.h"
 void load()
 {
+	//Sound
+	/*dae::ServiceLocator::RegisterSoundSystem( std::make_unique<dae::SDLSoundSystem>() );
+	dae::AudioClip clip{ "../Data/coin.wav" };
+	auto& ss = dae::ServiceLocator::GetSoundSystem();
+	ss.AddAudioClip( 10, std::make_shared<dae::AudioClip>( clip ) );
+	ss.Play( 10, 100.f );*/
+
+
 	//MAIN MENU
 	auto& mainMenu = dae::SceneManager::GetInstance().CreateScene( "MainMenu" );
 	auto go = std::make_shared<dae::GameObject>(0);
@@ -33,10 +41,12 @@ void load()
 	text->AddComponent( std::make_shared<dae::TextComponent>( text.get(), "Main Menu", font ) );
 	text->SetLocalTransform( { 10, 10 } );
 	mainMenu.Add( text );
+
 	auto text2 = std::make_shared<dae::GameObject>( 0 );
 	text2->AddComponent( std::make_shared<dae::TextComponent>( text2.get(), "Press 0 (menu), 1, 2 or 3 to switch level (debug purposes)", font2 ) );
 	text2->SetLocalTransform( { 10, 80 } );
 	mainMenu.Add( text2 );
+
 	auto text3 = std::make_shared<dae::GameObject>( 0 );
 	text3->AddComponent( std::make_shared<dae::TextComponent>( text3.get(), "Hold WASD to move, C to inflict damage", font2 ) );
 	text3->SetLocalTransform( { 10, 110 } );

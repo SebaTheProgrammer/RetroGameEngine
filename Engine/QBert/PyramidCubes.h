@@ -38,9 +38,9 @@ private:
 
 	float m_Scale = 1.5f;
 
-	int m_QBertCubeIndex = 0;
+	unsigned int m_QBertCubeIndex = 0;
 	int m_ActiveRow = 1;
 
-	int m_CompletedCubes = 0;
+	unsigned int m_CompletedCubes = 0;
 };
 
