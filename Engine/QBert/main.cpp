@@ -25,8 +25,6 @@ void load()
 	//Sound
 	dae::ServiceLocator::RegisterSoundSystem( std::make_unique<dae::SDLSoundSystem>() );
 	auto clip = std::make_shared < dae::AudioClip>( "../Data/Sounds/Level_Screen_Tune.wav" );
-	clip->Load();
-	clip->Play();
 	auto& ss = dae::ServiceLocator::GetSoundSystem();
 	ss.AddAudioClip( 1, clip );
 	ss.Play( 1, 100.f );
