@@ -82,12 +82,29 @@ void PyramidCubes::CompleteLevel()
 
 void PyramidCubes::ResetLevel()
 {
-	m_ActiveRow = 1;
-	m_QBertCubeIndex = 0;
+    for ( auto& cube : m_pCubes )
+    {
+        cube->Reset();
+    }
+
+    ResetIndex();
+}
+
+void PyramidCubes::ResetIndex()
+{
+    m_ActiveRow = 1;
+    m_QBertCubeIndex = 0;
+}
+
+void PyramidCubes::GameOver()
+{
+    m_CanMove = false;
 }
 
 void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
 {
+    if( !m_CanMove ) return;
+
     int oldActiveRow = m_ActiveRow;
 
     // Update cube index and active row based on movement direction
@@ -113,7 +130,7 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
     unsigned int rowStartIndex = ( (m_ActiveRow-1) * ( m_ActiveRow)) / 2;
     unsigned int rowEndIndex = rowStartIndex + m_ActiveRow-1;
 
-    if ( (m_QBertCubeIndex < 0 || m_ActiveRow > m_Size) || (m_QBertCubeIndex < rowStartIndex || m_QBertCubeIndex > rowEndIndex) )
+    if ( (m_QBertCubeIndex < 0 || m_ActiveRow > m_Size) || (m_QBertCubeIndex < rowStartIndex || m_QBertCubeIndex > rowEndIndex) || m_ActiveRow == 0)
     {
         NotifyObservers(dae::EventType::PLAYER_OUT_OF_BOUNDS, GetOwner());
         return;

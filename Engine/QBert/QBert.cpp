@@ -121,3 +121,9 @@ void QBert::ResetPosition()
 	SetAnimationState( AnimationState::Idle );
 	GetOwner()->SetLocalTransform( { 300, 90 } );
 }
+
+void QBert::GameOver()
+{
+	m_CanMove = false;
+	m_pSingleMovenment->SetCanMove( false );
+}

@@ -43,3 +43,10 @@ void Cube::LandedOnThisCube()
 		m_Completed = true;
 	}
 }
+
+void Cube::Reset()
+{
+	m_pTexture->Reset();
+	m_Completed = false;
+	m_CurrentFrame = 0;
+}

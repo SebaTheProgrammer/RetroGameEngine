@@ -22,6 +22,7 @@ class Cube : public dae::BaseComponent
 
 	void Won();
 	void LandedOnThisCube();
+	void Reset();
 
 	bool IsCompleted() const { return m_Completed; }
 

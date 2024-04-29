@@ -23,11 +23,13 @@
 void load()
 {
 	//Sound
-	//dae::ServiceLocator::RegisterSoundSystem( std::make_unique<dae::SDLSoundSystem>() );
-	//auto clip = std::make_shared < dae::AudioClip>( "../Data/coin.wav" );
-	//auto& ss = dae::ServiceLocator::GetSoundSystem();
-	//ss.AddAudioClip( 10, clip );
-	//ss.Play( 10, 100.f );
+	dae::ServiceLocator::RegisterSoundSystem( std::make_unique<dae::SDLSoundSystem>() );
+	auto clip = std::make_shared < dae::AudioClip>( "../Data/Sounds/Level_Screen_Tune.wav" );
+	clip->Load();
+	clip->Play();
+	auto& ss = dae::ServiceLocator::GetSoundSystem();
+	ss.AddAudioClip( 1, clip );
+	ss.Play( 1, 100.f );
 
 
 	//MAIN MENU
@@ -50,7 +52,7 @@ void load()
 	mainMenu.Add( text2 );
 
 	auto text3 = std::make_shared<dae::GameObject>( 0 );
-	text3->AddComponent( std::make_shared<dae::TextComponent>( text3.get(), "Hold WASD to move, C to inflict damage", font2 ) );
+	text3->AddComponent( std::make_shared<dae::TextComponent>( text3.get(), "Hold WASD to move, you can complete the level and/or die", font2 ) );
 	text3->SetLocalTransform( { 10, 110 } );
 	mainMenu.Add( text3 );
 

@@ -4,7 +4,7 @@
 #include <map>
 #include "Singleton.h"
 #include <iostream>
-#include <SDL2_mixer/include/SDL_mixer.h>
+#include <SDL_mixer.h>
 #include <thread>
 #include <mutex>
 
@@ -18,7 +18,7 @@ namespace dae
         AudioClip( const std::string& filePath )
             : filePath( filePath ), loaded( false ), chunk( nullptr ) {}
 
-        ~AudioClip() 
+        ~AudioClip()
         {
             std::lock_guard<std::mutex> lock( mutex );
             if ( chunk ) {
@@ -51,7 +51,7 @@ namespace dae
             }
         }
 
-        void Play() 
+        void Play()
         {
             std::lock_guard<std::mutex> lock( mutex );
             if ( loaded && chunk ) {
@@ -59,7 +59,7 @@ namespace dae
             }
         }
 
-        void Pause() 
+        void Pause()
         {
             std::lock_guard<std::mutex> lock( mutex );
             if ( loaded && chunk ) {
@@ -67,7 +67,7 @@ namespace dae
             }
         }
 
-        void SetVolume( float volume ) 
+        void SetVolume( float volume )
         {
             std::lock_guard<std::mutex> lock( mutex );
             if ( chunk ) {
@@ -77,7 +77,7 @@ namespace dae
             }
         }
 
-        bool IsLoaded() 
+        bool IsLoaded()
         {
             std::lock_guard<std::mutex> lock( mutex );
             return loaded;
@@ -101,84 +101,78 @@ namespace dae
         std::mutex mutex;
     };
 
-	class SoundSystem
-	{
-	public:
-		friend class Singleton<SoundSystem>;
-		SoundSystem() = default;
-		virtual ~SoundSystem();
+    class SoundSystem
+    {
+    public:
+        friend class Singleton<SoundSystem>;
+        SoundSystem() = default;
+        virtual ~SoundSystem() {};
 
-		virtual void Play( sound_id, const float)
-		{
-		}
+        virtual void Play( sound_id, const float ) {};
 
-        virtual void PauseSound( const sound_id )
+        virtual void PauseSound( const sound_id ) {};
+
+        virtual void AddAudioClip( const sound_id, const std::shared_ptr<AudioClip>& ) {};
+    };
+
+    class NullSoundSystem final : public SoundSystem
+    {
+        void Play( const sound_id, const float ) override {}
+    };
+
+    class LoggingSoundSystem final : public SoundSystem
+    {
+        std::unique_ptr<SoundSystem> _real_ss;
+    public:
+        LoggingSoundSystem( std::unique_ptr<SoundSystem>&& ss ) : _real_ss( std::move( ss ) ) {}
+        virtual ~LoggingSoundSystem() {};
+
+        void Play( sound_id id, const float volume ) override
         {
-		}
+            _real_ss->Play( id, volume );
+            std::cout << "playing " << id << " at volume " << volume << std::endl;
+        }
+    };
 
-        virtual void AddAudioClip( const sound_id, const std::shared_ptr<AudioClip>& )
+    class SDLSoundSystem final : public SoundSystem
+    {
+    public:
+        SDLSoundSystem() { if ( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 4, 2048 ) < 0 ) { return; } }
+
+        ~SDLSoundSystem() override { Mix_CloseAudio(); }
+
+        void Play( const sound_id id, const float volume = 100 ) override
         {
-		}
-	};
+            auto audioclip = audioclips[ id ];
 
-	class NullSoundSystem final : public SoundSystem
-	{
-		void Play( const sound_id, const float ) override {}
-	};
+            if ( !audioclip->IsLoaded() ) audioclip->Load();
 
-	class LoggingSoundSystem final : public SoundSystem
-	{
-		std::unique_ptr<SoundSystem> _real_ss;
-	public:
-		LoggingSoundSystem( std::unique_ptr<SoundSystem>&& ss ) : _real_ss( std::move( ss ) ) {}
-		virtual ~LoggingSoundSystem();
+            audioclip->SetVolume( volume );
 
-		void Play( sound_id id, const float volume ) override
-		{
-			_real_ss->Play( id, volume );
-			std::cout << "playing " << id << " at volume " << volume << std::endl;
-		}
-	};
+            audioclip->Play();
+        }
 
-	class SDLSoundSystem final : public SoundSystem
-	{
-	public:
+        void PauseSound( const sound_id id )
+        {
+            auto audioclip = audioclips[ id ];
 
-		~SDLSoundSystem() override;
+            if ( !audioclip->IsLoaded() )
+                audioclip->Load();
 
-		void Play( const sound_id id, const float volume = 100 ) override
-		{
-			auto audioclip = audioclips[ id ];
+            audioclip->Pause();
+        }
 
-			if ( !audioclip->IsLoaded() )
-				audioclip->Load();
+        void AddAudioClip( const sound_id id, const std::shared_ptr<AudioClip>& audioclip )
+        {
+            audioclips[ id ] = audioclip;
+        }
 
-			audioclip->SetVolume( volume );
+        void RemoveAudioClip( const sound_id id )
+        {
+            audioclips.erase( id );
+        }
 
-			audioclip->Play();
-		}
-
-		void PauseSound( const sound_id id )
-		{
-			auto audioclip = audioclips[ id ];
-
-			if ( !audioclip->IsLoaded() )
-				audioclip->Load();
-
-			audioclip->Pause();
-		}
-
-		void AddAudioClip( const sound_id id, const std::shared_ptr<AudioClip>& audioclip )
-		{
-			audioclips[ id ] = audioclip;
-		}
-
-		void RemoveAudioClip( const sound_id id )
-		{
-			audioclips.erase( id );
-		}
-
-	private:
-		std::map<sound_id, std::shared_ptr<AudioClip>> audioclips{};
-	};
+    private:
+        std::map<sound_id, std::shared_ptr<AudioClip>> audioclips{};
+    };
 }

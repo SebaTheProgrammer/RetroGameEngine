@@ -21,8 +21,9 @@ class LevelHandeler final : public dae::BaseComponent, public dae::Observer
 	int GetScore() const;
 
 private:
-	bool m_NeedsUpdate;
+	bool m_NeedsUpdate{ false };
 	int m_Lives;
+	int m_StartLives;
 	int m_Score;
 
 	QBert* m_pQbert;

@@ -8,7 +8,7 @@
 
 LevelHandeler::LevelHandeler( dae::GameObject* const parentGameObject, int lives ):
 	BaseComponent( parentGameObject ),
-	m_Lives( lives ), m_Score(0)
+	m_Lives( lives ), m_Score(0), m_StartLives( lives )
 {
 }
 
@@ -37,7 +37,10 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	switch ( event )
 	{
 	case dae::EventType::PLAYER_DIED:
+
 		std::cout << "PLAYER DIED" << std::endl;
+		//game over screen
+		Notify( dae::EventType::LEVEL_RESTART, gameObj );
 		break;
 
 	case dae::EventType::PLAYER_OUT_OF_BOUNDS:
@@ -45,7 +48,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		Notify( dae::EventType::PLAYER_HIT, gameObj );
 
 		m_pQbert->ResetPosition();
-		GetOwner()->GetComponent<PyramidCubes>()->ResetLevel();
+		GetOwner()->GetComponent<PyramidCubes>()->ResetIndex();
 		break;
 
 	case dae::EventType::PLAYER_HIT:
@@ -65,7 +68,9 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 
 	case dae::EventType::PLAYER_WON:
+		std::cout << "PLAYER WON" << std::endl;
 		GetOwner()->GetComponent<PyramidCubes>()->CompleteLevel();
+		//dae::SceneManager::GetInstance().SetCurrentScene( GetOwner()->GetSceneIndex()+1 );
 		break;
 
 	case dae::EventType::PLAYER_MOVED:
@@ -74,6 +79,12 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 			m_pQbert = qbert;
 			GetOwner()->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetDirection() );
 		}
+		break;
+
+	case dae::EventType::LEVEL_RESTART:
+		GetOwner()->GetComponent<PyramidCubes>()->ResetLevel();
+		m_Lives = m_StartLives;
+		m_Score = 0;
 		break;
 	}
 

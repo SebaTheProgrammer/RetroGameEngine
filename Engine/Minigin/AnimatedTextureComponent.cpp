@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include "Renderer.h"
 #include "GameTime.h"
+#include <iostream>
 
 dae::AnimatedTextureComponent::AnimatedTextureComponent( GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, 
 	float scale, int rows, int columns, int currentColumn, float frameTime )
@@ -91,4 +92,11 @@ void dae::AnimatedTextureComponent::NextFrame()
 	{
 		m_CurrentRow = 0;
 	}
+}
+
+void dae::AnimatedTextureComponent::Reset()
+{
+	m_CurrentRow = 0;
+	m_CurrentColumn = 0;
+	m_AccumulatedTime = 0;
 }

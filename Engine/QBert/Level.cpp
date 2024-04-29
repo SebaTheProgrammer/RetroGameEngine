@@ -43,11 +43,11 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 	pyramid->AddObserver( stats.get() );
 	qbert->AddObserver( stats.get() );
 
+	//Health display TODO: make this a component
 	auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 );
 	auto healthDisplay = std::make_shared<dae::TextComponent>( parentGameObject, "Health: " + std::to_string(stats->GetLives()), font, true);
 	healthDisplay->SetLocalPosition( 50, 50 );
 	parentGameObject->AddComponent( healthDisplay );
-	healthDisplay->SetText( "Health: " + std::to_string( stats->GetLives()) );
 
 	//Debug damage
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_C, InputTypeKeyBoard::IsDownThisFrame, DamagePlayerCommand{ m_QbertGameObject, qbert.get()});

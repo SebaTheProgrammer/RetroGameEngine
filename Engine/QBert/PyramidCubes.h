@@ -28,6 +28,9 @@ public:
 
 	void CompleteLevel();
 	void ResetLevel();
+	void ResetIndex();
+	void GameOver();
+
 	void WalkedOnCube( SingleMovementComponent::Direction dir);
 
 private:
@@ -43,5 +46,7 @@ private:
 	int m_ActiveRow = 1;
 
 	unsigned int m_CompletedCubes = 0;
+
+	bool m_CanMove = true;
 };
 

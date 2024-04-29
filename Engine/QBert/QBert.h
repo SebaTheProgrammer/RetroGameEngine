@@ -32,8 +32,11 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 
 	void SetAnimationState( AnimationState state );
 	void SetMirror( bool mirror );
+	bool CanMove() const { return m_CanMove; }
 
 	void ResetPosition();
+
+	void GameOver();
 
 private:
 	bool m_KeyBoardInput;
@@ -61,4 +64,6 @@ private:
 	const float m_SpeedBetweenSteps = 0.7f;
 
 	AnimationState m_CurrentState = AnimationState::Idle;
+
+	bool m_CanMove = true;
 };

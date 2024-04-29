@@ -20,6 +20,7 @@ public:
 	SingleMovementComponent& operator=( SingleMovementComponent&& other ) = delete;
 
 	void SingleMove( glm::vec2 direction, Direction dir );
+	void SetCanMove( bool canMove ) { m_CanMove = canMove; }
 
 	bool IsMovementInProgress() const { return m_MovementInProgress; }
 
@@ -29,6 +30,7 @@ private:
 	Direction m_Direction{ Direction::LeftDown };
 	float m_Speed;
 	bool m_MovementInProgress{ false };
+	bool m_CanMove{ true };
 	float m_StepSize{ 1.2f };
 	float m_MovementDelayTimer{ -1 };
 	float m_ElapsedTime{ 0.0f };
