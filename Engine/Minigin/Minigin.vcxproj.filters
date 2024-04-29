@@ -178,8 +178,5 @@
     <ClCompile Include="ServiceLocator.cpp">
       <Filter>SoundSystem</Filter>
     </ClCompile>
-    <ClCompile Include="SoundSystem.cpp">
-      <Filter>SoundSystem</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
