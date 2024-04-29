@@ -82,6 +82,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\vryen\Desktop\Retro_Engine\Engine\3rdParty\SDL2\include\SDL2_mixer\include;$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -109,6 +110,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\vryen\Desktop\Retro_Engine\Engine\3rdParty\SDL2\include\SDL2_mixer\include;$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,6 +138,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\vryen\Desktop\Retro_Engine\Engine\3rdParty\SDL2\include\SDL2_mixer\include;$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,6 +166,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\vryen\Desktop\Retro_Engine\Engine\3rdParty\SDL2\include\SDL2_mixer\include;$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
