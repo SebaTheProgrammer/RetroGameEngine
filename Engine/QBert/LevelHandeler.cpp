@@ -5,8 +5,12 @@
 #include "QBert.h"
 #include "PyramidCubes.h"
 #include "Level.h"
+#include <GameTime.h>
+#include <SceneManager.h>
+#include <Scene.h>
+#include "HealthComponentQbert.h"
 
-LevelHandeler::LevelHandeler( dae::GameObject* const parentGameObject, int lives ):
+LevelHandeler::LevelHandeler( dae::GameObject* const parentGameObject, int& lives ):
 	BaseComponent( parentGameObject ),
 	m_Lives( lives ), m_Score(0), m_StartLives( lives )
 {
@@ -20,14 +24,35 @@ void LevelHandeler::Update()
 {
 	if ( m_NeedsUpdate )
 	{
-		if ( dae::TextComponent * textComponent{ GetOwner()->GetComponent<dae::TextComponent>().get()} )
+		if ( HealthComponentQbert * healthComponent{ GetOwner()->GetComponent<HealthComponentQbert>().get()} )
 		{
-			textComponent->SetText(
-				"Health: " +
-				std::to_string( m_Lives )
-			);
+			healthComponent->SetLives( m_Lives );
 		}
 		m_NeedsUpdate = false;
+	}
+
+	if ( m_Completed )
+	{
+		if ( m_EndTimer < m_EndTimeChangeLevel )
+		{
+			m_EndTimer += dae::GameTime::GetInstance().GetDeltaTime();
+		}
+		else
+		{
+			int nextscene = dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1;
+
+			if ( nextscene <= dae::SceneManager::GetInstance().GetMaxScenes() )
+			{
+				dae::SceneManager::GetInstance().SetCurrentScene( nextscene );				
+			}
+			else
+			{
+				dae::SceneManager::GetInstance().SetCurrentScene( 0 );
+			}
+
+			m_EndTimer= 0.0f;
+			m_Completed = false;
+		}
 	}
 }
 
@@ -52,6 +77,8 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 
 	case dae::EventType::PLAYER_HIT:
+
+		m_NeedsUpdate = true;
 		if ( m_Lives > 1 )
 		{
 			--m_Lives;
@@ -68,9 +95,9 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 
 	case dae::EventType::PLAYER_WON:
-		std::cout << "PLAYER WON" << std::endl;
 		GetOwner()->GetComponent<PyramidCubes>()->CompleteLevel();
-		//dae::SceneManager::GetInstance().SetCurrentScene( GetOwner()->GetSceneIndex()+1 );
+		m_Completed = true;
+
 		break;
 
 	case dae::EventType::PLAYER_MOVED:

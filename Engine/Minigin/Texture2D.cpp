@@ -1,3 +1,6 @@
+#include "Texture2D.h"
+#include "Texture2D.h"
+#include "Texture2D.h"
 #include <SDL.h>
 #include "Texture2D.h"
 
@@ -11,6 +14,20 @@ glm::ivec2 dae::Texture2D::GetSize() const
 	SDL_Rect dst;
 	SDL_QueryTexture(GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
 	return { dst.w,dst.h };
+}
+
+float dae::Texture2D::GetWidth() const
+{
+	SDL_Rect dst;
+	SDL_QueryTexture( GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h );
+	return float(dst.w);
+}
+
+float dae::Texture2D::GetHeight() const
+{
+	SDL_Rect dst;
+	SDL_QueryTexture( GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h );
+	return float( dst.h );
 }
 
 SDL_Texture* dae::Texture2D::GetSDLTexture() const

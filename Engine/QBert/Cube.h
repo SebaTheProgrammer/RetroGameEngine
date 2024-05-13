@@ -27,8 +27,6 @@ class Cube : public dae::BaseComponent
 	bool IsCompleted() const { return m_Completed; }
 
 	private:
-
-
 		std::shared_ptr<dae::AnimatedTextureComponent> m_pTexture;
 
 		float m_X;

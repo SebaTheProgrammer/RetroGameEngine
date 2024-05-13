@@ -21,6 +21,9 @@ namespace dae
 
 		void SetTexture(const std::string& filename);
 
+		float GetWidth() const { return m_pTexture->GetWidth(); }
+		float GetHeight() const { return m_pTexture->GetHeight(); }
+
 		private:
 			std::shared_ptr<Texture2D> m_pTexture;
 			float m_X;

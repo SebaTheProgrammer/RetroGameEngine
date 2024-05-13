@@ -235,6 +235,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
   <ItemGroup>
     <ClInclude Include="AnimatedTextureComponent.h" />
     <ClInclude Include="BaseComponent.h" />
+    <ClInclude Include="BaseState.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameActor.h" />

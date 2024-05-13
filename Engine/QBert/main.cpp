@@ -24,43 +24,46 @@ void load()
 {
 	//Sound
 	dae::ServiceLocator::RegisterSoundSystem( std::make_unique<dae::SDLSoundSystem>() );
-	auto clip = std::make_shared < dae::AudioClip>( "../Data/Sounds/Level_Screen_Tune.wav" );
 	auto& ss = dae::ServiceLocator::GetSoundSystem();
-	ss.AddAudioClip( 1, clip );
 	ss.Play( 1, 100.f );
-
 
 	//MAIN MENU
 	auto& mainMenu = dae::SceneManager::GetInstance().CreateScene( "MainMenu" );
 	auto go = std::make_shared<dae::GameObject>(0);
 	auto texture = std::make_shared < dae::TextureComponent>( go.get(), "background.tga" );
+	auto title = std::make_shared < dae::TextureComponent>( go.get(), "Game Title.png" );
+	title->SetLocalPosition( 80, 50 );
 	go->AddComponent( texture );
+	go->AddComponent( title );
 	mainMenu.Add( go );
 
 	auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 );
 	auto font2 = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 );
 	auto text = std::make_shared<dae::GameObject>( 0 );
 	text->AddComponent( std::make_shared<dae::TextComponent>( text.get(), "Main Menu", font ) );
-	text->SetLocalTransform( { 10, 10 } );
+	text->SetLocalTransform( { 10, 210 } );
 	mainMenu.Add( text );
 
 	auto text2 = std::make_shared<dae::GameObject>( 0 );
 	text2->AddComponent( std::make_shared<dae::TextComponent>( text2.get(), "Press 0 (menu), 1, 2 or 3 to switch level (debug purposes)", font2 ) );
-	text2->SetLocalTransform( { 10, 80 } );
+	text2->SetLocalTransform( { 10, 280 } );
 	mainMenu.Add( text2 );
 
 	auto text3 = std::make_shared<dae::GameObject>( 0 );
 	text3->AddComponent( std::make_shared<dae::TextComponent>( text3.get(), "Hold WASD to move, you can complete the level and/or die", font2 ) );
-	text3->SetLocalTransform( { 10, 110 } );
+	text3->SetLocalTransform( { 10, 310 } );
 	mainMenu.Add( text3 );
 
-	//SHOULD I MAKE THIS LIKE THIS? One baselevel component? Or add 1000 things here?
+	//qbert
+	int hp = 3;
+	auto idle = std::shared_ptr<dae::Texture2D> { dae::ResourceManager::GetInstance().LoadTexture( "qbertIdle.png" ) };
+	auto backFaceIdle = std::shared_ptr<dae::Texture2D> { dae::ResourceManager::GetInstance().LoadTexture( "qbertBackFaceIdle.png" ) };
 
 	//LEVEL 1
 	auto& level1 = dae::SceneManager::GetInstance().CreateScene( "Level1" );
 	auto goLevel = std::make_shared<dae::GameObject>(1);
 	goLevel->SetLocalTransform( { 300, 130 } );
-	auto level = std::make_shared <Level>( goLevel.get(),false,5,0 );
+	auto level = std::make_shared <Level>( goLevel.get(),false,5,1, idle, backFaceIdle, hp );
 	goLevel->AddComponent( level );
 	level1.Add( goLevel );
 
@@ -68,7 +71,7 @@ void load()
 	auto& level2 = dae::SceneManager::GetInstance().CreateScene( "Level2" );
 	auto goLevel2 = std::make_shared<dae::GameObject>(2);
 	goLevel2->SetLocalTransform( { 300, 130 } );
-	auto Level2 = std::make_shared <Level>( goLevel2.get(), false, 7, 1 );
+	auto Level2 = std::make_shared <Level>( goLevel2.get(), false, 7, 2, idle, backFaceIdle, hp );
 	goLevel2->AddComponent( Level2 );
 	level2.Add( goLevel2 );
 
@@ -76,7 +79,7 @@ void load()
 	auto& level3 = dae::SceneManager::GetInstance().CreateScene( "Level3" );
 	auto goLevel3 = std::make_shared<dae::GameObject>(3);
 	goLevel3->SetLocalTransform( { 300, 130 } );
-	auto Level3 = std::make_shared <Level>( goLevel3.get(), false, 7, 2 );
+	auto Level3 = std::make_shared <Level>( goLevel3.get(), false, 7, 3, idle, backFaceIdle, hp );
 	goLevel3->AddComponent( Level3 );
 	level3.Add( goLevel3 );
 

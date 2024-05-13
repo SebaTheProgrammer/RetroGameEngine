@@ -67,17 +67,6 @@ void PyramidCubes::CompleteLevel()
     {
         cube->Won();
 	}
-
-   // float elapsedTime = 0.0f;
-
-    //while ( elapsedTime < 3.0f ) 
-    //{
-
-    //    float deltaTime = dae::GameTime::GetInstance().GetDeltaTime();
-    //    elapsedTime += deltaTime;
-    //}
-
-    //dae::SceneManager::GetInstance().SetCurrentScene( m_WhichLevel + 2 );
 }
 
 void PyramidCubes::ResetLevel()
@@ -108,7 +97,8 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
     int oldActiveRow = m_ActiveRow;
 
     // Update cube index and active row based on movement direction
-    switch (dir) {
+    switch (dir) 
+    {
         case SingleMovementComponent::Direction::LeftUp:
             m_QBertCubeIndex -= oldActiveRow;
             m_ActiveRow -= 1;

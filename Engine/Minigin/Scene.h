@@ -29,6 +29,7 @@ namespace dae
 		void AttachToRoot( std::shared_ptr<GameObject> gameObject );
 		void DettachFromRoot( GameObject* gameObject );
 		std::shared_ptr<GameObject> GetChildSharedPtr( GameObject* child );
+		std::vector < std::shared_ptr<GameObject>> GetObjects() const { return m_Objects; }
 	private: 
 		explicit Scene(const std::string& name);
 

@@ -38,10 +38,12 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 
 	void GameOver();
 
+	int GetHealth() const { return m_pStats->GetLives(); }
+	void SetHealth( int health ) { m_pStats->SetLives( health ); }
+
 private:
 	bool m_KeyBoardInput;
 
-	//all the textures, how can we make this more efficient?
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdle;
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdleBack;
 
@@ -51,9 +53,6 @@ private:
 	//Stats
 	std::shared_ptr<LevelHandeler> m_pStats;
 	std::shared_ptr < dae::TextComponent> m_pHealthDisplay;
-	//hitbox
-	//lives
-	//ect
 
 	float m_X;
 	float m_Y;

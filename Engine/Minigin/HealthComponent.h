@@ -22,16 +22,9 @@ namespace dae
 
 		int GetHealth() const { return m_Health; }
 
-		//void SetOnDeathEvent( OnDeathEvent event ) { m_DeathEvent = event; }
-		//OnDeathEvent GetOnDeathEvent() { m_DeathEvent; }
-		
-		//void SetText( const std::string& text ) { m_DeathEvent = text; }
-
 		private:
 
 		int m_Health;
-		//OnDeathEvent m_DeathEvent;
-		//OnTextChangedEvent m_OnTextChangedEvent;
 	};
 }
 

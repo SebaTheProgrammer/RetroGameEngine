@@ -7,172 +7,148 @@
 #include <SDL_mixer.h>
 #include <thread>
 #include <mutex>
-
-using sound_id = unsigned short;
+#include <queue>
+#include <unordered_map>
 
 namespace dae
 {
-    class AudioClip
-    {
-    public:
-        AudioClip( const std::string& filePath )
-            : filePath( filePath ), loaded( false ), chunk( nullptr ) {}
+	using sound_id = unsigned short;
 
-        ~AudioClip()
-        {
-            std::lock_guard<std::mutex> lock( mutex );
-            if ( chunk ) {
-                Mix_FreeChunk( chunk );
-            }
-        }
+	struct soundinfo
+	{
+		sound_id id;
+		float volume;
+	};
 
-        AudioClip( const AudioClip& other ) = delete;
-        AudioClip( AudioClip&& other ) = delete;
-        AudioClip& operator=( const AudioClip& other ) = delete;
-        AudioClip& operator=( AudioClip&& other ) = delete;
+	class SoundSystem
+	{
+	public:
 
-        void Load()
-        {
-            std::lock_guard<std::mutex> lock( mutex );
-            if ( !loaded )
-            {
-                std::thread loadThread( [ this ] { std::lock_guard<std::mutex> threadLock( mutex );
-                chunk = Mix_LoadWAV( filePath.c_str() );
-                if ( chunk == nullptr )
-                {
-                    std::cerr << "Failed to load audio clip: " << filePath << std::endl;
-                }
-                else
-                {
-                    loaded = true;
-                }
-                    } );
-                loadThread.detach();
-            }
-        }
+		virtual ~SoundSystem() = default;
+		virtual void AddSong( const sound_id id, const std::string& filePath ) = 0;
+		virtual void Play( sound_id id, const float volume = 100 ) = 0;
 
-        void Play()
-        {
-            std::lock_guard<std::mutex> lock( mutex );
-            if ( loaded && chunk ) {
-                Mix_PlayChannel( -1, chunk, 0 );
-            }
-        }
+		virtual int MaxVolume() const = 0;
+	};
 
-        void Pause()
-        {
-            std::lock_guard<std::mutex> lock( mutex );
-            if ( loaded && chunk ) {
-                Mix_HaltChannel( -1 );
-            }
-        }
+	class NullSoundSystem final : public SoundSystem
+	{
+	public:
 
-        void SetVolume( float volume )
-        {
-            std::lock_guard<std::mutex> lock( mutex );
-            if ( chunk ) {
-                int intVolume = static_cast< int >( ( volume / 100.0f ) * MIX_MAX_VOLUME );
-                intVolume = clamp( intVolume, 0, MIX_MAX_VOLUME );
-                Mix_VolumeChunk( chunk, intVolume );
-            }
-        }
+		virtual ~NullSoundSystem() = default;
 
-        bool IsLoaded()
-        {
-            std::lock_guard<std::mutex> lock( mutex );
-            return loaded;
-        }
+		virtual void AddSong( const std::string&, sound_id ){};
 
-    private:
-        int clamp( int value, int minValue, int maxValue )
-        {
-            if ( value < minValue ) {
-                return minValue;
-            }
-            else if ( value > maxValue ) {
-                return maxValue;
-            }
-            return value;
-        }
+		virtual void AddSoundEffect( const std::string&, sound_id ){};
 
-        std::string filePath;
-        bool loaded;
-        Mix_Chunk* chunk;
-        std::mutex mutex;
-    };
+		virtual void Play( sound_id, float ) override {};
 
-    class SoundSystem
-    {
-    public:
-        friend class Singleton<SoundSystem>;
-        SoundSystem() = default;
-        virtual ~SoundSystem() {};
+		virtual int MaxVolume() const override { return 0; }
+	};
 
-        virtual void Play( sound_id, const float ) {};
+	class LoggingSoundSystem final : public SoundSystem
+	{
+	public:
 
-        virtual void PauseSound( const sound_id ) {};
+		explicit LoggingSoundSystem( std::unique_ptr<SoundSystem>&& soundSystem )
+		{
+			m_RealSS = std::move( soundSystem );
+		}
+		virtual ~LoggingSoundSystem() = default;
 
-        virtual void AddAudioClip( const sound_id, const std::shared_ptr<AudioClip>& ) {};
-    };
+		virtual void AddSong( const std::string& filePath, sound_id id )
+		{
+			std::cout << "Adding song: " << filePath << " on id: " << id << ".\n";
+			m_RealSS->AddSong( id, filePath );
+		}
 
-    class NullSoundSystem final : public SoundSystem
-    {
-        void Play( const sound_id, const float ) override {}
-    };
+		void Play( sound_id id, float volume) override
+		{
+			m_RealSS->Play( id, volume);
+			std::cout << "played with id: " << id << " volume: " << volume << "\n";
+		}
 
-    class LoggingSoundSystem final : public SoundSystem
-    {
-        std::unique_ptr<SoundSystem> _real_ss;
-    public:
-        LoggingSoundSystem( std::unique_ptr<SoundSystem>&& ss ) : _real_ss( std::move( ss ) ) {}
-        virtual ~LoggingSoundSystem() {};
+		virtual int MaxVolume() const override
+		{
+			return m_RealSS->MaxVolume();
+		}
 
-        void Play( sound_id id, const float volume ) override
-        {
-            _real_ss->Play( id, volume );
-            std::cout << "playing " << id << " at volume " << volume << std::endl;
-        }
-    };
+	private:
+
+		std::unique_ptr<SoundSystem> m_RealSS;
+
+	};
+
+	class SoundPlayer final
+	{
+	public:
+
+		explicit SoundPlayer( const std::string& filePath ) { m_FilePath = filePath; };
+		~SoundPlayer() { UnLoad(); };
+
+		SoundPlayer( const SoundPlayer& other ) = delete;
+		SoundPlayer( SoundPlayer&& other ) noexcept = delete;
+		SoundPlayer& operator=( const SoundPlayer& other ) = delete;
+		SoundPlayer& operator=( SoundPlayer&& other ) noexcept = delete;
+
+		bool IsLoaded() const { return m_IsLoaded; };
+		void Load(){ m_Music = Mix_LoadMUS( m_FilePath.c_str() ); m_IsLoaded = m_Music != nullptr; }
+		void UnLoad(){ if ( m_IsLoaded ) { Mix_FreeMusic( m_Music ); m_Music = nullptr; m_IsLoaded = false; } }
+
+		void SetVolume( int volume ){ Mix_VolumeMusic( volume ); }
+
+		void Play(){ if ( m_IsLoaded ) { Mix_PlayMusic( m_Music, -1 ); } }
+		void Pause(){ if ( m_IsLoaded ) { Mix_PauseMusic(); } }
+		void Resume(){ if ( m_IsLoaded ) { Mix_ResumeMusic(); } }
+		void Stop(){ if ( m_IsLoaded ) { Mix_HaltMusic(); } }
+
+		static int MaxVolume(){ return MIX_MAX_VOLUME; }
+
+	private:
+
+		bool m_IsLoaded{ false };
+		std::string m_FilePath;
+		Mix_Music* m_Music{ nullptr };
+
+	};
 
     class SDLSoundSystem final : public SoundSystem
     {
     public:
-        SDLSoundSystem() { if ( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 4, 2048 ) < 0 ) { return; } }
+		SDLSoundSystem() { if ( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 4, 2048 ) < 0 ) { return; } };
 
-        ~SDLSoundSystem() override { Mix_CloseAudio(); }
+		~SDLSoundSystem() override { Mix_CloseAudio(); };
 
         void Play( const sound_id id, const float volume = 100 ) override
         {
-            auto audioclip = audioclips[ id ];
+			std::unique_lock<std::mutex> lock( m_Mutex );
 
-            if ( !audioclip->IsLoaded() ) audioclip->Load();
-
-            audioclip->SetVolume( volume );
-
-            audioclip->Play();
+			m_Queue.push( soundinfo{ id, volume} );
+			m_ConditionToRun.notify_one();
         }
 
-        void PauseSound( const sound_id id )
+        void AddSong( const sound_id id, const std::string& filePath ) override
         {
-            auto audioclip = audioclips[ id ];
+			std::unique_lock<std::mutex> lock( m_Mutex );
 
-            if ( !audioclip->IsLoaded() )
-                audioclip->Load();
-
-            audioclip->Pause();
+			if ( m_Music.find( id ) != m_Music.end() )
+			{
+				std::cerr << "ERROR::SDLSOUNDSYSTEMIMPL::SOUNDID_" << id << "_IS_ALREADY_IN_MUSIC\n";
+				return;
+			}
+			m_Music[ id ] = std::make_unique<SoundPlayer>( filePath );
         }
 
-        void AddAudioClip( const sound_id id, const std::shared_ptr<AudioClip>& audioclip )
-        {
-            audioclips[ id ] = audioclip;
-        }
-
-        void RemoveAudioClip( const sound_id id )
-        {
-            audioclips.erase( id );
-        }
+		int MaxVolume() const override { return SoundPlayer::MaxVolume(); }
 
     private:
-        std::map<sound_id, std::shared_ptr<AudioClip>> audioclips{};
+		std::unordered_map<sound_id, std::unique_ptr<SoundPlayer>> m_Music;
+
+		std::queue<soundinfo> m_Queue;
+
+		bool m_SoundThreadRunning{ false };
+		std::condition_variable m_ConditionToRun;
+		std::mutex m_Mutex;
+		std::jthread m_SoundThread;
     };
 }

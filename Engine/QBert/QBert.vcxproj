@@ -189,6 +189,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
   <ItemGroup>
     <ClCompile Include="..\Minigin\SingleMovementComponent.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="HealthComponentQbert.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="LevelHandeler.cpp" />
@@ -198,6 +199,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
   <ItemGroup>
     <ClInclude Include="..\Minigin\SingleMovementComponent.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="HealthComponentQbert.h" />
     <ClInclude Include="PlayerCommands.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelHandeler.h" />

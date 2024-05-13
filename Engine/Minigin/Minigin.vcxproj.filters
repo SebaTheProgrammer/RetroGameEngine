@@ -30,6 +30,9 @@
     <Filter Include="SoundSystem">
       <UniqueIdentifier>{7e47f848-027c-4a09-ad40-d19344d75822}</UniqueIdentifier>
     </Filter>
+    <Filter Include="StateSystem">
+      <UniqueIdentifier>{ba49e06a-70df-42c6-aa8f-7c823bc26603}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -115,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="ServiceLocator.h">
       <Filter>SoundSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseState.h">
+      <Filter>StateSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
