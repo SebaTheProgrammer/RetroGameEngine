@@ -5,8 +5,8 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 
-HealthComponentQbert::HealthComponentQbert( dae::GameObject* parentGameObject, int lives, bool standStill) :
-	BaseComponent( parentGameObject ), m_Lives( lives ), m_StartLives( lives ), m_StandStill( standStill )
+HealthComponentQbert::HealthComponentQbert( dae::GameObject* parentGameObject, int lives) :
+	BaseComponent( parentGameObject ), m_Lives( lives ), m_StartLives( lives )
 {
 	m_pTexture = dae::ResourceManager::GetInstance().LoadTexture( "Heart.png" );
 }

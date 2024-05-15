@@ -8,7 +8,7 @@ class QBert;
 class LevelHandeler final : public dae::BaseComponent, public dae::Observer
 {
 	public:
-	LevelHandeler( dae::GameObject* const parentGameObject, int& lives );
+	LevelHandeler( dae::GameObject* parentGameObject, int& lives );
 	~LevelHandeler();
 
 	void Update() override;
@@ -32,5 +32,7 @@ private:
 
 	float m_EndTimer = 0.0f;
 	const float m_EndTimeChangeLevel = 4.0f;
+
+	void ChangeLevel();
 };
 

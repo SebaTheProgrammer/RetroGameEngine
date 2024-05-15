@@ -55,9 +55,9 @@ void load()
 	mainMenu.Add( text3 );
 
 	//qbert
-	int hp = 3;
+	int hp = 4;
 	auto idle = std::shared_ptr<dae::Texture2D> { dae::ResourceManager::GetInstance().LoadTexture( "qbertIdle.png" ) };
-	auto backFaceIdle = std::shared_ptr<dae::Texture2D> { dae::ResourceManager::GetInstance().LoadTexture( "qbertBackFaceIdle.png" ) };
+	auto backFaceIdle = std::shared_ptr<dae::Texture2D> { dae::ResourceManager::GetInstance().LoadTexture( "qbertBackFaceIdle.png" ) };	
 
 	//LEVEL 1
 	auto& level1 = dae::SceneManager::GetInstance().CreateScene( "Level1" );
@@ -83,12 +83,21 @@ void load()
 	goLevel3->AddComponent( Level3 );
 	level3.Add( goLevel3 );
 
+	//LEVEL 4
+	/*auto& level4 = dae::SceneManager::GetInstance().CreateScene( "Level4" );
+	auto golevel4 = std::make_shared<dae::GameObject>( 4 );
+	golevel4->SetLocalTransform( { 300, 130 } );
+	auto Level4 = std::make_shared <Level>( golevel4.get(), false, 7, 4, idle, backFaceIdle, hp );
+	golevel4->AddComponent( Level4 );
+	level4.Add( golevel4 );*/
+
 	//for debug purposes
 	auto levelswitcher = std::make_shared<dae::GameObject>(-1);
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_0, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 0 } );
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_1, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 1 } );
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_2, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 2 } );
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_3, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 3 } );
+	//dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_4, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 4 } );
 	//
 
 	dae::SceneManager::GetInstance().SetCurrentScene( 0 );

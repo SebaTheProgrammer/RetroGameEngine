@@ -8,7 +8,7 @@ class QBert;
 class HealthComponentQbert final : public dae::BaseComponent
 {
 public:
-	HealthComponentQbert( dae::GameObject* parentGameObject, int lives, bool standStill = false );
+	HealthComponentQbert( dae::GameObject* parentGameObject, int lives);
 	virtual ~HealthComponentQbert() = default;
 
 	HealthComponentQbert( const HealthComponentQbert& other ) = delete;
@@ -24,7 +24,6 @@ public:
 private:
 	int m_Lives;
 	int m_StartLives;
-	bool m_StandStill;
 	bool m_NeedsUpdate{ false };
 
 	std::shared_ptr<dae::Texture2D> m_pTexture;

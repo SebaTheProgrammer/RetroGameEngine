@@ -24,10 +24,9 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 	parentGameObject->AddComponent( background );
 
 	//pyramid base
-	m_PyramidGameObject = std::make_shared<dae::GameObject>( level);
-	auto pyramid = std::make_shared<PyramidCubes>( m_PyramidGameObject.get(), howLongLevel, level - 1);
-	m_PyramidGameObject->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x,parentGameObject->GetLocalTransform().GetPosition().y } );
-	m_PyramidGameObject->AddComponent( pyramid );
+	auto pyramid = std::make_shared<PyramidCubes>( parentGameObject, howLongLevel, level - 1);
+	parentGameObject->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x,parentGameObject->GetLocalTransform().GetPosition().y } );
+	parentGameObject->AddComponent( pyramid );
 
 	//begin
 	m_BeginScreenObject = std::make_shared<dae::GameObject>( level);
@@ -45,17 +44,17 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 	qbert = ( std::make_shared<QBert>( m_QbertGameObject.get(), idle, backface, true) );
 	m_QbertGameObject->AddComponent( qbert );
 
-	//Levelhandeler
-	auto levelHandeler = std::make_shared<LevelHandeler>( m_PyramidGameObject.get(), qbertlives);
-	m_PyramidGameObject->AddComponent( levelHandeler );
+	//Levelhandeler //TODO
+	auto levelHandeler = std::make_shared<LevelHandeler>( parentGameObject, qbertlives);
+	parentGameObject->AddComponent( levelHandeler );
 
 	pyramid->AddObserver( levelHandeler.get() );
 	qbert->AddObserver( levelHandeler.get() );
 
 	//Health display
-	auto healthDisplay = std::make_shared<HealthComponentQbert>( m_PyramidGameObject.get(), levelHandeler->GetLives(), true);
+	auto healthDisplay = std::make_shared<HealthComponentQbert>( parentGameObject, levelHandeler->GetLives());
 	healthDisplay->SetLocalPosition( -250, -50 );
-	m_PyramidGameObject->AddComponent( healthDisplay );
+	parentGameObject->AddComponent( healthDisplay );
 }
 
 void Level::Update()
@@ -66,12 +65,12 @@ void Level::Update()
 		if ( m_BeginTimer > m_BeginTime )
 		{
 			m_Begin = false;
+			m_QbertGameObject->GetComponent<QBert>()->SetCanMove(true);
 		}
 		m_BeginScreenObject->Update();
 	}
 	else 
 	{
-		m_PyramidGameObject->Update();
 		m_QbertGameObject->Update();
 	}
 }
@@ -84,7 +83,6 @@ void Level::Render() const
 	}
 	else
 	{
-		m_PyramidGameObject->Render();
 		m_QbertGameObject->Render();
 	}
 }

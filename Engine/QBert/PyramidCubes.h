@@ -24,13 +24,12 @@ public:
 	void Render() const override;
 
 	void SetLevel( const int level);
-	void SetScale( float scale ){ m_Scale = scale; }
+	void SetScale( float scale ) { m_Scale = scale; };
 
 	void CompleteLevel();
 	void ResetLevel();
 	void ResetIndex();
 	void GameOver();
-
 	void WalkedOnCube( SingleMovementComponent::Direction dir);
 
 private:

@@ -30,7 +30,7 @@ private:
 	Direction m_Direction{ Direction::LeftDown };
 	float m_Speed;
 	bool m_MovementInProgress{ false };
-	bool m_CanMove{ true };
+	bool m_CanMove{ false };
 	float m_StepSize{ 1.2f };
 	float m_MovementDelayTimer{ -1 };
 	float m_ElapsedTime{ 0.0f };

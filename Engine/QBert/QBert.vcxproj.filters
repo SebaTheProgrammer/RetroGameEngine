@@ -28,6 +28,9 @@
     <Filter Include="Level\Components">
       <UniqueIdentifier>{e50f0a3f-a894-4023-89ba-0a794955de89}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Level\Enemies">
+      <UniqueIdentifier>{29d94507-a160-42e2-995c-3b72ceb0facf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,6 +57,9 @@
     <ClCompile Include="HealthComponentQbert.cpp">
       <Filter>Level\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Coily.cpp">
+      <Filter>Level\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PyramidCubes.h">
@@ -79,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="HealthComponentQbert.h">
       <Filter>Level\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Coily.h">
+      <Filter>Level\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

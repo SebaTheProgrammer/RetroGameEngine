@@ -10,7 +10,7 @@
 #include <Scene.h>
 #include "HealthComponentQbert.h"
 
-LevelHandeler::LevelHandeler( dae::GameObject* const parentGameObject, int& lives ):
+LevelHandeler::LevelHandeler( dae::GameObject* parentGameObject, int& lives ):
 	BaseComponent( parentGameObject ),
 	m_Lives( lives ), m_Score(0), m_StartLives( lives )
 {
@@ -33,26 +33,7 @@ void LevelHandeler::Update()
 
 	if ( m_Completed )
 	{
-		if ( m_EndTimer < m_EndTimeChangeLevel )
-		{
-			m_EndTimer += dae::GameTime::GetInstance().GetDeltaTime();
-		}
-		else
-		{
-			int nextscene = dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1;
-
-			if ( nextscene <= dae::SceneManager::GetInstance().GetMaxScenes() )
-			{
-				dae::SceneManager::GetInstance().SetCurrentScene( nextscene );				
-			}
-			else
-			{
-				dae::SceneManager::GetInstance().SetCurrentScene( 0 );
-			}
-
-			m_EndTimer= 0.0f;
-			m_Completed = false;
-		}
+		ChangeLevel();
 	}
 }
 
@@ -96,6 +77,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 
 	case dae::EventType::PLAYER_WON:
 		GetOwner()->GetComponent<PyramidCubes>()->CompleteLevel();
+		m_pQbert->SetCanMove( false );
 		m_Completed = true;
 
 		break;
@@ -120,22 +102,53 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 
 void LevelHandeler::SetLives( int lives )
 {	
-	m_NeedsUpdate = true;
 	m_Lives = lives;
+	m_NeedsUpdate = true;
 }
-
 void LevelHandeler::SetScore( int score )
 {
 	m_NeedsUpdate = true;
 	m_Score = score;
 }
-
 int LevelHandeler::GetLives() const
 {	
 	return m_Lives;
 }
-
 int LevelHandeler::GetScore() const
 {
 	return m_Score;
+}
+
+void LevelHandeler::ChangeLevel()
+{
+	if ( m_EndTimer < m_EndTimeChangeLevel )
+	{
+		m_EndTimer += dae::GameTime::GetInstance().GetDeltaTime();
+	}
+	else
+	{
+		int nextscene = dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1;
+
+		if ( nextscene <= dae::SceneManager::GetInstance().GetMaxScenes() )
+		{
+			dae::SceneManager::GetInstance().SetCurrentScene( nextscene );
+			
+			for ( int index{}; index < dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects().size(); ++index )
+			{
+				if ( dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects()[ index ]->GetComponent<LevelHandeler>() != nullptr )
+				{
+					dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects()[ index ]->GetComponent<LevelHandeler>()->SetLives( m_Lives );
+				}
+
+			}
+		}
+		else
+		{
+			//TODO:: Win screen then go to main menu
+			dae::SceneManager::GetInstance().SetCurrentScene( 0 );
+		}
+
+		m_EndTimer = 0.0f;
+		m_Completed = false;
+	}
 }

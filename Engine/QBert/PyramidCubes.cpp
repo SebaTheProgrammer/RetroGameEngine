@@ -17,18 +17,18 @@ PyramidCubes::PyramidCubes( dae::GameObject* parentGameObject, int size, int wic
 
 void PyramidCubes::Update()
 {
-	for ( const auto& cube : m_pCubes )
-	{
-		cube->Update();
-	}
+    for ( const auto& cube : m_pCubes )
+    {
+        cube->Update();
+    }
 }
 
 void PyramidCubes::Render() const
 {
-	for ( const auto& cube : m_pCubes )
-	{
-		cube->Render();
-	}
+    for ( const auto& cube : m_pCubes )
+    {
+        cube->Render();
+    }
 }
 
 void PyramidCubes::SetLevel( const int level )
@@ -122,6 +122,7 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
 
     if ( (m_QBertCubeIndex < 0 || m_ActiveRow > m_Size) || (m_QBertCubeIndex < rowStartIndex || m_QBertCubeIndex > rowEndIndex) || m_ActiveRow == 0)
     {
+        //TODO: check for platforms
         NotifyObservers(dae::EventType::PLAYER_OUT_OF_BOUNDS, GetOwner());
         return;
     }

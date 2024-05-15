@@ -33,6 +33,7 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 	void SetAnimationState( AnimationState state );
 	void SetMirror( bool mirror );
 	bool CanMove() const { return m_CanMove; }
+	void SetCanMove( bool canMove ) { m_CanMove = canMove; m_pSingleMovenment->SetCanMove( canMove ); };
 
 	void ResetPosition();
 
@@ -64,5 +65,5 @@ private:
 
 	AnimationState m_CurrentState = AnimationState::Idle;
 
-	bool m_CanMove = true;
+	bool m_CanMove = false;
 };

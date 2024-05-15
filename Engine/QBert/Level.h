@@ -22,9 +22,6 @@ private:
 	const int m_MAX_LEVEL = 5;
 	std::shared_ptr<dae::GameObject> m_BeginScreenObject;
 
-	//Pyramid
-	std::shared_ptr<dae::GameObject> m_PyramidGameObject;
-
 	//Player
 	std::shared_ptr<dae::GameObject> m_QbertGameObject;
 
