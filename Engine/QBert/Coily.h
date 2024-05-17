@@ -27,6 +27,10 @@ public:
 
 	void SetAnimationState( AnimationState state );
 
+	void SetPyramidPosition( const int x, const int y );
+	int GetRow() const { return m_Row; }
+	int GetCol() const { return m_Col; }
+
 private:
 	const float m_FrameTime = 0.3f;
 
@@ -36,5 +40,8 @@ private:
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureJumpSnake;
 
 	AnimationState m_CurrentState = AnimationState::Egg;
+
+	int m_Row;
+	int m_Col;
 };
 

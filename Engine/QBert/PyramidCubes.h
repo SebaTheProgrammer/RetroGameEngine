@@ -32,6 +32,9 @@ public:
 	void GameOver();
 	void WalkedOnCube( SingleMovementComponent::Direction dir);
 
+	int GetActiveRow() const { return m_QBertColIndex; }
+	int GetActiveColumn() const { return m_QBertRowIndex; }
+
 private:
 	std::shared_ptr<dae::Texture2D> m_pTexture;
 	int m_Size;
@@ -41,10 +44,10 @@ private:
 
 	float m_Scale = 1.5f;
 
-	unsigned int m_QBertCubeIndex = 0;
-	int m_ActiveRow = 1;
+	int m_QBertRowIndex = 0;
+	int m_QBertColIndex = 1;
 
-	unsigned int m_CompletedCubes = 0;
+	int m_CompletedCubes = 0;
 
 	bool m_CanMove = true;
 };

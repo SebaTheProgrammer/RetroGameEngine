@@ -60,6 +60,9 @@
     <ClCompile Include="Coily.cpp">
       <Filter>Level\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyHandeler.cpp">
+      <Filter>Level\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PyramidCubes.h">
@@ -87,6 +90,9 @@
       <Filter>Level\Components</Filter>
     </ClInclude>
     <ClInclude Include="Coily.h">
+      <Filter>Level\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyHandeler.h">
       <Filter>Level\Enemies</Filter>
     </ClInclude>
   </ItemGroup>

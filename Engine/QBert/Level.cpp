@@ -33,6 +33,9 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 	std::string beginFilename = "Level 0" + std::to_string( level) + " Title.png";
 	auto begin = std::make_shared<dae::TextureComponent>( parentGameObject, beginFilename );
 	begin->SetLocalPosition( -begin->GetWidth() / 2+30, parentGameObject->GetLocalTransform().GetPosition().y / 2 - begin->GetHeight() / 2 );
+	auto beginBg = std::make_shared<dae::TextureComponent>( parentGameObject, bgFilename );
+	beginBg->SetLocalPosition( -parentGameObject->GetLocalTransform().GetPosition().x, -parentGameObject->GetLocalTransform().GetPosition().y );
+	m_BeginScreenObject->AddComponent( beginBg );
 	m_BeginScreenObject->AddComponent( begin );
 
 	//players
