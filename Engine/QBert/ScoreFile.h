@@ -19,14 +19,14 @@ public:
     ScoreFile& operator=(const ScoreFile& other) = delete;
     ScoreFile& operator=( ScoreFile&& other) = delete;
 
-    std::vector<std::pair<std::string, int>> ReadHighScores( const std::string& path )
+    std::vector<std::pair<std::string, int>> ReadHighScores()
     {
-        std::ifstream file( path );
+        std::ifstream file( m_Path );
         std::vector<std::pair<std::string, int>> highScores;
 
         if ( !file.is_open() )
         {
-            std::cerr << "Unable to open file: " << path << std::endl;
+            std::cerr << "Unable to open file: " << m_Path << std::endl;
             return highScores;
         }
 
@@ -39,7 +39,7 @@ public:
 
         if ( file.bad() )
         {
-            std::cerr << "Error reading file: " << path << std::endl;
+            std::cerr << "Error reading file: " << m_Path << std::endl;
             highScores.clear();
         }
 
@@ -48,9 +48,9 @@ public:
         return highScores;
     }
 
-    void WriteHighScores( const std::string& path, const std::vector<std::pair<std::string, int>>& highScores ) 
+    void WriteHighScores(const std::vector<std::pair<std::string, int>>& highScores ) 
     {
-        std::ofstream file( path );
+        std::ofstream file( m_Path );
         if ( file.is_open() ) {
             for ( const auto& entry : highScores ) {
                 file << entry.first << " " << entry.second << '\n';
@@ -62,11 +62,11 @@ public:
         }
     }
 
-    void UpdateHighScores( const std::string& path, const std::string& newName, int newScore )
+    void UpdateHighScores( int newScore )
     {
-        auto highScores = ReadHighScores( path );
+        auto highScores = ReadHighScores();
 
-        highScores.push_back( { newName, newScore } );
+        highScores.push_back( { m_Name, newScore } );
 
         std::sort( highScores.begin(), highScores.end(), []( const auto& a, const auto& b )
             {
@@ -78,15 +78,18 @@ public:
             highScores.resize( 10 );
         }
 
-        std::cout << "Updated High Scores:" << std::endl;
         for ( const auto& score : highScores )
         {
             std::cout << score.first << " " << score.second << std::endl;
         }
 
-        WriteHighScores( path, highScores );
+        WriteHighScores( highScores );
     }
+
+    void SetName( std::string name ) { m_Name = name; };
 
 private:
     ScoreFile() = default;
+    std::string m_Name{"RandomPlayer"};
+    std::string m_Path{"../Data/highscores.txt"};
 };

@@ -2,13 +2,14 @@
 #include "BaseComponent.h"
 #include "Observer.h"
 #include "GameObject.h"
+#include "TextureComponent.h"
 
 class QBert;
 
 class LevelHandeler final : public dae::BaseComponent, public dae::Observer
 {
 	public:
-	LevelHandeler( dae::GameObject* parentGameObject, int& lives );
+	LevelHandeler( dae::GameObject* parentGameObject, int& lives, int maxLevels );
 	~LevelHandeler() {};
 
 	void Update() override;
@@ -25,10 +26,10 @@ private:
 	int m_Lives;
 	int m_StartLives;
 	int m_Score;
+	int m_MaxLevels;
 
 	QBert* m_pQbert;
-
-	bool m_Completed = false;
+	bool m_CompletedLevel = false;
 
 	float m_EndTimer = 0.0f;
 	const float m_EndTimeChangeLevel = 4.0f;

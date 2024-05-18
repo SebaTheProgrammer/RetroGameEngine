@@ -11,11 +11,13 @@
 #include "HealthComponentQbert.h"
 #include "ScoreComponent.h"
 #include "ScoreFile.h"
+#include "TextureComponent.h"
 
-LevelHandeler::LevelHandeler( dae::GameObject* parentGameObject, int& lives ):
+LevelHandeler::LevelHandeler( dae::GameObject* parentGameObject, int& lives, int maxLevels ):
 	BaseComponent( parentGameObject ),
-	m_Lives( lives ), m_Score(0), m_StartLives( lives )
+	m_Lives( lives ), m_Score(0), m_StartLives( lives ), m_MaxLevels( maxLevels )
 {
+	
 }
 
 void LevelHandeler::Update()
@@ -33,7 +35,7 @@ void LevelHandeler::Update()
 		m_NeedsUpdate = false;
 	}
 
-	if ( m_Completed )
+	if ( m_CompletedLevel )
 	{
 		ChangeLevel();
 	}
@@ -46,9 +48,9 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	{
 	case dae::EventType::PLAYER_DIED:
 
-		std::cout << "PLAYER DIED" << std::endl;
-		//game over screen
+		GetOwner()->GetComponent<Level>()->GameOver(m_Score);
 		Notify( dae::EventType::LEVEL_RESTART, gameObj );
+
 		break;
 
 	case dae::EventType::PLAYER_OUT_OF_BOUNDS:
@@ -57,6 +59,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 
 		m_pQbert->ResetPosition();
 		GetOwner()->GetComponent<PyramidCubes>()->ResetIndex();
+
 		break;
 
 	case dae::EventType::PLAYER_HIT:
@@ -79,7 +82,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::PLAYER_WON:
 		GetOwner()->GetComponent<PyramidCubes>()->CompleteLevel();
 		m_pQbert->SetCanMove( false );
-		m_Completed = true;
+		m_CompletedLevel = true;
 		break;
 
 	case dae::EventType::PLAYER_MOVED:
@@ -91,13 +94,11 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 
 	case dae::EventType::NEW_CUBE_COMPLETED:
-		m_Score += 15;
+		m_Score += 25;
 		break;
 
 	case dae::EventType::LEVEL_RESTART:
-		GetOwner()->GetComponent<PyramidCubes>()->ResetLevel();
-		m_Lives = m_StartLives;
-		m_Score = 0;
+		ResetLevel();
 		break;
 	}
 
@@ -133,7 +134,7 @@ void LevelHandeler::ChangeLevel()
 	{
 		int nextscene = dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1;
 
-		if ( nextscene < dae::SceneManager::GetInstance().GetMaxScenes() )
+		if ( nextscene < m_MaxLevels )
 		{
 			dae::SceneManager::GetInstance().SetCurrentScene( nextscene );
 			
@@ -148,22 +149,13 @@ void LevelHandeler::ChangeLevel()
 		}
 		else
 		{
-			//checkin highscore
-			//TODO: make player name input
-
-			std::cout << "YOU WON" << std::endl;
-			std::cout<< m_Score << std::endl;
-			const std::string pathscore = "../Data/highscores.txt";
-			const std::string newName = "TestPlayer1";
-			ScoreFile::GetInstance().UpdateHighScores( pathscore, newName, m_Score );
-
+			//Played Game Out
+			GetOwner()->GetComponent<Level>()->WinGame( m_Score );
 			ResetLevel();
-
-			dae::SceneManager::GetInstance().SetCurrentScene( 0 );
 		}
 
 		m_EndTimer = 0.0f;
-		m_Completed = false;
+		m_CompletedLevel = false;
 	}
 }
 
@@ -172,7 +164,7 @@ void LevelHandeler::ResetLevel()
 	m_Lives = m_StartLives;
 	m_Score = 0;
 	m_NeedsUpdate = true;
-	m_Completed = false;
+	m_CompletedLevel = false;
 	m_EndTimer = 0.0f;
 	GetOwner()->GetComponent<PyramidCubes>()->ResetLevel();
 	m_pQbert->ResetPosition();

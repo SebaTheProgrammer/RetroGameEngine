@@ -44,6 +44,8 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 	void SetHealth( int health ) { m_pStats->SetLives( health ); }
 
 private:
+	AnimationState m_CurrentState = AnimationState::Idle;
+
 	bool m_KeyBoardInput;
 
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdle;
@@ -64,8 +66,6 @@ private:
 	const float m_FrameTime = 0.3f;
 	const float m_Speed = 47.f;
 	const float m_SpeedBetweenSteps = 0.7f;
-
-	AnimationState m_CurrentState = AnimationState::Idle;
 
 	bool m_GetsHit = false;
 	const float m_HitWaitTime = 2.5f;

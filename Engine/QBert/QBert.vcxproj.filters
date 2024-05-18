@@ -31,14 +31,11 @@
     <Filter Include="Level\Enemies">
       <UniqueIdentifier>{29d94507-a160-42e2-995c-3b72ceb0facf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Level\Highscore">
-      <UniqueIdentifier>{7ad2a7c1-062f-4b42-abcf-64cae4afa858}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Level\GameOver">
-      <UniqueIdentifier>{a80f69d0-3068-4157-8a97-bc0c7f7e639f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Files">
       <UniqueIdentifier>{16848012-a961-4397-91e6-f7cfcc606531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Level\HighScore">
+      <UniqueIdentifier>{2c8363ad-288c-4c1c-af6b-4be73a25af0a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="EnemyHandeler.cpp">
       <Filter>Level\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="HighScoreScreen.cpp">
+      <Filter>Level\HighScore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="ScoreFile.h">
       <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScoreScreen.h">
+      <Filter>Level\HighScore</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

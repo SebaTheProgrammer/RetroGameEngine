@@ -10,22 +10,36 @@ class PyramidCubes;
 class Level : public dae::BaseComponent
 {
 public:
-	Level( dae::GameObject* parentGameObject, int howLongLevel, int level, 
+	Level( dae::GameObject* parentGameObject, int howLongLevel, int level, int maxLevels,
 		std::shared_ptr<dae::Texture2D> idle, std::shared_ptr<dae::Texture2D> backface, int qbertlives );
 	~Level() {};
 
 	void Update() override;
 	void Render() const override;
 
+	void GameOver( int score );
+	void WinGame( int score );
+
+	enum class LevelState
+	{
+		Begin,
+		GameOver,
+		Win,
+		Normal
+	};
 private:
+	LevelState m_CurrentState = LevelState::Begin;
+
 	//Level
 	const int m_MAX_LEVEL = 5;
 	std::shared_ptr<dae::GameObject> m_BeginScreenObject;
 
+	std::shared_ptr<dae::GameObject> m_pGameOverObject;
+	std::shared_ptr<dae::GameObject> m_pWinObject;
+
 	//Player
 	std::shared_ptr<dae::GameObject> m_QbertGameObject;
 
-	bool m_Begin{ true };
 	float m_BeginTimer{ 0 };
 	const float m_BeginTime{ 3 };
 

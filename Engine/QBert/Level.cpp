@@ -12,8 +12,9 @@
 #include <GameTime.h>
 #include "ScoreComponent.h"
 #include "Cube.h"
+#include "ScoreFile.h"
 
-Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, 
+Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, int maxLevels,
 	std::shared_ptr<dae::Texture2D> idle, std::shared_ptr<dae::Texture2D> backface, int qbertlives )
 	: dae::BaseComponent( parentGameObject )
 {
@@ -40,6 +41,24 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level,
 	m_BeginScreenObject->AddComponent( beginBg );
 	m_BeginScreenObject->AddComponent( begin );
 
+	//game over
+	m_pGameOverObject = std::make_shared<dae::GameObject>( level);
+	auto gameOver = std::make_shared<dae::TextureComponent>( parentGameObject, "Game Over Title.png" );
+	gameOver->SetLocalPosition( -gameOver->GetWidth() / 2 + 30, parentGameObject->GetLocalTransform().GetPosition().y / 2 - gameOver->GetHeight() / 2 );
+	auto textScore = std::make_shared<dae::TextComponent>( parentGameObject, "SCORE: 0", dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 ), true );
+	textScore->SetLocalPosition( 235, 300 );
+	m_pGameOverObject->AddComponent( beginBg );
+	m_pGameOverObject->AddComponent( gameOver );
+	m_pGameOverObject->AddComponent( textScore );
+
+	//win game
+	m_pWinObject = std::make_shared<dae::GameObject>( level );
+	auto gameWin = std::make_shared<dae::TextureComponent>( parentGameObject, "Victory Title.png" );
+	gameWin->SetLocalPosition( -gameWin->GetWidth() / 2 + 30, parentGameObject->GetLocalTransform().GetPosition().y / 2 - gameWin->GetHeight() / 2 );
+	m_pWinObject->AddComponent( beginBg );
+	m_pWinObject->AddComponent( gameWin );
+	m_pWinObject->AddComponent( textScore );
+
 	//players
 	 // add 2 players, but is for later
 	m_QbertGameObject = std::make_shared<dae::GameObject>( level);
@@ -49,55 +68,116 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level,
 	qbert = ( std::make_shared<QBert>( m_QbertGameObject.get(), idle, backface, true) );
 	m_QbertGameObject->AddComponent( qbert );
 
-	//Levelhandeler //TODO
-	auto levelHandeler = std::make_shared<LevelHandeler>( parentGameObject, qbertlives);
+	//Levelhandeler
+	auto levelHandeler = std::make_shared<LevelHandeler>( parentGameObject, qbertlives, maxLevels );
 	parentGameObject->AddComponent( levelHandeler );
 
 	pyramid->AddObserver( levelHandeler.get() );
 	qbert->AddObserver( levelHandeler.get() );
-	for ( const auto& cube : pyramid->GetCubes() )
-	{
-		cube->AddObserver( levelHandeler.get() );
-	}
+	for ( const auto& cube : pyramid->GetCubes() ) { cube->AddObserver( levelHandeler.get() ); };
 
 	//Health display
 	auto healthDisplay = std::make_shared<HealthComponentQbert>( parentGameObject, levelHandeler->GetLives());
-	healthDisplay->SetLocalPosition( -270, -90 );
+	healthDisplay->SetLocalPosition( -250, -90 );
 	parentGameObject->AddComponent( healthDisplay );
 
 	//Score
-	auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 );
-	auto score = std::make_shared<dae::ScoreComponent>( parentGameObject,"Score: ", font);
+	auto score = std::make_shared<dae::ScoreComponent>( parentGameObject,"Score: ", dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 ) );
 	score->SetLocalPosition( 200, -90 );
 	parentGameObject->AddComponent( score );
 }
 
 void Level::Update()
 {
-	if ( m_Begin )
+	switch ( m_CurrentState )
 	{
+
+	case LevelState::Begin:
+
 		m_BeginTimer += dae::GameTime::GetInstance().GetDeltaTime();
 		if ( m_BeginTimer > m_BeginTime )
 		{
-			m_Begin = false;
-			m_QbertGameObject->GetComponent<QBert>()->SetCanMove(true);
+			m_CurrentState = LevelState::Normal;
+			m_BeginTimer = 0;
+			m_QbertGameObject->GetComponent<QBert>()->SetCanMove( true );
 		}
 		m_BeginScreenObject->Update();
+		break;
+
+	case LevelState::GameOver:
+
+		m_BeginTimer += dae::GameTime::GetInstance().GetDeltaTime();
+		if ( m_BeginTimer > ( m_BeginTime * 2 ) )
+		{
+			m_CurrentState = LevelState::Normal;
+			m_BeginTimer = 0;
+			m_QbertGameObject->GetComponent<QBert>()->SetCanMove( true );
+			dae::SceneManager::GetInstance().SetCurrentScene( 0 );
+		}
+		m_pGameOverObject->Update();
+		break;
+
+	case LevelState::Win:
+
+		m_BeginTimer += dae::GameTime::GetInstance().GetDeltaTime();
+
+		if ( m_BeginTimer > ( m_BeginTime * 2 ) )
+		{
+			m_CurrentState = LevelState::Normal;
+			m_BeginTimer = 0;
+			m_QbertGameObject->GetComponent<QBert>()->SetCanMove( true );
+			dae::SceneManager::GetInstance().SetCurrentScene( dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1 );
+		}
+		m_pWinObject->Update();
+		break;
 	}
-	else 
-	{
-		m_QbertGameObject->Update();
-	}
+
+	m_QbertGameObject->Update();
 }
 
 void Level::Render() const
 {
-	if ( m_Begin )
+	switch ( m_CurrentState )
 	{
+	case LevelState::Begin:
 		m_BeginScreenObject->Render();
-	}
-	else
-	{
+		break;
+
+	case LevelState::GameOver:
+		m_pGameOverObject->Render();
+		break;
+
+	case LevelState::Win:
+		m_pWinObject->Render();
+		break;
+
+	case LevelState::Normal:
 		m_QbertGameObject->Render();
+		break;
 	}
+}
+
+void Level::GameOver(int score)
+{
+	m_CurrentState = LevelState::GameOver;
+	m_BeginTimer = 0;
+	m_QbertGameObject->GetComponent<QBert>()->SetCanMove( false );
+	std::string scoreString = std::to_string( score );
+	m_pGameOverObject->GetComponent<dae::TextComponent>()->SetText( { "SCORE: " + scoreString } );
+
+	std::cout << score << std::endl;
+	ScoreFile::GetInstance().UpdateHighScores( score );
+}
+
+void Level::WinGame( int score )
+{
+	//Played All Games Out
+	m_CurrentState = LevelState::Win;
+	m_BeginTimer = 0;
+	m_QbertGameObject->GetComponent<QBert>()->SetCanMove( false );
+	std::string scoreString = std::to_string( score );
+	m_pWinObject->GetComponent<dae::TextComponent>()->SetText( { "SCORE: " + scoreString } );
+
+	std::cout << score << std::endl;
+	ScoreFile::GetInstance().UpdateHighScores( score );
 }

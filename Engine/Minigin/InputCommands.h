@@ -164,4 +164,24 @@ namespace dae
 		private:
 			int m_Level{};
 	};
+
+	class OpenNextLevelCommand : public GameObjectCommand
+	{
+	public:
+		OpenNextLevelCommand( GameObject* gameObject ) : GameObjectCommand( gameObject ){}
+
+		virtual void Execute() override
+		{
+			int nextscene = dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1;
+
+			if ( nextscene < dae::SceneManager::GetInstance().GetMaxScenes() )
+			{
+				dae::SceneManager::GetInstance().SetCurrentScene( nextscene );
+			}
+			else 
+			{
+				dae::SceneManager::GetInstance().SetCurrentScene( 0 );
+			}
+		}
+	};
 }

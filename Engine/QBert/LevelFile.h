@@ -40,10 +40,6 @@ public:
                 {
                     levels.push_back( level );
                 }
-                else
-                {
-                    std::cerr << "Error parsing line: " << line << std::endl;
-                }
             }
             file.close();
         }

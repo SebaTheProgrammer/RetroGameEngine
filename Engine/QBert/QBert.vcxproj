@@ -192,6 +192,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="EnemyHandeler.cpp" />
     <ClCompile Include="HealthComponentQbert.cpp" />
+    <ClCompile Include="HighScoreScreen.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="LevelHandeler.cpp" />
@@ -204,6 +205,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
     <ClInclude Include="Cube.h" />
     <ClInclude Include="EnemyHandeler.h" />
     <ClInclude Include="HealthComponentQbert.h" />
+    <ClInclude Include="HighScoreScreen.h" />
     <ClInclude Include="PlayerCommands.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelHandeler.h" />

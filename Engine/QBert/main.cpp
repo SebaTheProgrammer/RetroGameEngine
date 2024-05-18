@@ -21,6 +21,7 @@
 #include "SoundSystem.h"
 #include "LevelFile.h"
 #include "ScoreFile.h"
+#include "HighScoreScreen.h"
 
 void load()
 {
@@ -47,7 +48,7 @@ void load()
 	mainMenu.Add( text );
 
 	auto text2 = std::make_shared<dae::GameObject>( 0 );
-	text2->AddComponent( std::make_shared<dae::TextComponent>( text2.get(), "Press 1 to begin the game", font2 ) );
+	text2->AddComponent( std::make_shared<dae::TextComponent>( text2.get(), "Press 1 to begin the game, 0 for the main menu, 9 for the highscores", font2 ) );
 	text2->SetLocalTransform( { 10, 280 } );
 	mainMenu.Add( text2 );
 
@@ -56,16 +57,18 @@ void load()
 	text3->SetLocalTransform( { 10, 310 } );
 	mainMenu.Add( text3 );
 
-	//qbert
+	//Resources
 	int hp = 4;
 	auto idle = std::shared_ptr<dae::Texture2D> { dae::ResourceManager::GetInstance().LoadTexture( "qbertIdle.png" ) };
 	auto backFaceIdle = std::shared_ptr<dae::Texture2D> { dae::ResourceManager::GetInstance().LoadTexture( "qbertBackFaceIdle.png" ) };	
+
+	//ScoreFile::GetInstance().SetName( "" );
 
 	//Level loading from file:
 	const std::string path = "../Data/levels.txt";
 	LevelFile levelFile( path );
 	std::vector<LevelFile::Level> levels = levelFile.ReadLevelFile();
-
+	int size = static_cast< int >( levels.size()+1);
 	for ( const auto& level : levels )
 	{
 		int lentgh = level.length;
@@ -74,7 +77,7 @@ void load()
 		auto& level1 = dae::SceneManager::GetInstance().CreateScene( "Level"+ level.levelNumber );
 		auto goLevel = std::make_shared<dae::GameObject>( level.levelNumber );
 		goLevel->SetLocalTransform( { 300, 130 } );
-		auto levelComponent = std::make_shared <Level>( goLevel.get(), lentgh, levelNumber, idle, backFaceIdle, hp );
+		auto levelComponent = std::make_shared <Level>( goLevel.get(), lentgh, levelNumber, size, idle, backFaceIdle, hp );
 		goLevel->AddComponent( levelComponent );
 		level1.Add( goLevel );
 	}
@@ -84,7 +87,26 @@ void load()
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_0, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 0 } );
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_1, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 1 } );
 
+	//HIGHSCORE
+	auto& highScore = dae::SceneManager::GetInstance().CreateScene( "Highscores" );
+	auto score = std::make_shared<dae::GameObject>( 0 );
+	auto highscore = std::make_shared<HighScoreScreen>( score.get(), font, font2 );
+	score->AddComponent( highscore );
+	highScore.Add( score );
+
 	dae::SceneManager::GetInstance().SetCurrentScene( 0 );
+
+	std::string playerName;
+	std::cout << "Enter your name: ";
+	std::getline( std::cin, playerName );
+	ScoreFile::GetInstance().SetName( playerName );
+	std::cout << "Hello, " << playerName << "!" << std::endl;
+	std::cout << "!Welcome and enjoy QBert!" << std::endl;
+	std::cout << "Made by Vryens Sebastiaan, 2GD18 " << std::endl;
+	int max = static_cast< int >( dae::SceneManager::GetInstance().GetMaxScenes()-1);
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_9, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), max });
+
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_F1, InputTypeKeyBoard::IsDownThisFrame, dae::OpenNextLevelCommand{ levelswitcher.get() } );
 }
 
 int main( int, char* [] ) 
