@@ -1,14 +1,14 @@
 #pragma once
 #include "BaseComponent.h"
-
+#include "TextComponent.h"
 namespace dae
 {
 	class BaseComponent;
 
-	class ScoreComponent: public BaseComponent
+	class ScoreComponent: public TextComponent
 	{
 		public:
-		ScoreComponent(GameObject* const parentGameObject, int score);
+		ScoreComponent( GameObject* parentGameObject, std::shared_ptr<Font> font, int score = 0 );
 		virtual ~ScoreComponent() = default;
 
 		ScoreComponent(const ScoreComponent& other) = delete;
