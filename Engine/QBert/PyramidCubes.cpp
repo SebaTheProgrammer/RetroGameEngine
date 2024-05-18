@@ -133,6 +133,7 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
     }
 
     m_CompletedCubes = 0;
+
     for ( const auto& cube : m_pCubes )
     {
         if ( cube->IsCompleted() )

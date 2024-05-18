@@ -10,6 +10,8 @@
 #include <iostream>
 #include "HealthComponentQbert.h"
 #include <GameTime.h>
+#include "ScoreComponent.h"
+#include "Cube.h"
 
 Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLevel, int level, 
 	std::shared_ptr<dae::Texture2D> idle, std::shared_ptr<dae::Texture2D> backface, int qbertlives )
@@ -53,11 +55,21 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 
 	pyramid->AddObserver( levelHandeler.get() );
 	qbert->AddObserver( levelHandeler.get() );
+	for ( const auto& cube : pyramid->GetCubes() )
+	{
+		cube->AddObserver( levelHandeler.get() );
+	}
 
 	//Health display
 	auto healthDisplay = std::make_shared<HealthComponentQbert>( parentGameObject, levelHandeler->GetLives());
 	healthDisplay->SetLocalPosition( -250, -50 );
 	parentGameObject->AddComponent( healthDisplay );
+
+	//Score
+	auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 );
+	auto score = std::make_shared<dae::ScoreComponent>( parentGameObject,"Score: ", font);
+	score->SetLocalPosition( -250, -10 );
+	parentGameObject->AddComponent( score );
 }
 
 void Level::Update()

@@ -140,7 +140,7 @@ namespace dae
 			{
 				if ( auto scoreComp{ GetGameObject()->GetComponent<dae::ScoreComponent>() } )
 				{
-					scoreComp->AddScore( m_Score );
+					scoreComp->SetScore( m_Score );
 				}
 			}
 		}

@@ -32,6 +32,7 @@ void Cube::Won()
 
 void Cube::LandedOnThisCube()
 {
+	if( m_Completed ) return;
 						//level 1 == 0
 	if ( m_CurrentFrame < m_Level + 1)
 	{
@@ -40,6 +41,7 @@ void Cube::LandedOnThisCube()
 	}
 	if( m_CurrentFrame > m_Level )
 	{
+		NotifyObservers( dae::EventType::NEW_CUBE_COMPLETED, GetOwner() );
 		m_Completed = true;
 	}
 }

@@ -1,9 +1,10 @@
 #pragma once
 #include "BaseComponent.h"
-#include <GameObject.h>
 #include "Observer.h"
 #include "QBert.h"
-
+#include "GameActor.h"
+#include "Observer.h"
+#include "GameObject.h"
 class Cube;
 
 class PyramidCubes : public dae::BaseComponent, public dae::GameActor
@@ -34,6 +35,8 @@ public:
 
 	int GetActiveRow() const { return m_QBertColIndex; }
 	int GetActiveColumn() const { return m_QBertRowIndex; }
+
+	std::vector<std::shared_ptr<Cube>> GetCubes() const { return m_pCubes; }
 
 private:
 	std::shared_ptr<dae::Texture2D> m_pTexture;

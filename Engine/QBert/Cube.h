@@ -2,8 +2,10 @@
 #include "BaseComponent.h"
 #include "AnimatedTextureComponent.h"
 #include "Observer.h"
+#include "GameObject.h"
+#include "GameActor.h"
 
-class Cube : public dae::BaseComponent
+class Cube : public dae::BaseComponent, public dae::GameActor
 {
 	public:
 

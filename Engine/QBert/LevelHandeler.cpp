@@ -9,6 +9,7 @@
 #include <SceneManager.h>
 #include <Scene.h>
 #include "HealthComponentQbert.h"
+#include "ScoreComponent.h"
 
 LevelHandeler::LevelHandeler( dae::GameObject* parentGameObject, int& lives ):
 	BaseComponent( parentGameObject ),
@@ -27,6 +28,10 @@ void LevelHandeler::Update()
 		if ( HealthComponentQbert * healthComponent{ GetOwner()->GetComponent<HealthComponentQbert>().get()} )
 		{
 			healthComponent->SetLives( m_Lives );
+		}
+		if ( dae::ScoreComponent * scoreComponent{ GetOwner()->GetComponent< dae::ScoreComponent>().get() } )
+		{
+			scoreComponent->SetScore( m_Score );
 		}
 		m_NeedsUpdate = false;
 	}
@@ -79,7 +84,6 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		GetOwner()->GetComponent<PyramidCubes>()->CompleteLevel();
 		m_pQbert->SetCanMove( false );
 		m_Completed = true;
-
 		break;
 
 	case dae::EventType::PLAYER_MOVED:
@@ -88,6 +92,11 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 			m_pQbert = qbert;
 			GetOwner()->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetDirection() );
 		}
+		break;
+
+	case dae::EventType::NEW_CUBE_COMPLETED:
+		m_Score += 15;
+		m_NeedsUpdate = true;
 		break;
 
 	case dae::EventType::LEVEL_RESTART:
@@ -138,8 +147,8 @@ void LevelHandeler::ChangeLevel()
 				if ( dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects()[ index ]->GetComponent<LevelHandeler>() != nullptr )
 				{
 					dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects()[ index ]->GetComponent<LevelHandeler>()->SetLives( m_Lives );
+					dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects()[ index ]->GetComponent<LevelHandeler>()->SetScore( m_Score );
 				}
-
 			}
 		}
 		else
