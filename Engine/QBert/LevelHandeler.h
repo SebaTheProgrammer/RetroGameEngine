@@ -9,7 +9,7 @@ class LevelHandeler final : public dae::BaseComponent, public dae::Observer
 {
 	public:
 	LevelHandeler( dae::GameObject* parentGameObject, int& lives );
-	~LevelHandeler();
+	~LevelHandeler() {};
 
 	void Update() override;
 	void Notify( dae::EventType event, dae::GameObject* gameObj ) override;

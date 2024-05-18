@@ -10,14 +10,11 @@
 #include <Scene.h>
 #include "HealthComponentQbert.h"
 #include "ScoreComponent.h"
+#include "ScoreFile.h"
 
 LevelHandeler::LevelHandeler( dae::GameObject* parentGameObject, int& lives ):
 	BaseComponent( parentGameObject ),
 	m_Lives( lives ), m_Score(0), m_StartLives( lives )
-{
-}
-
-LevelHandeler::~LevelHandeler()
 {
 }
 
@@ -63,21 +60,22 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 
 	case dae::EventType::PLAYER_HIT:
-
-		m_NeedsUpdate = true;
 		if ( m_Lives > 1 )
 		{
 			--m_Lives;
+			if ( m_Score > 25 ) { m_Score -= 25;}
 		}
 		else
 		{
 			m_Lives = 0;
 			Notify( dae::EventType::PLAYER_DIED, gameObj );
 		}
+		m_NeedsUpdate = true;
 		break;
 
 	case dae::EventType::KILL_ENEMY:
 		m_Score += 100;
+		m_NeedsUpdate = true;
 		break;
 
 	case dae::EventType::PLAYER_WON:
@@ -138,7 +136,7 @@ void LevelHandeler::ChangeLevel()
 	{
 		int nextscene = dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1;
 
-		if ( nextscene <= dae::SceneManager::GetInstance().GetMaxScenes() )
+		if ( nextscene < dae::SceneManager::GetInstance().GetMaxScenes() )
 		{
 			dae::SceneManager::GetInstance().SetCurrentScene( nextscene );
 			
@@ -153,7 +151,16 @@ void LevelHandeler::ChangeLevel()
 		}
 		else
 		{
-			//TODO:: Win screen then go to main menu
+			//checkin highscore
+			//TODO: make player name input
+
+			std::cout << "YOU WON" << std::endl;
+			std::cout<< m_Score << std::endl;
+			const std::string pathscore = "../Data/highscores.txt";
+			const std::string newName = "TestPlayer1";
+			ScoreFile::GetInstance().UpdateHighScores( pathscore, newName, m_Score );
+
+			//TODO:: Win screen/check high score
 			dae::SceneManager::GetInstance().SetCurrentScene( 0 );
 		}
 

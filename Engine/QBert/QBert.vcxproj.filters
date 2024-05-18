@@ -31,6 +31,15 @@
     <Filter Include="Level\Enemies">
       <UniqueIdentifier>{29d94507-a160-42e2-995c-3b72ceb0facf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Level\Highscore">
+      <UniqueIdentifier>{7ad2a7c1-062f-4b42-abcf-64cae4afa858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Level\GameOver">
+      <UniqueIdentifier>{a80f69d0-3068-4157-8a97-bc0c7f7e639f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files">
+      <UniqueIdentifier>{16848012-a961-4397-91e6-f7cfcc606531}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -94,6 +103,12 @@
     </ClInclude>
     <ClInclude Include="EnemyHandeler.h">
       <Filter>Level\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelFile.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreFile.h">
+      <Filter>Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

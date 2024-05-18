@@ -10,7 +10,7 @@ class PyramidCubes;
 class Level : public dae::BaseComponent
 {
 public:
-	Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLevel, int level, 
+	Level( dae::GameObject* parentGameObject, int howLongLevel, int level, 
 		std::shared_ptr<dae::Texture2D> idle, std::shared_ptr<dae::Texture2D> backface, int qbertlives );
 	~Level() {};
 

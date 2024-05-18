@@ -19,6 +19,8 @@
 #include "PlayerCommands.h"
 #include "ServiceLocator.h"
 #include "SoundSystem.h"
+#include "LevelFile.h"
+#include "ScoreFile.h"
 
 void load()
 {
@@ -45,7 +47,7 @@ void load()
 	mainMenu.Add( text );
 
 	auto text2 = std::make_shared<dae::GameObject>( 0 );
-	text2->AddComponent( std::make_shared<dae::TextComponent>( text2.get(), "Press 0 (menu), 1, 2 or 3 to switch level (debug purposes)", font2 ) );
+	text2->AddComponent( std::make_shared<dae::TextComponent>( text2.get(), "Press 1 to begin the game", font2 ) );
 	text2->SetLocalTransform( { 10, 280 } );
 	mainMenu.Add( text2 );
 
@@ -59,51 +61,34 @@ void load()
 	auto idle = std::shared_ptr<dae::Texture2D> { dae::ResourceManager::GetInstance().LoadTexture( "qbertIdle.png" ) };
 	auto backFaceIdle = std::shared_ptr<dae::Texture2D> { dae::ResourceManager::GetInstance().LoadTexture( "qbertBackFaceIdle.png" ) };	
 
-	//LEVEL 1
-	auto& level1 = dae::SceneManager::GetInstance().CreateScene( "Level1" );
-	auto goLevel = std::make_shared<dae::GameObject>(1);
-	goLevel->SetLocalTransform( { 300, 130 } );
-	auto level = std::make_shared <Level>( goLevel.get(),false,5,1, idle, backFaceIdle, hp );
-	goLevel->AddComponent( level );
-	level1.Add( goLevel );
+	//Level loading from file:
+	const std::string path = "../Data/levels.txt";
+	LevelFile levelFile( path );
+	std::vector<LevelFile::Level> levels = levelFile.ReadLevelFile();
 
-	//LEVEL 2
-	auto& level2 = dae::SceneManager::GetInstance().CreateScene( "Level2" );
-	auto goLevel2 = std::make_shared<dae::GameObject>(2);
-	goLevel2->SetLocalTransform( { 300, 130 } );
-	auto Level2 = std::make_shared <Level>( goLevel2.get(), false, 7, 2, idle, backFaceIdle, hp );
-	goLevel2->AddComponent( Level2 );
-	level2.Add( goLevel2 );
+	for ( const auto& level : levels )
+	{
+		int lentgh = level.length;
+		int levelNumber = level.levelNumber;
 
-	//LEVEL 3
-	auto& level3 = dae::SceneManager::GetInstance().CreateScene( "Level3" );
-	auto goLevel3 = std::make_shared<dae::GameObject>(3);
-	goLevel3->SetLocalTransform( { 300, 130 } );
-	auto Level3 = std::make_shared <Level>( goLevel3.get(), false, 7, 3, idle, backFaceIdle, hp );
-	goLevel3->AddComponent( Level3 );
-	level3.Add( goLevel3 );
-
-	//LEVEL 4
-	/*auto& level4 = dae::SceneManager::GetInstance().CreateScene( "Level4" );
-	auto golevel4 = std::make_shared<dae::GameObject>( 4 );
-	golevel4->SetLocalTransform( { 300, 130 } );
-	auto Level4 = std::make_shared <Level>( golevel4.get(), false, 7, 4, idle, backFaceIdle, hp );
-	golevel4->AddComponent( Level4 );
-	level4.Add( golevel4 );*/
+		auto& level1 = dae::SceneManager::GetInstance().CreateScene( "Level"+ level.levelNumber );
+		auto goLevel = std::make_shared<dae::GameObject>( level.levelNumber );
+		goLevel->SetLocalTransform( { 300, 130 } );
+		auto levelComponent = std::make_shared <Level>( goLevel.get(), lentgh, levelNumber, idle, backFaceIdle, hp );
+		goLevel->AddComponent( levelComponent );
+		level1.Add( goLevel );
+	}
 
 	//for debug purposes
 	auto levelswitcher = std::make_shared<dae::GameObject>(-1);
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_0, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 0 } );
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_1, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 1 } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_2, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 2 } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_3, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 3 } );
-	//dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_4, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 4 } );
-	//
 
 	dae::SceneManager::GetInstance().SetCurrentScene( 0 );
 }
 
-int main( int, char* [] ) {
+int main( int, char* [] ) 
+{
 	dae::Minigin engine("../Data/");
 	engine.Run(load);
 	return 0;

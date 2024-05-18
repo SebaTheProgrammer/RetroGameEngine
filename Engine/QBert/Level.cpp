@@ -13,7 +13,7 @@
 #include "ScoreComponent.h"
 #include "Cube.h"
 
-Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLevel, int level, 
+Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, 
 	std::shared_ptr<dae::Texture2D> idle, std::shared_ptr<dae::Texture2D> backface, int qbertlives )
 	: dae::BaseComponent( parentGameObject )
 {
@@ -41,7 +41,7 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 	m_BeginScreenObject->AddComponent( begin );
 
 	//players
-	multiplayer = multiplayer; //TODO: if multiplayer, add 2 players, but is for later
+	 // add 2 players, but is for later
 	m_QbertGameObject = std::make_shared<dae::GameObject>( level);
 	m_QbertGameObject->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x, parentGameObject->GetLocalTransform().GetPosition().y - 40 } );
 	auto qbert = std::shared_ptr<QBert>{};
@@ -62,13 +62,13 @@ Level::Level( dae::GameObject* parentGameObject, bool multiplayer, int howLongLe
 
 	//Health display
 	auto healthDisplay = std::make_shared<HealthComponentQbert>( parentGameObject, levelHandeler->GetLives());
-	healthDisplay->SetLocalPosition( -250, -50 );
+	healthDisplay->SetLocalPosition( -270, -90 );
 	parentGameObject->AddComponent( healthDisplay );
 
 	//Score
 	auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 );
 	auto score = std::make_shared<dae::ScoreComponent>( parentGameObject,"Score: ", font);
-	score->SetLocalPosition( -250, -10 );
+	score->SetLocalPosition( 200, -90 );
 	parentGameObject->AddComponent( score );
 }
 

@@ -209,6 +209,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
     <ClInclude Include="LevelHandeler.h" />
     <ClInclude Include="PyramidCubes.h" />
     <ClInclude Include="QBert.h" />
+    <ClInclude Include="LevelFile.h" />
+    <ClInclude Include="ScoreFile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
