@@ -7,6 +7,7 @@
 #include "GameActor.h"
 #include "LevelHandeler.h"
 #include <TextComponent.h>
+#include "TextureComponent.h"
 
 class QBert : public dae::BaseComponent, public dae::GameActor
 {
@@ -32,8 +33,8 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 
 	void SetAnimationState( AnimationState state );
 	void SetMirror( bool mirror );
-	bool CanMove() const { return m_CanMove; }
-	void SetCanMove( bool canMove ) { m_CanMove = canMove; m_pSingleMovenment->SetCanMove( canMove ); };
+	bool CanMove() const {return m_pSingleMovenment->GetCanMove();};
+	void SetCanMove( bool canMove ) { m_pSingleMovenment->SetCanMove( canMove ); };
 
 	void ResetPosition();
 
@@ -47,6 +48,7 @@ private:
 
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdle;
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdleBack;
+	std::shared_ptr <dae::TextureComponent> m_pTextureHit;
 
 	std::shared_ptr<dae::MovenmentComponent> m_pMovenment;
 	std::shared_ptr<SingleMovementComponent> m_pSingleMovenment;
@@ -65,5 +67,7 @@ private:
 
 	AnimationState m_CurrentState = AnimationState::Idle;
 
-	bool m_CanMove = false;
+	bool m_GetsHit = false;
+	const float m_HitWaitTime = 2.5f;
+	float m_HitTimer = 0;
 };

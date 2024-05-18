@@ -2,6 +2,8 @@
 #include "ResourceManager.h"
 #include "PyramidCubes.h"
 #include "PlayerCommands.h"
+#include <GameTime.h>
+#include "TextureComponent.h"
 
 QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureIdle, std::shared_ptr<dae::Texture2D> textureIdleBack, bool keyboardinput )
 	:BaseComponent( parentGameObject )
@@ -12,6 +14,7 @@ QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D>
 {
 	m_pTextureIdle = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureIdle, m_Scale, 1, 8, 0, m_FrameTime );
 	m_pTextureIdleBack = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureIdleBack, m_Scale, 1, 8, 0, m_FrameTime );
+	m_pTextureHit = std::make_shared<dae::TextureComponent>( parentGameObject, "Qbert Curses.png" );
 
 	m_pMovenment = std::make_shared<dae::MovenmentComponent>( parentGameObject, m_Speed );
 	GetOwner()->AddComponent( m_pMovenment );
@@ -60,6 +63,19 @@ void QBert::Update()
 		m_pTextureIdleBack->Update();
 		break;
 	}
+
+	if ( m_GetsHit )
+	{
+		m_pTextureHit->Update();
+
+		m_HitTimer += dae::GameTime::GetInstance().GetDeltaTime();
+		if ( m_HitTimer >= m_HitWaitTime ) 
+		{
+			m_HitTimer = 0;
+			m_pSingleMovenment->SetCanMove( true );
+			m_GetsHit= false;
+		}
+	}
 }
 
 void QBert::Render() const
@@ -73,10 +89,17 @@ void QBert::Render() const
 		m_pTextureIdleBack->Render();
 		break;
 	}
+
+	if ( m_GetsHit ) 
+	{
+		m_pTextureHit->Render();
+	}
 }
 
 void QBert::GetsHit()
 {
+	m_GetsHit = true;
+	m_pSingleMovenment->SetCanMove( false );
 	NotifyObservers( dae::EventType::PLAYER_HIT, GetOwner() );
 }
 
@@ -118,14 +141,13 @@ void QBert::SetMirror( bool mirror )
 
 void QBert::ResetPosition()
 {
-	m_CanMove = true;
-	m_pSingleMovenment->SetCanMove( true );
+	m_GetsHit = true;
+	m_pSingleMovenment->SetCanMove( false );
 	SetAnimationState( AnimationState::Idle );
 	GetOwner()->SetLocalTransform( { 300, 90 } );
 }
 
 void QBert::GameOver()
 {
-	m_CanMove = false;
 	m_pSingleMovenment->SetCanMove( false );
 }
