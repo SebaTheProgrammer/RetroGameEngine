@@ -90,4 +90,5 @@ void dae::AnimatedTextureComponent::Reset()
 	m_CurrentRow = 0;
 	m_CurrentColumn = 0;
 	m_AccumulatedTime = 0;
+	m_FrameTime = 0;
 }

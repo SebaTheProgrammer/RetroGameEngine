@@ -70,12 +70,10 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 			m_Lives = 0;
 			Notify( dae::EventType::PLAYER_DIED, gameObj );
 		}
-		m_NeedsUpdate = true;
 		break;
 
 	case dae::EventType::KILL_ENEMY:
 		m_Score += 100;
-		m_NeedsUpdate = true;
 		break;
 
 	case dae::EventType::PLAYER_WON:
@@ -94,7 +92,6 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 
 	case dae::EventType::NEW_CUBE_COMPLETED:
 		m_Score += 15;
-		m_NeedsUpdate = true;
 		break;
 
 	case dae::EventType::LEVEL_RESTART:
@@ -160,11 +157,23 @@ void LevelHandeler::ChangeLevel()
 			const std::string newName = "TestPlayer1";
 			ScoreFile::GetInstance().UpdateHighScores( pathscore, newName, m_Score );
 
-			//TODO:: Win screen/check high score
+			ResetLevel();
+
 			dae::SceneManager::GetInstance().SetCurrentScene( 0 );
 		}
 
 		m_EndTimer = 0.0f;
 		m_Completed = false;
 	}
+}
+
+void LevelHandeler::ResetLevel()
+{
+	m_Lives = m_StartLives;
+	m_Score = 0;
+	m_NeedsUpdate = true;
+	m_Completed = false;
+	m_EndTimer = 0.0f;
+	GetOwner()->GetComponent<PyramidCubes>()->ResetLevel();
+	m_pQbert->ResetPosition();
 }

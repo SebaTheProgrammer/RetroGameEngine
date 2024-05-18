@@ -75,12 +75,13 @@ void PyramidCubes::ResetLevel()
     {
         cube->Reset();
     }
-
+    m_CompletedCubes = 0;
     ResetIndex();
 }
 
 void PyramidCubes::ResetIndex()
 {
+    m_CanMove = true;
     m_QBertColIndex = 1;
     m_QBertRowIndex = 0;
 }

@@ -118,6 +118,8 @@ void QBert::SetMirror( bool mirror )
 
 void QBert::ResetPosition()
 {
+	m_CanMove = true;
+	m_pSingleMovenment->SetCanMove( true );
 	SetAnimationState( AnimationState::Idle );
 	GetOwner()->SetLocalTransform( { 300, 90 } );
 }

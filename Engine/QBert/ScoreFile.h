@@ -62,20 +62,26 @@ public:
         }
     }
 
-    void UpdateHighScores( const std::string& path, const std::string& newName, int newScore ) 
+    void UpdateHighScores( const std::string& path, const std::string& newName, int newScore )
     {
         auto highScores = ReadHighScores( path );
 
         highScores.push_back( { newName, newScore } );
 
-        std::sort( highScores.begin(), highScores.end(), []( const auto& a, const auto& b ) 
+        std::sort( highScores.begin(), highScores.end(), []( const auto& a, const auto& b )
             {
-            return b.second < a.second;
+                return b.second < a.second;
             } );
 
-        if ( highScores.size() > 10 ) 
+        if ( highScores.size() > 10 )
         {
             highScores.resize( 10 );
+        }
+
+        std::cout << "Updated High Scores:" << std::endl;
+        for ( const auto& score : highScores )
+        {
+            std::cout << score.first << " " << score.second << std::endl;
         }
 
         WriteHighScores( path, highScores );

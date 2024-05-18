@@ -34,5 +34,6 @@ private:
 	const float m_EndTimeChangeLevel = 4.0f;
 
 	void ChangeLevel();
+	void ResetLevel();
 };
 
