@@ -53,9 +53,14 @@ void load()
 	mainMenu.Add( text2 );
 
 	auto text3 = std::make_shared<dae::GameObject>( 0 );
-	text3->AddComponent( std::make_shared<dae::TextComponent>( text3.get(), "Hold WASD to move, you can complete the level and/or die", font2 ) );
+	text3->AddComponent( std::make_shared<dae::TextComponent>( text3.get(), "Press F1 to skip levels/cycle through", font2 ) );
 	text3->SetLocalTransform( { 10, 310 } );
 	mainMenu.Add( text3 );
+
+	auto text4 = std::make_shared<dae::GameObject>( 0 );
+	text4->AddComponent( std::make_shared<dae::TextComponent>( text4.get(), "Hold WASD to move, you can complete the level and/or die", font2 ) );
+	text4->SetLocalTransform( { 10, 340 } );
+	mainMenu.Add( text4 );
 
 	//Resources
 	int hp = 4;

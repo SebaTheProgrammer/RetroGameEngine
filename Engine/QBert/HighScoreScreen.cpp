@@ -21,7 +21,7 @@ HighScoreScreen::HighScoreScreen( dae::GameObject* parentGameObject, std::shared
 
 	m_TextComponents.resize( 10 );
 
-	for ( int index{};index < m_TextComponents.size(); ++index )
+	for ( unsigned index{};index < m_TextComponents.size(); ++index )
 	{
 		std::string text = m_Scores[index].first + " " + std::to_string( m_Scores[index].second );
 		m_TextComponents[index] = std::make_shared<dae::TextComponent>(parentGameObject, text, font2, true);
@@ -34,7 +34,7 @@ void HighScoreScreen::GetAllScores()
 {
 	m_Scores = ScoreFile::GetInstance().ReadHighScores();
 
-	for ( int index{}; index < m_TextComponents.size(); ++index )
+	for ( unsigned index{}; index < m_TextComponents.size(); ++index )
 	{
 		std::string text = m_Scores[index].first + " " + std::to_string( m_Scores[index].second );
 		m_TextComponents[index]->SetText( text );

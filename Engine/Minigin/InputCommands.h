@@ -172,7 +172,7 @@ namespace dae
 
 		virtual void Execute() override
 		{
-			int nextscene = dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1;
+			unsigned nextscene = dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1;
 
 			if ( nextscene < dae::SceneManager::GetInstance().GetMaxScenes() )
 			{

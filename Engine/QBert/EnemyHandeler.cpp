@@ -13,7 +13,7 @@ EnemyHandeler::~EnemyHandeler()
 
 void EnemyHandeler::Update()
 {
-	for ( int i = 0; i < m_pCoilies.size(); ++i )
+	for ( unsigned i = 0; i < m_pCoilies.size(); ++i )
 	{
 		m_pCoilies[i]->Update();
 	}
@@ -21,7 +21,7 @@ void EnemyHandeler::Update()
 
 void EnemyHandeler::Render() const
 {
-	for ( int i = 0; i < m_pCoilies.size(); ++i )
+	for ( unsigned i = 0; i < m_pCoilies.size(); ++i )
 	{
 		m_pCoilies[i]->Render();
 	}
@@ -35,7 +35,7 @@ void EnemyHandeler::SpawnCoily( const int row, const int col )
 
 void EnemyHandeler::DeleteCoily( const int row, const int col )
 {
-	for ( int i = 0; i < m_pCoilies.size(); ++i )
+	for ( unsigned i = 0; i < m_pCoilies.size(); ++i )
 	{
 		if ( m_pCoilies[ i ]->GetRow() == row && m_pCoilies[ i ]->GetCol() == col )
 		{
@@ -47,7 +47,7 @@ void EnemyHandeler::DeleteCoily( const int row, const int col )
 
 void EnemyHandeler::CheckEnemy( const int row, const int col )
 {
-	for ( int i = 0; i < m_pCoilies.size(); ++i )
+	for ( unsigned i = 0; i < m_pCoilies.size(); ++i )
 	{
 		if ( m_pCoilies[ i ]->GetRow() == row && m_pCoilies[ i ]->GetCol() == col )
 		{

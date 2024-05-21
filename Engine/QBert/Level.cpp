@@ -165,7 +165,6 @@ void Level::GameOver(int score)
 	std::string scoreString = std::to_string( score );
 	m_pGameOverObject->GetComponent<dae::TextComponent>()->SetText( { "SCORE: " + scoreString } );
 
-	std::cout << score << std::endl;
 	ScoreFile::GetInstance().UpdateHighScores( score );
 }
 
@@ -178,6 +177,5 @@ void Level::WinGame( int score )
 	std::string scoreString = std::to_string( score );
 	m_pWinObject->GetComponent<dae::TextComponent>()->SetText( { "SCORE: " + scoreString } );
 
-	std::cout << score << std::endl;
 	ScoreFile::GetInstance().UpdateHighScores( score );
 }

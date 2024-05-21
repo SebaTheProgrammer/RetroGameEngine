@@ -26,7 +26,7 @@ public:
 
         if ( !file.is_open() )
         {
-            std::cerr << "Unable to open file: " << m_Path << std::endl;
+            std::cout << "Unable to open file: " << m_Path << std::endl;
             return highScores;
         }
 
@@ -39,7 +39,7 @@ public:
 
         if ( file.bad() )
         {
-            std::cerr << "Error reading file: " << m_Path << std::endl;
+            std::cout << "Error reading file: " << m_Path << std::endl;
             highScores.clear();
         }
 
@@ -76,11 +76,6 @@ public:
         if ( highScores.size() > 10 )
         {
             highScores.resize( 10 );
-        }
-
-        for ( const auto& score : highScores )
-        {
-            std::cout << score.first << " " << score.second << std::endl;
         }
 
         WriteHighScores( highScores );

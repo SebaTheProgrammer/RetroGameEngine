@@ -128,7 +128,7 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
         return;
     }
 
-    if ( m_QBertRowIndex >= 0 && m_QBertRowIndex < m_pCubes.size() && m_pCubes[ m_QBertRowIndex ] != nullptr )
+    if ( m_QBertRowIndex >= 0 && unsigned(m_QBertRowIndex) < m_pCubes.size() && m_pCubes[ m_QBertRowIndex ] != nullptr )
     {
         m_pCubes[ m_QBertRowIndex ]->LandedOnThisCube();
     }
@@ -143,7 +143,7 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
 		}
 	}
 
-    if ( m_CompletedCubes == m_pCubes.size() ) 
+    if ( unsigned(m_CompletedCubes) == m_pCubes.size() )
     {
         NotifyObservers( dae::EventType::PLAYER_WON, GetOwner() );
     }

@@ -138,7 +138,7 @@ void LevelHandeler::ChangeLevel()
 		{
 			dae::SceneManager::GetInstance().SetCurrentScene( nextscene );
 			
-			for ( int index{}; index < dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects().size(); ++index )
+			for ( unsigned index{}; index < dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects().size(); ++index )
 			{
 				if ( dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects()[ index ]->GetComponent<LevelHandeler>() != nullptr )
 				{
