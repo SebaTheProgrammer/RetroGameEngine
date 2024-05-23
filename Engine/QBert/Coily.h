@@ -43,12 +43,13 @@ private:
 
 	std::shared_ptr<SingleMovementComponent> m_pSingleMovenment;
 
-	int m_Row;
-	int m_Col;
+	int m_Size; //level size
+	int m_Row{1};
+	int m_Col{1};
 
 	bool m_Started = false;
 	const float m_StartTime = 6.f;
-	const float m_JumpTime = 2.f;
+	const float m_JumpTime = 3.f;
 	float m_Timer = 0.f;
 
 	const float m_Speed = 47.f;

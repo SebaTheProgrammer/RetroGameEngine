@@ -53,7 +53,15 @@ void Coily::Update()
 				//check if the egg is on the bottom of the pyramid
 				//yes, become snake
 				//no, stay egg and fall when possible, left or right
-				Jump( SingleMovementComponent::Direction::LeftDown );
+				bool random = rand() % 2;
+				if ( random==0 )
+				{
+					Jump( SingleMovementComponent::Direction::LeftDown );
+				}
+				else
+				{
+					Jump( SingleMovementComponent::Direction::RightDown );
+				}
 			}
 			break;
 		}
@@ -72,10 +80,10 @@ void Coily::Render() const
 
 void Coily::Jump( SingleMovementComponent::Direction dir )
 {
-	if(dir == SingleMovementComponent::Direction::LeftUp) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, dir );
-	if(dir == SingleMovementComponent::Direction::RightUp) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, dir );
-	if(dir == SingleMovementComponent::Direction::LeftDown) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, dir );
-	if(dir == SingleMovementComponent::Direction::RightDown) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, dir );
+	if ( dir == SingleMovementComponent::Direction::LeftUp ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, -1.2f }, dir );
+	else if ( dir == SingleMovementComponent::Direction::RightUp ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, dir );
+	else if ( dir == SingleMovementComponent::Direction::RightDown ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, dir );
+	else if ( dir == SingleMovementComponent::Direction::LeftDown ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, dir );
 }
 
 void Coily::SetAnimationState( AnimationState state )
@@ -91,25 +99,57 @@ void Coily::SetPyramidPosition( const int x, const int y )
 
 void Coily::Moved( SingleMovementComponent::Direction dir )
 {
-	if ( m_CurrentState == AnimationState::Egg ) return;
+	int oldActiveRow = m_Row;
 
-	switch ( dir )
+	if ( m_CurrentState == AnimationState::Egg )
 	{
-	case SingleMovementComponent::Direction::LeftUp:
-		SetAnimationState( AnimationState::IdleBackSnake );
-		Mirror( true );
-		break;
-	case SingleMovementComponent::Direction::RightDown:
-		SetAnimationState( AnimationState::IdleSnake );
-		Mirror( false );
-		break;
-	case SingleMovementComponent::Direction::LeftDown:
-		SetAnimationState( AnimationState::IdleSnake );
-		Mirror( true );
-		break;
-	case SingleMovementComponent::Direction::RightUp:
-		SetAnimationState( AnimationState::IdleBackSnake );
-		Mirror( false );
-		break;
+		switch ( dir )
+		{
+		case SingleMovementComponent::Direction::LeftUp:
+			m_Col -= oldActiveRow;
+			m_Row -= 1;
+			break;
+		case SingleMovementComponent::Direction::LeftDown:
+			m_Col += oldActiveRow;
+			m_Row += 1;
+			std::cout<<"LeftDown"<<std::endl;
+			break;
+		case SingleMovementComponent::Direction::RightDown:
+			m_Col += oldActiveRow;
+			m_Row += 1;
+			std::cout << "RightDown" << std::endl;
+			break;
+		case SingleMovementComponent::Direction::RightUp:
+			m_Col -= oldActiveRow - 1;
+			m_Row -= 1;
+			break;
+		}
 	}
+	else
+	{
+		switch ( dir )
+		{
+		case SingleMovementComponent::Direction::LeftUp:
+			SetAnimationState( AnimationState::IdleBackSnake );
+			Mirror( true );
+			break;
+		case SingleMovementComponent::Direction::RightDown:
+			SetAnimationState( AnimationState::IdleSnake );
+			Mirror( false );
+			break;
+		case SingleMovementComponent::Direction::LeftDown:
+			SetAnimationState( AnimationState::IdleSnake );
+			Mirror( true );
+			break;
+		case SingleMovementComponent::Direction::RightUp:
+			SetAnimationState( AnimationState::IdleBackSnake );
+			Mirror( false );
+			break;
+		}
+	}
+
+	//int rowStartIndex = ( ( m_Row - 1 ) * m_Row ) / 2;
+	//int rowEndIndex = rowStartIndex + m_Row - 1;
+
+	std::cout << "Coily moved to row: " << m_Row << " and col: " << m_Col << std::endl;
 }

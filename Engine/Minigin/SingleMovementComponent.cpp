@@ -14,51 +14,49 @@ SingleMovementComponent::SingleMovementComponent( dae::GameObject* const parentG
 
 void SingleMovementComponent::SingleMove( glm::vec2 direction, Direction dir )
 {
-    if ( m_CanMove ) 
+    if ( m_CanMove )
     {
+        if ( m_InstantJump )
+        {
+            m_Direction=dir;
+            glm::vec2 totalDistance = direction * m_StepSize*30.f;
+            MovenmentComponent::Move( totalDistance );
+            if ( GetOwner()->GetComponent<Coily>() )
+            {
+                GetOwner()->GetComponent<Coily>().get()->Moved( m_Direction );
+            }
+            return;
+        }
+
         //This is a simple way to make sure the movement is not interrupted
         //you also need to hold the key to have a old school feel
-        if ( !m_MovementInProgress && m_MovementDelayTimer <= 0.0f)
+        if ( !m_MovementInProgress && m_MovementDelayTimer <= 0.0f )
         {
             m_MovementInProgress = true;
             glm::vec2 totalDistance = direction * m_StepSize;
             glm::vec2 movementDelta = glm::vec2( 0.0f );
 
-            if ( m_InstantJump ) 
+            while ( m_ElapsedTime < 1.0f )
             {
-				MovenmentComponent::Move( totalDistance );
-				m_MovementInProgress = false;
-				m_ElapsedTime = 0.0f;
-				m_MovementDelayTimer = m_TimeBetweenSteps;
-                if ( GetOwner()->GetComponent<Coily>() )
-                {
-                    GetOwner()->GetComponent<Coily>().get()->Moved( m_Direction );
-                }
-                return;
-			}
-            else 
-            {
-                while ( m_ElapsedTime < 1.0f )
-                {
-                    float deltaTime = dae::GameTime::GetInstance().GetDeltaTime();
+                float deltaTime = dae::GameTime::GetInstance().GetDeltaTime();
 
-                    m_ElapsedTime += deltaTime;
+                m_ElapsedTime += deltaTime;
 
-                    movementDelta = totalDistance * m_ElapsedTime;
+                movementDelta = totalDistance * m_ElapsedTime;
 
-                    MovenmentComponent::Move( movementDelta );
-                }
-            }
-            m_Direction = dir;
-
-            if ( GetOwner()->GetComponent<QBert>() ) 
-            {
-                GetOwner()->GetComponent<QBert>().get()->Moved( m_Direction );
+                MovenmentComponent::Move( movementDelta );
             }
 
             m_MovementInProgress = false;
             m_ElapsedTime = 0.0f;
             m_MovementDelayTimer = m_TimeBetweenSteps;
+
+            m_Direction = dir;
+
+            if ( GetOwner()->GetComponent<QBert>() )
+            {
+                GetOwner()->GetComponent<QBert>().get()->Moved( m_Direction );
+            }
         }
 
         m_MovementDelayTimer -= dae::GameTime::GetInstance().GetDeltaTime();
