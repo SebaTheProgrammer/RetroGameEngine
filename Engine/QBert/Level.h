@@ -45,5 +45,5 @@ private:
 
 	float m_BeginTimer{ 0 };
 	const float m_BeginTime{ 3 };
-
+	int m_LevelSize;
 };

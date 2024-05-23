@@ -8,7 +8,7 @@ class Coily : public dae::BaseComponent, public dae::GameActor
 {
 public:
 	Coily( dae::GameObject* parentGameObject, 
-		std::shared_ptr<dae::Texture2D> textureCoily);
+		std::shared_ptr<dae::Texture2D> textureCoily, int levelSize);
 	~Coily() = default;
 	Coily( const Coily& other ) = delete;
 	Coily( Coily&& other ) = delete;
@@ -34,8 +34,12 @@ public:
 
 	void Mirror( bool mirror ) { m_pTextureCoily->Mirror( mirror ); }
 	void Moved( SingleMovementComponent::Direction dir );
+	void FollowPlayer( int playerRow, int playerCol );
 
 private:
+	int GetRowStartIndex(int col) const;
+	int GetRowEndIndex(int col) const;
+
 	const float m_FrameTime = 0.5f;
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureCoily;
 
@@ -43,8 +47,8 @@ private:
 
 	std::shared_ptr<SingleMovementComponent> m_pSingleMovenment;
 
-	int m_Size; //level size
-	int m_Row{1};
+	int m_LevelSize; //level size
+	int m_Row{0};
 	int m_Col{1};
 
 	bool m_Started = false;
@@ -54,5 +58,6 @@ private:
 
 	const float m_Speed = 47.f;
 	const float m_SpeedBetweenSteps = 0.7f;
+	SingleMovementComponent::Direction m_PrevDirection{};
 };
 

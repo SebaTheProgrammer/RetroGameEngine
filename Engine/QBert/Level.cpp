@@ -20,7 +20,7 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	: dae::BaseComponent( parentGameObject )
 {
 	if ( level > m_MAX_LEVEL ) level = m_MAX_LEVEL;
-
+	m_LevelSize = howLongLevel;
 	//bg
 	std::string bgFilename = "bg" + std::to_string( level) + ".png";
 	auto background = std::make_shared<dae::TextureComponent>( parentGameObject, bgFilename );
@@ -90,7 +90,7 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	//Enemies
 	m_CoilyGameObject.push_back( std::make_shared<dae::GameObject>( level ) );
 	m_CoilyGameObject[0] = std::make_shared<dae::GameObject>(level);
-	auto coily = std::make_shared<Coily>( m_CoilyGameObject[0].get(), dae::ResourceManager::GetInstance().LoadTexture("SnakePurple.png"));
+	auto coily = std::make_shared<Coily>( m_CoilyGameObject[0].get(), dae::ResourceManager::GetInstance().LoadTexture("SnakePurple.png"), m_LevelSize );
 	m_CoilyGameObject[0]->AddComponent(coily);
 	m_CoilyGameObject[0]->SetLocalTransform({ 300, 110 });
 	//m_CoilyGameObject.push_back( std::make_shared<dae::GameObject>( level ) );

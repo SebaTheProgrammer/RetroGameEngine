@@ -4,11 +4,12 @@
 
 
 Coily::Coily( dae::GameObject* parentGameObject, 
-	std::shared_ptr<dae::Texture2D> textureCoily ):
+	std::shared_ptr<dae::Texture2D> textureCoily, int levelSize ):
 	BaseComponent( parentGameObject )
 {																										//Hardcoded values for the animation
 	m_pTextureCoily = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureCoily, 1.0f, 2, 8, 0, m_FrameTime );
 	m_pSingleMovenment = std::make_shared<SingleMovementComponent>( parentGameObject, m_Speed, m_SpeedBetweenSteps, true );
+	m_LevelSize = levelSize;
 }
 
 void Coily::Update()
@@ -28,20 +29,31 @@ void Coily::Update()
 		switch ( m_CurrentState )
 		{
 		case AnimationState::IdleSnake:
+			//Animations
 			m_pTextureCoily->SetMinColumns( 0 );
 			m_pTextureCoily->SetMaxColumns( 4 );
 			m_pTextureCoily->SetMinRows( 0 );
 			m_pTextureCoily->SetMaxRows( 1 );
-			//jump down, left or right
+			if ( m_Timer >= m_JumpTime )
+			{
+				m_Timer = 0.f;
+				FollowPlayer( 0, 0 );
+			}
 			break;
 		case AnimationState::IdleBackSnake:
+			//Animations
 			m_pTextureCoily->SetMinColumns( 4 );
 			m_pTextureCoily->SetMaxColumns( 8 );
 			m_pTextureCoily->SetMinRows( 0 );
 			m_pTextureCoily->SetMaxRows( 1 );
-			//jump up, left or right
+			if ( m_Timer >= m_JumpTime )
+			{
+				m_Timer = 0.f;
+				FollowPlayer( 0, 0 );
+			}
 			break;
 		case AnimationState::Egg:
+			//Animations
 			m_pTextureCoily->SetMinColumns( 0 );
 			m_pTextureCoily->SetMaxColumns( 4 );
 			m_pTextureCoily->SetMinRows( 1 );
@@ -50,9 +62,6 @@ void Coily::Update()
 			if ( m_Timer >= m_JumpTime )
 			{
 				m_Timer = 0.f;
-				//check if the egg is on the bottom of the pyramid
-				//yes, become snake
-				//no, stay egg and fall when possible, left or right
 				bool random = rand() % 2;
 				if ( random==0 )
 				{
@@ -99,29 +108,18 @@ void Coily::SetPyramidPosition( const int x, const int y )
 
 void Coily::Moved( SingleMovementComponent::Direction dir )
 {
-	int oldActiveRow = m_Row;
-
+	int oldActiveCol = m_Col;
 	if ( m_CurrentState == AnimationState::Egg )
 	{
 		switch ( dir )
 		{
-		case SingleMovementComponent::Direction::LeftUp:
-			m_Col -= oldActiveRow;
-			m_Row -= 1;
-			break;
 		case SingleMovementComponent::Direction::LeftDown:
-			m_Col += oldActiveRow;
-			m_Row += 1;
-			std::cout<<"LeftDown"<<std::endl;
+			m_Row += oldActiveCol;
+			m_Col += 1;
 			break;
 		case SingleMovementComponent::Direction::RightDown:
-			m_Col += oldActiveRow;
-			m_Row += 1;
-			std::cout << "RightDown" << std::endl;
-			break;
-		case SingleMovementComponent::Direction::RightUp:
-			m_Col -= oldActiveRow - 1;
-			m_Row -= 1;
+			m_Row += oldActiveCol + 1;
+			m_Col += 1;
 			break;
 		}
 	}
@@ -148,8 +146,107 @@ void Coily::Moved( SingleMovementComponent::Direction dir )
 		}
 	}
 
-	//int rowStartIndex = ( ( m_Row - 1 ) * m_Row ) / 2;
-	//int rowEndIndex = rowStartIndex + m_Row - 1;
+	int rowStartIndex = GetRowStartIndex(m_Col);
+	int rowEndIndex = GetRowEndIndex(m_Col);
 
-	std::cout << "Coily moved to row: " << m_Row << " and col: " << m_Col << std::endl;
+	if ( ( m_Row < 0 || m_Col >= m_LevelSize ) || ( m_Row < rowStartIndex || m_Row > rowEndIndex ) || m_Col == 0 )
+	{
+		//At the bottom of the pyramid
+		SetAnimationState( AnimationState::IdleSnake );
+		return;
+	}
+}
+
+void Coily::FollowPlayer( int playerRow, int playerCol )
+{
+	if ( m_Row != playerRow || m_Col != playerCol )
+	{
+		int oldActiveCol = m_Col;
+
+		// Calculate the potential new positions
+		int newRow{}, newCol{};
+		SingleMovementComponent::Direction direction{};
+
+		if ( playerRow < m_Row && playerCol < m_Col )
+		{
+			newRow = m_Row - oldActiveCol;
+			newCol = m_Col - 1;
+			direction = SingleMovementComponent::Direction::LeftUp;
+		}
+		if ( playerRow > m_Row && playerCol > m_Col )
+		{
+			newRow = m_Row + oldActiveCol + 1;
+			newCol = m_Col + 1;
+			direction = SingleMovementComponent::Direction::RightDown;
+		}
+		if ( playerRow > m_Row && playerCol < m_Col )
+		{
+			newRow = m_Row + oldActiveCol;
+			newCol = m_Col + 1;
+			direction = SingleMovementComponent::Direction::LeftDown;
+		}
+		if ( playerRow < m_Row && playerCol > m_Col )
+		{
+			newRow = m_Row - oldActiveCol - 1;
+			newCol = m_Col - 1;
+			direction = SingleMovementComponent::Direction::RightUp;
+		}
+
+		int rowStartIndex = GetRowStartIndex( newCol );
+		int rowEndIndex = GetRowEndIndex( newCol );
+
+		if ( ( newRow >= 0 && newCol < m_LevelSize ) &&
+			( newRow >= rowStartIndex && newRow <= rowEndIndex ) &&
+			newCol != 0 )
+		{
+			m_Row = newRow;
+			m_Col = newCol;
+			Jump( direction );
+			m_PrevDirection=direction;
+		}
+		else
+		{
+			SingleMovementComponent::Direction invdirection{};
+			switch ( m_PrevDirection )
+			{
+			case SingleMovementComponent::Direction::LeftUp:
+				newRow = m_Row + oldActiveCol + 1;
+				newCol = m_Col + 1;
+				invdirection = SingleMovementComponent::Direction::RightDown;
+				break;
+			case SingleMovementComponent::Direction::RightDown:
+				newRow = m_Row - oldActiveCol;
+				newCol = m_Col - 1;
+				invdirection = SingleMovementComponent::Direction::LeftUp;
+				break;
+			case SingleMovementComponent::Direction::LeftDown:
+				newRow = m_Row - oldActiveCol - 1;
+				newCol = m_Col - 1;
+				invdirection = SingleMovementComponent::Direction::RightUp;
+				break;
+			case SingleMovementComponent::Direction::RightUp:
+				newRow = m_Row + oldActiveCol;
+				newCol = m_Col + 1;
+				invdirection = SingleMovementComponent::Direction::LeftDown;
+				break;
+			default:
+				break;
+			}
+			Jump( invdirection );
+			m_PrevDirection = invdirection;
+
+			m_Row = newRow;
+			m_Col = newCol;
+		}
+	}
+}
+
+int Coily::GetRowStartIndex(int col) const
+{
+	return ( ( col - 1 ) * ( col ) ) / 2;
+}
+
+int Coily::GetRowEndIndex( int col ) const
+{
+	return  GetRowStartIndex( col ) + col - 1;
 }

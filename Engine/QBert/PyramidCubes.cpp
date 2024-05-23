@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <iostream>
 #include <GameTime.h>
+#include <iostream>
 
 PyramidCubes::PyramidCubes( dae::GameObject* parentGameObject, int size, int wichLevel )
 	: BaseComponent( parentGameObject )
@@ -95,25 +96,24 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
 {
     if( !m_CanMove ) return;
 
-    int oldActiveRow = m_QBertColIndex;
-
+    int oldActiveCol = m_QBertColIndex;
     // Update cube index and active row based on movement direction
     switch (dir) 
     {
         case SingleMovementComponent::Direction::LeftUp:
-            m_QBertRowIndex -= oldActiveRow;
+            m_QBertRowIndex -= oldActiveCol;
             m_QBertColIndex -= 1;
             break;
         case SingleMovementComponent::Direction::RightDown:
-            m_QBertRowIndex += oldActiveRow + 1;
+            m_QBertRowIndex += oldActiveCol + 1;
             m_QBertColIndex += 1;
             break;
         case SingleMovementComponent::Direction::LeftDown:
-            m_QBertRowIndex += oldActiveRow;
+            m_QBertRowIndex += oldActiveCol;
             m_QBertColIndex += 1;
             break;
         case SingleMovementComponent::Direction::RightUp:
-            m_QBertRowIndex -= oldActiveRow - 1;
+            m_QBertRowIndex -= oldActiveCol - 1;
             m_QBertColIndex -= 1;
             break;
     }
