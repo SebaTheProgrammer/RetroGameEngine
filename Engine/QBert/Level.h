@@ -40,6 +40,9 @@ private:
 	//Player
 	std::shared_ptr<dae::GameObject> m_QbertGameObject;
 
+	//Enemies
+	std::vector<std::shared_ptr<dae::GameObject>> m_CoilyGameObject;
+
 	float m_BeginTimer{ 0 };
 	const float m_BeginTime{ 3 };
 

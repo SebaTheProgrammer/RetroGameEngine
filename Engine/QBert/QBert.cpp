@@ -4,6 +4,7 @@
 #include "PlayerCommands.h"
 #include <GameTime.h>
 #include "TextureComponent.h"
+#include <iostream>
 
 QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureIdle, std::shared_ptr<dae::Texture2D> textureIdleBack, bool keyboardinput )
 	:BaseComponent( parentGameObject )
@@ -18,7 +19,7 @@ QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D>
 
 	m_pMovenment = std::make_shared<dae::MovenmentComponent>( parentGameObject, m_Speed );
 	GetOwner()->AddComponent( m_pMovenment );
-	m_pSingleMovenment = std::make_shared<SingleMovementComponent>( parentGameObject, m_Speed, m_SpeedBetweenSteps );
+	m_pSingleMovenment = std::make_shared<SingleMovementComponent>( parentGameObject, m_Speed, m_SpeedBetweenSteps, false );
 	GetOwner()->AddComponent( m_pSingleMovenment );
 
 	if ( m_KeyBoardInput )

@@ -13,6 +13,7 @@
 #include "ScoreComponent.h"
 #include "Cube.h"
 #include "ScoreFile.h"
+#include "Coily.h"
 
 Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, int maxLevels,
 	std::shared_ptr<dae::Texture2D> idle, std::shared_ptr<dae::Texture2D> backface, int qbertlives )
@@ -85,6 +86,18 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	auto score = std::make_shared<dae::ScoreComponent>( parentGameObject,"Score: ", dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 ) );
 	score->SetLocalPosition( 200, -90 );
 	parentGameObject->AddComponent( score );
+
+	//Enemies
+	m_CoilyGameObject.push_back( std::make_shared<dae::GameObject>( level ) );
+	m_CoilyGameObject[0] = std::make_shared<dae::GameObject>(level);
+	auto coily = std::make_shared<Coily>( m_CoilyGameObject[0].get(), dae::ResourceManager::GetInstance().LoadTexture("SnakePurple.png"));
+	m_CoilyGameObject[0]->AddComponent(coily);
+	m_CoilyGameObject[0]->SetLocalTransform({ 300, 110 });
+	//m_CoilyGameObject.push_back( std::make_shared<dae::GameObject>( level ) );
+	//m_CoilyGameObject[ 1 ] = std::make_shared<dae::GameObject>( level );
+	//auto coily2 = std::make_shared<Coily>( m_CoilyGameObject[ 1 ].get(), dae::ResourceManager::GetInstance().LoadTexture( "SnakeGreen.png" ) );
+	//m_CoilyGameObject[ 1 ]->AddComponent( coily2 );
+	//m_CoilyGameObject[ 1 ]->SetLocalTransform( { 300, 290 } );
 }
 
 void Level::Update()
@@ -133,6 +146,11 @@ void Level::Update()
 	}
 
 	m_QbertGameObject->Update();
+	
+	for ( const auto& coily : m_CoilyGameObject )
+	{
+		coily->Update();
+	}
 }
 
 void Level::Render() const
@@ -153,6 +171,11 @@ void Level::Render() const
 
 	case LevelState::Normal:
 		m_QbertGameObject->Render();
+		
+		for ( const auto& coily : m_CoilyGameObject )
+		{
+			coily->Render();
+		}
 		break;
 	}
 }

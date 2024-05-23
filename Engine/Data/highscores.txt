@@ -1,10 +1,10 @@
+Noah 19000
 l 25
-Seba 0
-Seba 0
-Seba 0
+Seba 100000
+Seba 1000
+Seba 10000
 Seba 0
 seba 0
-Seba 0
 Seba 0
 Seba 0
 Seba 0

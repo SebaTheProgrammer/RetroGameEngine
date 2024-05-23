@@ -12,7 +12,7 @@ public:
 		RightUp
 	};
 
-	SingleMovementComponent( dae::GameObject* const parentGameObject, float speed, float timeTakenForStep );
+	SingleMovementComponent( dae::GameObject* const parentGameObject, float speed, float timeTakenForStep, bool instantJump );
 	virtual ~SingleMovementComponent() = default;
 	SingleMovementComponent( const SingleMovementComponent& other ) = delete;
 	SingleMovementComponent( SingleMovementComponent&& other ) = delete;
@@ -35,6 +35,7 @@ private:
 	float m_StepSize{ 1.2f };
 	float m_MovementDelayTimer{ -1 };
 	float m_ElapsedTime{ 0.0f };
+	bool m_InstantJump;
 
 	const float m_TimeBetweenSteps{ 0.5f };
 };

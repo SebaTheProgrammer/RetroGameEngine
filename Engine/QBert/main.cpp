@@ -101,11 +101,11 @@ void load()
 
 	dae::SceneManager::GetInstance().SetCurrentScene( 0 );
 
-	std::string playerName;
-	std::cout << "Enter your name: ";
-	std::getline( std::cin, playerName );
-	ScoreFile::GetInstance().SetName( playerName );
-	std::cout << "Hello, " << playerName << "!" << std::endl;
+	//std::string playerName;
+	//std::cout << "Enter your name: ";
+	//std::getline( std::cin, playerName );
+	//ScoreFile::GetInstance().SetName( playerName );
+	//std::cout << "Hello, " << playerName << "!" << std::endl;
 	std::cout << "!Welcome and enjoy QBert!" << std::endl;
 	std::cout << "Made by Vryens Sebastiaan, 2GD18 " << std::endl;
 	int max = static_cast< int >( dae::SceneManager::GetInstance().GetMaxScenes()-1);

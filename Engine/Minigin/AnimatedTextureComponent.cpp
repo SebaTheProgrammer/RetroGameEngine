@@ -18,8 +18,8 @@ dae::AnimatedTextureComponent::AnimatedTextureComponent( GameObject* parentGameO
 	, m_X( 0 )
 	, m_Y( 0 )
 	, m_Scale( scale )
-	, m_ActiveRows( rows )
-	, m_ActiveColumns( columns )
+	, m_MaxRows( rows )
+	, m_MaxColumns( columns )
 {
 }
 
@@ -40,12 +40,12 @@ void dae::AnimatedTextureComponent::Update()
 				m_AccumulatedTime -= m_FrameTime;
 
 				m_CurrentColumn++;
-				if ( m_CurrentColumn >= m_ActiveColumns ) {
-					m_CurrentColumn = 0;
+				if ( m_CurrentColumn >= m_MaxColumns ) {
+					m_CurrentColumn = m_MinColumns;
 					m_CurrentRow++;
 
-					if ( m_CurrentRow >= m_ActiveRows ) {
-						m_CurrentRow = 0;
+					if ( m_CurrentRow >= m_MaxRows ) {
+						m_CurrentRow = m_MinRows;
 					}
 				}
 			}
@@ -79,7 +79,7 @@ void dae::AnimatedTextureComponent::NextFrame()
 {
 	m_CurrentRow++;
 
-	if ( m_CurrentRow >= m_ActiveRows ) 
+	if ( m_CurrentRow >= m_MaxRows ) 
 	{
 		m_CurrentRow = 0;
 	}

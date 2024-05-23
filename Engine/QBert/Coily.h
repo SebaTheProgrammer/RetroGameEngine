@@ -2,13 +2,13 @@
 #include "BaseComponent.h"
 #include "GameActor.h"
 #include <AnimatedTextureComponent.h>
+#include "SingleMovementComponent.h"
 
 class Coily : public dae::BaseComponent, public dae::GameActor
 {
 public:
 	Coily( dae::GameObject* parentGameObject, 
-		std::shared_ptr<dae::Texture2D> textureIdleEgg, std::shared_ptr<dae::Texture2D> textureJumpEgg, 
-		std::shared_ptr<dae::Texture2D> textureIdleSnake,std::shared_ptr<dae::Texture2D> textureJumpSnake);
+		std::shared_ptr<dae::Texture2D> textureCoily);
 	~Coily() = default;
 	Coily( const Coily& other ) = delete;
 	Coily( Coily&& other ) = delete;
@@ -24,6 +24,7 @@ public:
 
 	void Update() override;
 	void Render() const override;
+	void Jump( SingleMovementComponent::Direction dir );
 
 	void SetAnimationState( AnimationState state );
 
@@ -31,17 +32,26 @@ public:
 	int GetRow() const { return m_Row; }
 	int GetCol() const { return m_Col; }
 
-private:
-	const float m_FrameTime = 0.3f;
+	void Mirror( bool mirror ) { m_pTextureCoily->Mirror( mirror ); }
+	void Moved( SingleMovementComponent::Direction dir );
 
-	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdleEgg;
-	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureJumpEgg;
-	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdleSnake;
-	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureJumpSnake;
+private:
+	const float m_FrameTime = 0.5f;
+	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureCoily;
 
 	AnimationState m_CurrentState = AnimationState::Egg;
 
+	std::shared_ptr<SingleMovementComponent> m_pSingleMovenment;
+
 	int m_Row;
 	int m_Col;
+
+	bool m_Started = false;
+	const float m_StartTime = 6.f;
+	const float m_JumpTime = 2.f;
+	float m_Timer = 0.f;
+
+	const float m_Speed = 47.f;
+	const float m_SpeedBetweenSteps = 0.7f;
 };
 

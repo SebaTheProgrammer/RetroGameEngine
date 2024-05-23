@@ -25,13 +25,22 @@ namespace dae
 
 		void Mirror( bool mirror ) { m_Mirror = mirror; }
 
+		void SetRows( int rows ) { m_Rows = rows; }
+		void SetColumns( int columns ) { m_Columns = columns; }
+		void SetMaxRows( int rows ) { m_MaxRows = rows; }
+		void SetMaxColumns( int columns ) { m_MaxColumns = columns; }
+		void SetMinRows( int rows ) { m_MinRows = rows; }
+		void SetMinColumns( int columns ) { m_MinColumns = columns; }
+
 	private:
 		std::shared_ptr<dae::Texture2D> m_pTexture;
 		int m_Rows;
 		int m_Columns;
 		float m_FrameTime;
-		int m_ActiveRows;
-		int m_ActiveColumns;
+		int m_MaxRows;
+		int m_MaxColumns;
+		int m_MinRows{ 0 };
+		int m_MinColumns{ 0 };
 
 		int m_CurrentRow;
 		int m_CurrentColumn;

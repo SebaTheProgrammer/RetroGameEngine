@@ -34,6 +34,9 @@ private:
 	float m_EndTimer = 0.0f;
 	const float m_EndTimeChangeLevel = 4.0f;
 
+	int m_QBertRowIndex = 0;
+	int m_QBertColIndex = 1;
+
 	void ChangeLevel();
 	void ResetLevel();
 };

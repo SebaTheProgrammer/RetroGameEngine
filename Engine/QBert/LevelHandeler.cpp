@@ -90,6 +90,10 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		{
 			m_pQbert = qbert;
 			GetOwner()->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetDirection() );
+			m_QBertRowIndex = GetOwner()->GetComponent<PyramidCubes>()->GetActiveRow();
+			m_QBertColIndex = GetOwner()->GetComponent<PyramidCubes>()->GetActiveColumn();
+			std::cout<< "Row: " << m_QBertRowIndex << " Col: " << m_QBertColIndex << std::endl;
+
 		}
 		break;
 
