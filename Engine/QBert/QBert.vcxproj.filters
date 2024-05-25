@@ -72,6 +72,9 @@
     <ClCompile Include="HighScoreScreen.cpp">
       <Filter>Level\HighScore</Filter>
     </ClCompile>
+    <ClCompile Include="SlickSam.cpp">
+      <Filter>Level\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PyramidCubes.h">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="HighScoreScreen.h">
       <Filter>Level\HighScore</Filter>
+    </ClInclude>
+    <ClInclude Include="SlickSam.h">
+      <Filter>Level\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

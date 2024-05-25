@@ -56,10 +56,6 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::PLAYER_OUT_OF_BOUNDS:
 
 		Notify( dae::EventType::PLAYER_HIT, gameObj );
-
-		m_pQbert->ResetPosition();
-		GetOwner()->GetComponent<PyramidCubes>()->ResetIndex();
-
 		break;
 
 	case dae::EventType::PLAYER_HIT:
@@ -67,21 +63,25 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		{
 			--m_Lives;
 			if ( m_Score > 25 ) { m_Score -= 25;}
+			m_pQbert->ResetPosition();
+			GetOwner()->GetComponent<PyramidCubes>()->ResetIndex();
 		}
 		else
 		{
 			m_Lives = 0;
+			m_pQbert->ResetPosition();
+			GetOwner()->GetComponent<PyramidCubes>()->ResetIndex();
 			Notify( dae::EventType::PLAYER_DIED, gameObj );
 		}
 		break;
 
 	case dae::EventType::KILL_ENEMY:
-		m_Score += 100;
+		m_Score += 300;
 		break;
 
 	case dae::EventType::PLAYER_WON:
 		GetOwner()->GetComponent<PyramidCubes>()->CompleteLevel();
-		m_pQbert->SetCanMove( false );
+		GetOwner()->GetComponent<Level>()->CompletedLevel();
 		m_CompletedLevel = true;
 		break;
 
@@ -92,7 +92,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 			GetOwner()->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetDirection() );
 			m_QBertRowIndex = GetOwner()->GetComponent<PyramidCubes>()->GetActiveRow();
 			m_QBertColIndex = GetOwner()->GetComponent<PyramidCubes>()->GetActiveColumn();
-			std::cout<< "Row: " << m_QBertRowIndex << " Col: " << m_QBertColIndex << std::endl;
+			GetOwner()->GetComponent<Level>()->PlayerMoved();
 		}
 		break;
 

@@ -38,6 +38,9 @@ public:
 
 	std::vector<std::shared_ptr<Cube>> GetCubes() const { return m_pCubes; }
 
+	void KilledEnemy();
+	void PlayerHit();
+
 private:
 	std::shared_ptr<dae::Texture2D> m_pTexture;
 	int m_Size;

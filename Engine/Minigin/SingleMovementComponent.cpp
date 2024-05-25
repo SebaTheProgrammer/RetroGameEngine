@@ -3,6 +3,7 @@
 #include "../QBert/QBert.h"
 #include <iostream>
 #include "../QBert/Coily.h"
+#include "../QBert/SlickSam.h"
 
 SingleMovementComponent::SingleMovementComponent( dae::GameObject* const parentGameObject, float speed, float timeTakenForStep, bool instantJump)
 	: MovenmentComponent( parentGameObject, speed )
@@ -21,9 +22,14 @@ void SingleMovementComponent::SingleMove( glm::vec2 direction, Direction dir )
             m_Direction=dir;
             glm::vec2 totalDistance = direction * m_StepSize*30.f;
             MovenmentComponent::Move( totalDistance );
+            //Should make a base class for the enemies
             if ( GetOwner()->GetComponent<Coily>() )
             {
                 GetOwner()->GetComponent<Coily>().get()->Moved( m_Direction );
+            }
+            if ( GetOwner()->GetComponent<SlickSam>() )
+            {
+                GetOwner()->GetComponent<SlickSam>().get()->Moved( m_Direction );
             }
             return;
         }

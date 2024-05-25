@@ -149,3 +149,13 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
     }
 }
 
+void PyramidCubes::KilledEnemy()
+{
+	NotifyObservers( dae::EventType::KILL_ENEMY, GetOwner() );
+}
+
+void PyramidCubes::PlayerHit()
+{
+	NotifyObservers( dae::EventType::PLAYER_HIT, GetOwner() );
+}
+

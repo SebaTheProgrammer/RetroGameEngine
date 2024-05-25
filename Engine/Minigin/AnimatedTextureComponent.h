@@ -27,6 +27,8 @@ namespace dae
 
 		void SetRows( int rows ) { m_Rows = rows; }
 		void SetColumns( int columns ) { m_Columns = columns; }
+		void SetCurrentRow( int row ) { m_CurrentRow = row; }
+		void SetCurrentColumn( int column ) { m_CurrentColumn = column; }
 		void SetMaxRows( int rows ) { m_MaxRows = rows; }
 		void SetMaxColumns( int columns ) { m_MaxColumns = columns; }
 		void SetMinRows( int rows ) { m_MinRows = rows; }

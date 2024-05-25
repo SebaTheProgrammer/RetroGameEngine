@@ -3,12 +3,12 @@
 #include "GameActor.h"
 #include <AnimatedTextureComponent.h>
 #include "SingleMovementComponent.h"
-
+#include "PyramidCubes.h"
 class Coily : public dae::BaseComponent, public dae::GameActor
 {
 public:
 	Coily( dae::GameObject* parentGameObject, 
-		std::shared_ptr<dae::Texture2D> textureCoily, int levelSize);
+		std::shared_ptr<dae::Texture2D> textureCoily, int levelSize, PyramidCubes* pyramid);
 	~Coily() = default;
 	Coily( const Coily& other ) = delete;
 	Coily( Coily&& other ) = delete;
@@ -28,6 +28,7 @@ public:
 
 	void SetAnimationState( AnimationState state );
 
+	void SetCanMove( bool move ) { m_CanMove = move; };
 	void SetPyramidPosition( const int x, const int y );
 	int GetRow() const { return m_Row; }
 	int GetCol() const { return m_Col; }
@@ -39,6 +40,9 @@ public:
 private:
 	int GetRowStartIndex(int col) const;
 	int GetRowEndIndex(int col) const;
+	void IdleSnake();
+	void IdleBackSnake();
+	void Egged();
 
 	const float m_FrameTime = 0.5f;
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureCoily;
@@ -46,15 +50,20 @@ private:
 	AnimationState m_CurrentState = AnimationState::Egg;
 
 	std::shared_ptr<SingleMovementComponent> m_pSingleMovenment;
+	PyramidCubes* m_pPyramid;
 
-	int m_LevelSize; //level size
+	int m_LevelSize;
 	int m_Row{0};
 	int m_Col{1};
 
-	bool m_Started = false;
-	const float m_StartTime = 6.f;
 	const float m_JumpTime = 3.f;
 	float m_Timer = 0.f;
+
+	const float m_RespawnTime = 3.f;
+	float m_TimerRespawn = 0.f;
+
+	bool m_CanMove{ true };
+	bool m_HasHitPlayer{false };
 
 	const float m_Speed = 47.f;
 	const float m_SpeedBetweenSteps = 0.7f;

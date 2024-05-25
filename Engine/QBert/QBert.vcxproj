@@ -204,6 +204,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
     <ClCompile Include="LevelHandeler.cpp" />
     <ClCompile Include="PyramidCubes.cpp" />
     <ClCompile Include="QBert.cpp" />
+    <ClCompile Include="SlickSam.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Minigin\SingleMovementComponent.h" />
@@ -219,6 +220,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
     <ClInclude Include="QBert.h" />
     <ClInclude Include="LevelFile.h" />
     <ClInclude Include="ScoreFile.h" />
+    <ClInclude Include="SlickSam.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
