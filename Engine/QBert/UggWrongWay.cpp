@@ -45,7 +45,7 @@ void UggWrongWay::Update()
 	if ( m_pPyramid->GetActiveRow() == m_Col and m_pPyramid->GetActiveColumn() == m_Row )
 	{
 		m_IsAlive = false;
-		//m_pPyramid->PlayerHit();
+		m_pPyramid->PlayerHit();
 	}
 }
 
@@ -80,13 +80,13 @@ void UggWrongWay::Moved( SingleMovementComponent::Direction dir )
 	int oldActiveCol = m_Col;
 	switch ( dir )
 	{
-	case SingleMovementComponent::Direction::RightUp:
+	case SingleMovementComponent::Direction::LeftUp:
 		SetAnimationState( AnimationState::front );
 		Mirror( true );
 		m_Row += oldActiveCol;
 		m_Col += 1;
 		break;
-	case SingleMovementComponent::Direction::LeftUp:
+	case SingleMovementComponent::Direction::RightUp:
 		SetAnimationState( AnimationState::front );
 		Mirror( false );
 		m_Row += oldActiveCol + 1;

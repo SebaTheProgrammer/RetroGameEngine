@@ -65,7 +65,7 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	//win game
 	m_pWinObject = std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() );
 	auto gameWin = std::make_shared<dae::TextureComponent>( m_pWinObject.get(), m_Textures.m_WinTexture );
-	gameWin->SetLocalPosition( -gameWin->GetWidth() / 2 + 30, parentGameObject->GetLocalTransform().GetPosition().y / 2 - gameWin->GetHeight() / 2 );
+	gameWin->SetLocalPosition( gameWin->GetWidth() / 2 + gameWin->GetWidth()/4, parentGameObject->GetLocalTransform().GetPosition().y / 2 + gameWin->GetHeight()/2);
 	m_pWinObject->AddComponent( background );
 	m_pWinObject->AddComponent( gameWin );
 	m_pWinObject->AddComponent( textScore );
@@ -169,12 +169,15 @@ void Level::Update()
 
 		if ( m_Timer > m_SpawnEnemyTime )
 		{
-			SpawnSlickSam();
+			if ( m_PlayerMoved ) 
+			{
+				SpawnSlickSam();
+				SpawnCoily();
+			}
 			m_Timer = 0;
 		}
 		break;
 	}
-
 	m_QbertGameObject->Update();
 }
 
@@ -209,12 +212,11 @@ void Level::Render() const
 
 void Level::GameOver(int score)
 {
-	m_CurrentState = LevelState::GameOver;
 	m_Timer = 0;
+	m_CurrentState = LevelState::GameOver;
 	m_QbertGameObject->GetComponent<QBert>()->SetCanMove( false );
 	std::string scoreString = std::to_string( score );
 	m_pGameOverObject->GetComponent<dae::TextComponent>()->SetText( { "SCORE: " + scoreString } );
-
 	ScoreFile::GetInstance().UpdateHighScores( score );
 }
 
@@ -243,12 +245,10 @@ void Level::WinGame( int score )
 	std::string scoreString = std::to_string( score );
 	m_pWinObject->GetComponent<dae::TextComponent>()->SetText( { "SCORE: " + scoreString } );
 	ScoreFile::GetInstance().UpdateHighScores( score );
-	dae::SceneManager::GetInstance().SetCurrentScene( dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1 );
 }
 
 void Level::RestartLevel()
 {
-	m_CurrentState = LevelState::Begin;
 	m_Timer = 0;
 	m_QbertGameObject->GetComponent<QBert>()->SetCanMove( false );
 	m_PlayerMoved = false;
@@ -258,6 +258,8 @@ void Level::RestartLevel()
 
 void Level::SpawnCoily()
 {
+	if( m_HasCoily ) return;
+	m_HasCoily = true;
 	m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex()) );
 	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
 	auto coily = std::make_shared<Coily>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Coily, m_LevelSize, m_pPyramidCubes.get() );
@@ -270,26 +272,33 @@ void Level::PlayerMoved()
 	if ( !m_PlayerMoved )
 	{
 		m_PlayerMoved = true;
-		SpawnCoily();
 	}
 }
 
 void Level::SpawnSlickSam()
 {
-	if ( m_PlayerMoved )
+	if ( m_HowManyEnemies < m_MaxEnemies )
 	{
-		if ( m_HowManyEnemies < m_MaxEnemies ) 
+		if ( m_pPyramidCubes->GetActiveRow() != 0 )
 		{
-			if ( m_pPyramidCubes->GetActiveRow() != 0 ) 
-			{
-				++m_HowManyEnemies;
+			if ( !m_HasCoily ) return;
 
+			++m_HowManyEnemies;
+
+			bool wichOne = rand() % 2;
+
+			if ( wichOne ) 
+			{
 				m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
 				m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
-				auto uggWrongWay = std::make_shared<UggWrongWay>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), 
+				auto uggWrongWay = std::make_shared<UggWrongWay>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(),
 					m_Textures.m_UggWrongWay, m_LevelSize, m_pPyramidCubes.get() );
 				m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( uggWrongWay );
+																							//TODO: left or right bottom random
 				m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 110 } );
+			}
+			else 
+			{
 				bool random = rand() % 2;
 				if ( random )
 				{

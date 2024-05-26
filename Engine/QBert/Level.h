@@ -71,6 +71,7 @@ private:
 
 	//Enemies
 	std::vector<std::shared_ptr<dae::GameObject>> m_EnemiesGameObjects;
+	bool m_HasCoily{ false };
 	std::shared_ptr<PyramidCubes> m_pPyramidCubes;
 	int m_HowManyEnemies{ 0 };
 	int m_MaxEnemies{};
