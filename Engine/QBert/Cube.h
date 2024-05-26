@@ -9,7 +9,7 @@ class Cube : public dae::BaseComponent, public dae::GameActor
 {
 	public:
 
-	Cube( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, float scale, int level );
+	Cube( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, float scale, int level, int howManuJumpsNeeded );
 	virtual ~Cube()= default;
 
 	Cube( const Cube& other ) = delete;
@@ -27,8 +27,11 @@ class Cube : public dae::BaseComponent, public dae::GameActor
 	void Reset();
 
 	bool IsCompleted() const { return m_Completed; }
+	void CompletedCube();
 
 	private:
+		int m_HowManyJumpsNeeded;
+
 		std::shared_ptr<dae::AnimatedTextureComponent> m_pTexture;
 
 		float m_X;

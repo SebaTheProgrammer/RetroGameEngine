@@ -15,63 +15,68 @@
 #include "ScoreFile.h"
 #include "Coily.h"
 #include "SlickSam.h"
+#include "UggWrongWay.h"
 
-Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, int maxLevels,
-	std::shared_ptr<dae::Texture2D> idle, std::shared_ptr<dae::Texture2D> backface, int qbertlives )
+Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, int howManuJumpsNeeded, int maxLevels,
+	allTextures textures, int qbertlives )
 	: dae::BaseComponent( parentGameObject )
 {
+	m_Textures = textures;
+
 	if ( level > m_MAX_LEVEL ) level = m_MAX_LEVEL;
 	m_Level = level;
 	m_LevelSize = howLongLevel;
 	m_MaxEnemies = level * 2;
 
-	//bg
-	std::string bgFilename = "bg" + std::to_string( level) + ".png";
-	auto background = std::make_shared<dae::TextureComponent>( parentGameObject, bgFilename );
+	auto background = std::make_shared<dae::TextureComponent>( parentGameObject, m_Textures.m_BgTexture );
 	background->SetLocalPosition( -parentGameObject->GetLocalTransform().GetPosition().x, -parentGameObject->GetLocalTransform().GetPosition().y );
 	parentGameObject->AddComponent( background );
+	auto text = std::make_shared<dae::TextComponent>( parentGameObject, "LEVEL " + std::to_string( howManuJumpsNeeded ), dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 ), true );
+	text->SetLocalPosition( 535, 30 );
+	parentGameObject->AddComponent( text );
+	auto textstage = std::make_shared<dae::TextComponent>( parentGameObject, "round " + std::to_string( m_LevelSize-4 ), dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 16 ), true );
+	textstage->SetLocalPosition( 540, 60 );
+	parentGameObject->AddComponent( textstage );
 
 	//pyramid base
-	auto pyramid = std::make_shared<PyramidCubes>( parentGameObject, howLongLevel, level - 1);
+	auto pyramid = std::make_shared<PyramidCubes>( parentGameObject, m_Textures.m_CubesTexture, howLongLevel, level - 1, howManuJumpsNeeded );
 	parentGameObject->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x,parentGameObject->GetLocalTransform().GetPosition().y } );
 	parentGameObject->AddComponent( pyramid );
 	m_pPyramidCubes = pyramid;
 
 	//begin
-	m_BeginScreenObject = std::make_shared<dae::GameObject>( level);
-	std::string beginFilename = "Level 0" + std::to_string( level) + " Title.png";
-	auto begin = std::make_shared<dae::TextureComponent>( parentGameObject, beginFilename );
+	m_BeginScreenObject = std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex());
+
+	auto begin = std::make_shared<dae::TextureComponent>( parentGameObject, m_Textures.m_BeginTexture );
 	begin->SetLocalPosition( -begin->GetWidth() / 2+30, parentGameObject->GetLocalTransform().GetPosition().y / 2 - begin->GetHeight() / 2 );
-	auto beginBg = std::make_shared<dae::TextureComponent>( parentGameObject, bgFilename );
-	beginBg->SetLocalPosition( -parentGameObject->GetLocalTransform().GetPosition().x, -parentGameObject->GetLocalTransform().GetPosition().y );
-	m_BeginScreenObject->AddComponent( beginBg );
+	m_BeginScreenObject->AddComponent( background );
 	m_BeginScreenObject->AddComponent( begin );
 
 	//game over
-	m_pGameOverObject = std::make_shared<dae::GameObject>( level);
-	auto gameOver = std::make_shared<dae::TextureComponent>( parentGameObject, "Game Over Title.png" );
+	m_pGameOverObject = std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() );
+	auto gameOver = std::make_shared<dae::TextureComponent>( parentGameObject, m_Textures.m_GameOverTexture );
 	gameOver->SetLocalPosition( -gameOver->GetWidth() / 2 + 30, parentGameObject->GetLocalTransform().GetPosition().y / 2 - gameOver->GetHeight() / 2 );
 	auto textScore = std::make_shared<dae::TextComponent>( parentGameObject, "SCORE: 0", dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 ), true );
 	textScore->SetLocalPosition( 235, 300 );
-	m_pGameOverObject->AddComponent( beginBg );
+	m_pGameOverObject->AddComponent( background );
 	m_pGameOverObject->AddComponent( gameOver );
 	m_pGameOverObject->AddComponent( textScore );
 
 	//win game
-	m_pWinObject = std::make_shared<dae::GameObject>( level );
-	auto gameWin = std::make_shared<dae::TextureComponent>( parentGameObject, "Victory Title.png" );
+	m_pWinObject = std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() );
+	auto gameWin = std::make_shared<dae::TextureComponent>( m_pWinObject.get(), m_Textures.m_WinTexture );
 	gameWin->SetLocalPosition( -gameWin->GetWidth() / 2 + 30, parentGameObject->GetLocalTransform().GetPosition().y / 2 - gameWin->GetHeight() / 2 );
-	m_pWinObject->AddComponent( beginBg );
+	m_pWinObject->AddComponent( background );
 	m_pWinObject->AddComponent( gameWin );
 	m_pWinObject->AddComponent( textScore );
 
 	//players
 	 // add 2 players, but is for later
-	m_QbertGameObject = std::make_shared<dae::GameObject>( level);
+	m_QbertGameObject = std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() );
 	m_QbertGameObject->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x, parentGameObject->GetLocalTransform().GetPosition().y - 40 } );
 	auto qbert = std::shared_ptr<QBert>{};
 
-	qbert = ( std::make_shared<QBert>( m_QbertGameObject.get(), idle, backface, true) );
+	qbert = ( std::make_shared<QBert>( m_QbertGameObject.get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle, true) );
 	m_QbertGameObject->AddComponent( qbert );
 
 	//Levelhandeler
@@ -91,6 +96,13 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	auto score = std::make_shared<dae::ScoreComponent>( parentGameObject,"Score: ", dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 ) );
 	score->SetLocalPosition( -250, -70 );
 	parentGameObject->AddComponent( score );
+
+	if ( 5 != m_LevelSize )
+	{
+		m_CurrentState = LevelState::Normal;
+		m_Timer = 0;
+		m_QbertGameObject->GetComponent<QBert>()->SetCanMove( true );
+	}
 }
 
 void Level::Update()
@@ -139,9 +151,7 @@ void Level::Update()
 
 	case LevelState::Normal:
 
-
 		m_Timer += dae::GameTime::GetInstance().GetDeltaTime();
-
 
 		for ( const auto& enemy : m_EnemiesGameObjects )
 		{
@@ -186,10 +196,12 @@ void Level::Render() const
 
 	case LevelState::Normal:
 		m_QbertGameObject->Render();
-
 		for ( const auto& enemy : m_EnemiesGameObjects )
 		{
-			enemy->Render();
+			if ( enemy != nullptr )
+			{
+				enemy->Render();
+			}
 		}
 		break;
 	}
@@ -230,15 +242,25 @@ void Level::WinGame( int score )
 	m_QbertGameObject->GetComponent<QBert>()->SetCanMove( false );
 	std::string scoreString = std::to_string( score );
 	m_pWinObject->GetComponent<dae::TextComponent>()->SetText( { "SCORE: " + scoreString } );
-
 	ScoreFile::GetInstance().UpdateHighScores( score );
+	dae::SceneManager::GetInstance().SetCurrentScene( dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1 );
+}
+
+void Level::RestartLevel()
+{
+	m_CurrentState = LevelState::Begin;
+	m_Timer = 0;
+	m_QbertGameObject->GetComponent<QBert>()->SetCanMove( false );
+	m_PlayerMoved = false;
+	m_HowManyEnemies = 0;
+	m_EnemiesGameObjects.clear();
 }
 
 void Level::SpawnCoily()
 {
-	m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( m_Level ) );
-	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( m_Level );
-	auto coily = std::make_shared<Coily>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), dae::ResourceManager::GetInstance().LoadTexture( "SnakePurple.png" ), m_LevelSize, m_pPyramidCubes.get() );
+	m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex()) );
+	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
+	auto coily = std::make_shared<Coily>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Coily, m_LevelSize, m_pPyramidCubes.get() );
 	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( coily );
 	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 110 } );
 }
@@ -261,21 +283,28 @@ void Level::SpawnSlickSam()
 			if ( m_pPyramidCubes->GetActiveRow() != 0 ) 
 			{
 				++m_HowManyEnemies;
+
+				m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
+				m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
+				auto uggWrongWay = std::make_shared<UggWrongWay>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), 
+					m_Textures.m_UggWrongWay, m_LevelSize, m_pPyramidCubes.get() );
+				m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( uggWrongWay );
+				m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 110 } );
 				bool random = rand() % 2;
 				if ( random )
 				{
-					m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( m_Level ) );
-					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( m_Level );
+					m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
+					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
 					auto slick = std::make_shared<SlickSam>
-						( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), dae::ResourceManager::GetInstance().LoadTexture( "Slick.png" ), m_LevelSize, m_pPyramidCubes.get() );
+						( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Slick, m_LevelSize, m_pPyramidCubes.get() );
 					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( slick );
 					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 110 } );
 				}
 				else
 				{
-					m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( m_Level ) );
-					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( m_Level );
-					auto sam = std::make_shared<SlickSam>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), dae::ResourceManager::GetInstance().LoadTexture( "Sam.png" ), m_LevelSize, m_pPyramidCubes.get() );
+					m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
+					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
+					auto sam = std::make_shared<SlickSam>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Sam, m_LevelSize, m_pPyramidCubes.get() );
 					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( sam );
 					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 110 } );
 				}

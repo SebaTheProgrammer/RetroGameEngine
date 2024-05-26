@@ -75,6 +75,9 @@
     <ClCompile Include="SlickSam.cpp">
       <Filter>Level\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="UggWrongWay.cpp">
+      <Filter>Level\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PyramidCubes.h">
@@ -117,6 +120,9 @@
       <Filter>Level\HighScore</Filter>
     </ClInclude>
     <ClInclude Include="SlickSam.h">
+      <Filter>Level\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="UggWrongWay.h">
       <Filter>Level\Enemies</Filter>
     </ClInclude>
   </ItemGroup>

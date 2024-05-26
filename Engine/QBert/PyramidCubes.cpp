@@ -6,12 +6,13 @@
 #include <GameTime.h>
 #include <iostream>
 
-PyramidCubes::PyramidCubes( dae::GameObject* parentGameObject, int size, int wichLevel )
+PyramidCubes::PyramidCubes( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, int size, int wichLevel, int howManuJumpsNeeded )
 	: BaseComponent( parentGameObject )
 	, m_Size{ size }
 	, m_WhichLevel{ wichLevel }
+    , m_HowManyJumpsNeeded{ howManuJumpsNeeded }
 {
-	m_pTexture = dae::ResourceManager::GetInstance().LoadTexture("Qbert Cubes.png");
+	m_pTexture = texture;
 
 	SetLevel( wichLevel );
 }
@@ -53,13 +54,17 @@ void PyramidCubes::SetLevel( const int level )
             float cubeX = startX + i * offsetX;
             float cubeY = startY;
 
-            auto cube = std::make_shared<Cube>( GetOwner(), m_pTexture, m_Scale, m_WhichLevel );
+            auto cube = std::make_shared<Cube>( GetOwner(), m_pTexture, m_Scale, m_WhichLevel, m_HowManyJumpsNeeded );
             cube->SetLocalPosition( cubeX, cubeY );
 
             m_pCubes.push_back( cube );
             GetOwner()->AddComponent( cube );
         }
     }
+
+    m_EndGoalCube = std::make_shared<Cube>( GetOwner(), m_pTexture, m_Scale, m_WhichLevel, m_HowManyJumpsNeeded );
+    m_EndGoalCube->SetLocalPosition( 245, -45 );
+    m_EndGoalCube->CompletedCube();
 }
 
 void PyramidCubes::CompleteLevel()
@@ -157,5 +162,10 @@ void PyramidCubes::KilledEnemy()
 void PyramidCubes::PlayerHit()
 {
 	NotifyObservers( dae::EventType::PLAYER_HIT, GetOwner() );
+}
+
+void PyramidCubes::PlayerDied()
+{
+	NotifyObservers( dae::EventType::PLAYER_DIED, GetOwner() );
 }
 

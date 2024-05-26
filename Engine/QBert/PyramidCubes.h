@@ -10,7 +10,7 @@ class Cube;
 class PyramidCubes : public dae::BaseComponent, public dae::GameActor
 {
 public:
-	PyramidCubes( dae::GameObject* parentGameObject, int size, int wichLevel);
+	PyramidCubes( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, int size, int wichLevel, int howManuJumpsNeeded);
 	virtual ~PyramidCubes()= default;
 
 	PyramidCubes( const PyramidCubes& other ) = delete;
@@ -40,13 +40,16 @@ public:
 
 	void KilledEnemy();
 	void PlayerHit();
+	void PlayerDied();
 
 private:
 	std::shared_ptr<dae::Texture2D> m_pTexture;
 	int m_Size;
 	int m_WhichLevel;
+	int m_HowManyJumpsNeeded;
 
 	std::vector<std::shared_ptr<Cube>> m_pCubes;
+	std::shared_ptr<Cube> m_EndGoalCube;
 
 	float m_Scale = 1.5f;
 

@@ -64,27 +64,43 @@ void load()
 
 	//Resources
 	int hp = 4;
-	auto idle = std::shared_ptr<dae::Texture2D> { dae::ResourceManager::GetInstance().LoadTexture( "qbertIdle.png" ) };
-	auto backFaceIdle = std::shared_ptr<dae::Texture2D> { dae::ResourceManager::GetInstance().LoadTexture( "qbertBackFaceIdle.png" ) };	
-
+	Level::allTextures LevelTextures;
+	{
+		//saved 60mb
+		LevelTextures.m_QbertIdle = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "qbertIdle.png" ) };
+		LevelTextures.m_QbertBackfaceIdle = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "qbertBackFaceIdle.png" ) };
+		LevelTextures.m_Coily = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "SnakePurple.png" ) };
+		LevelTextures.m_UggWrongWay = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "UggWrongWay.png" ) };
+		LevelTextures.m_Slick = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Slick.png" ) };
+		LevelTextures.m_Sam = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Sam.png" ) };
+		LevelTextures.m_GameOverTexture = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Game Over Title.png" ) };
+		LevelTextures.m_WinTexture = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Victory Title.png" ) };
+		LevelTextures.m_CubesTexture = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Qbert Cubes.png" ) };
+	}
 	//ScoreFile::GetInstance().SetName( "" );
 
 	//Level loading from file:
 	const std::string path = "../Data/levels.txt";
 	LevelFile levelFile( path );
 	std::vector<LevelFile::Level> levels = levelFile.ReadLevelFile();
-	int size = static_cast< int >( levels.size()+1);
+	int size = static_cast< int >( levels.size());
+	int levelgameobjectNumber = 1;
 	for ( const auto& level : levels )
 	{
 		int lentgh = level.length;
 		int levelNumber = level.levelNumber;
+		int jump = level.howManyJumpsNeeded;
+
+		LevelTextures.m_BgTexture = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "bg" + std::to_string( levelNumber ) + ".png" ) };
+		LevelTextures.m_BeginTexture = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Level 0" + std::to_string( jump ) + " Title.png" ) };
 
 		auto& level1 = dae::SceneManager::GetInstance().CreateScene( "Level"+ level.levelNumber );
-		auto goLevel = std::make_shared<dae::GameObject>( level.levelNumber );
+		auto goLevel = std::make_shared<dae::GameObject>( levelgameobjectNumber );
 		goLevel->SetLocalTransform( { 300, 130 } );
-		auto levelComponent = std::make_shared <Level>( goLevel.get(), lentgh, levelNumber, size, idle, backFaceIdle, hp );
+		auto levelComponent = std::make_shared <Level>( goLevel.get(), lentgh, levelNumber, jump, size, LevelTextures, hp );
 		goLevel->AddComponent( levelComponent );
 		level1.Add( goLevel );
+		levelgameobjectNumber += 1;
 	}
 
 	//for debug purposes

@@ -21,6 +21,7 @@ public:
     {
         int length = 0;
         int levelNumber = 0;
+        int howManyJumpsNeeded = 0;
     };
 
     std::vector<Level> ReadLevelFile( const std::string& path )
@@ -36,7 +37,7 @@ public:
                 std::istringstream iss( line );
                 Level level;
 
-                if ( iss >> level.length >> level.levelNumber )
+                if ( iss >> level.length >> level.levelNumber >> level.howManyJumpsNeeded )
                 {
                     levels.push_back( level );
                 }

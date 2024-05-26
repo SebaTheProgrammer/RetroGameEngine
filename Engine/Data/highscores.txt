@@ -5,6 +5,6 @@ RandomPlayer 1500
 Seba 1000
 RandomPlayer 900
 RandomPlayer 850
+RandomPlayer 675
 RandomPlayer 600
 RandomPlayer 575
-RandomPlayer 550

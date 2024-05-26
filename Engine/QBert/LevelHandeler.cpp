@@ -48,6 +48,8 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	{
 	case dae::EventType::PLAYER_DIED:
 
+		m_pQbert->ResetPosition();
+		GetOwner()->GetComponent<PyramidCubes>()->ResetIndex();
 		GetOwner()->GetComponent<Level>()->GameOver(m_Score);
 		Notify( dae::EventType::LEVEL_RESTART, gameObj );
 
@@ -69,8 +71,6 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		else
 		{
 			m_Lives = 0;
-			m_pQbert->ResetPosition();
-			GetOwner()->GetComponent<PyramidCubes>()->ResetIndex();
 			Notify( dae::EventType::PLAYER_DIED, gameObj );
 		}
 		break;
@@ -170,5 +170,6 @@ void LevelHandeler::ResetLevel()
 	m_CompletedLevel = false;
 	m_EndTimer = 0.0f;
 	GetOwner()->GetComponent<PyramidCubes>()->ResetLevel();
+	GetOwner()->GetComponent<Level>()->RestartLevel();
 	m_pQbert->ResetPosition();
 }

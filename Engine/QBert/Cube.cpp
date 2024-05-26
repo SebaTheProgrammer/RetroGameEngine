@@ -2,11 +2,11 @@
 #include "Renderer.h"
 #include <iostream>
 
-Cube::Cube( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, float scale, int level )
-	: BaseComponent( parentGameObject ), m_Level( level )
+Cube::Cube( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, float scale, int level, int howManuJumpsNeeded )
+	: BaseComponent( parentGameObject ), m_Level( level ), m_HowManyJumpsNeeded( howManuJumpsNeeded )
 {
 																							//hardcoded values bc png is 3x6
-	m_pTexture = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, texture, scale, 3, 6, level, 0.0f );
+	m_pTexture = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, texture, scale, 3, 6, m_Level, 0.0f );
 	GetOwner()->AddComponent( m_pTexture );
 }
 
@@ -33,13 +33,12 @@ void Cube::Won()
 void Cube::LandedOnThisCube()
 {
 	if( m_Completed ) return;
-						//level 1 == 0
-	if ( m_CurrentFrame < m_Level + 1)
+	if ( m_CurrentFrame < m_HowManyJumpsNeeded )
 	{
 		m_pTexture->NextFrame();
 		++m_CurrentFrame;
 	}
-	if( m_CurrentFrame > m_Level )
+	if( m_CurrentFrame == m_HowManyJumpsNeeded )
 	{
 		NotifyObservers( dae::EventType::NEW_CUBE_COMPLETED, GetOwner() );
 		m_Completed = true;
@@ -51,4 +50,17 @@ void Cube::Reset()
 	m_pTexture->Reset();
 	m_Completed = false;
 	m_CurrentFrame = 0;
+}
+
+void Cube::CompletedCube()
+{
+	while ( m_CurrentFrame < m_HowManyJumpsNeeded )
+	{
+		m_pTexture->NextFrame();
+		++m_CurrentFrame;
+	}
+	if ( m_CurrentFrame == m_HowManyJumpsNeeded )
+	{
+		m_Completed = true;
+	}
 }

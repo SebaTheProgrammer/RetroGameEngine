@@ -14,6 +14,7 @@ namespace dae
 	{
 		public:
 		TextureComponent( GameObject* parentGameObject, const std::string& fileName );
+		TextureComponent( GameObject* parentGameObject, const std::shared_ptr<Texture2D> texture );
 		virtual ~TextureComponent() = default;
 
 		void Update() override;

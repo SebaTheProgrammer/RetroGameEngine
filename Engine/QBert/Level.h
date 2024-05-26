@@ -10,8 +10,26 @@ class PyramidCubes;
 class Level : public dae::BaseComponent
 {
 public:
-	Level( dae::GameObject* parentGameObject, int howLongLevel, int level, int maxLevels,
-		std::shared_ptr<dae::Texture2D> idle, std::shared_ptr<dae::Texture2D> backface, int qbertlives );
+	struct allTextures
+	{
+		std::shared_ptr<dae::Texture2D> m_BgTexture;
+		std::shared_ptr<dae::Texture2D> m_CubesTexture;
+		std::shared_ptr<dae::Texture2D> m_GameOverTexture;
+		std::shared_ptr<dae::Texture2D> m_WinTexture;
+		std::shared_ptr<dae::Texture2D> m_BeginTexture;
+
+		std::shared_ptr<dae::Texture2D> m_QbertIdle;
+		std::shared_ptr<dae::Texture2D> m_QbertBackfaceIdle;
+
+		std::shared_ptr<dae::Texture2D> m_Coily;
+		std::shared_ptr<dae::Texture2D> m_UggWrongWay;
+		std::shared_ptr<dae::Texture2D> m_Slick;
+		std::shared_ptr<dae::Texture2D> m_Sam;
+	};
+
+	Level( dae::GameObject* parentGameObject, int howLongLevel, int level, int howManuJumpsNeeded, int maxLevels,
+		allTextures textures, int qbertlives );
+
 	~Level() {};
 
 	void Update() override;
@@ -20,6 +38,8 @@ public:
 	void GameOver( int score );
 	void CompletedLevel();
 	void WinGame( int score );
+	void RestartLevel();
+	void PlayerMoved();
 
 	enum class LevelState
 	{
@@ -28,10 +48,12 @@ public:
 		Win,
 		Normal
 	};
-	void PlayerMoved();
+
 private:
 	void SpawnSlickSam();
 	void SpawnCoily();
+
+	allTextures m_Textures;
 
 	LevelState m_CurrentState = LevelState::Begin;
 

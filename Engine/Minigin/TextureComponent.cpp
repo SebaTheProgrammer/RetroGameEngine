@@ -10,6 +10,12 @@ dae::TextureComponent::TextureComponent( GameObject* parentGameObject, const std
 		m_pTexture = ResourceManager::GetInstance().LoadTexture( fileName );
 }
 
+dae::TextureComponent::TextureComponent( GameObject* parentGameObject, const std::shared_ptr<Texture2D> texture )
+	: BaseComponent( parentGameObject )
+{
+	m_pTexture = texture;
+}
+
 void dae::TextureComponent::Update()
 {
 	if ( m_pTexture )

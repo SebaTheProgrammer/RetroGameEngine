@@ -4,6 +4,7 @@
 #include <iostream>
 #include "../QBert/Coily.h"
 #include "../QBert/SlickSam.h"
+#include "../QBert/UggWrongWay.h"
 
 SingleMovementComponent::SingleMovementComponent( dae::GameObject* const parentGameObject, float speed, float timeTakenForStep, bool instantJump)
 	: MovenmentComponent( parentGameObject, speed )
@@ -31,6 +32,10 @@ void SingleMovementComponent::SingleMove( glm::vec2 direction, Direction dir )
             {
                 GetOwner()->GetComponent<SlickSam>().get()->Moved( m_Direction );
             }
+            if ( GetOwner()->GetComponent<UggWrongWay>() )
+            {
+				GetOwner()->GetComponent<UggWrongWay>().get()->Moved( m_Direction );
+			}
             return;
         }
 
