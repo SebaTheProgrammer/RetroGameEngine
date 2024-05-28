@@ -1,5 +1,6 @@
 #include "UggWrongWay.h"
 #include <GameTime.h>
+#include <iostream>
 
 UggWrongWay::UggWrongWay( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureUggWrongWay, int levelSize, PyramidCubes* pyramid ) :
 	BaseComponent( parentGameObject ),
@@ -13,12 +14,16 @@ UggWrongWay::UggWrongWay( dae::GameObject* parentGameObject, std::shared_ptr<dae
 
 	m_pTextureUggWrongWay->SetCurrentColumn( 0 );
 	m_pTextureUggWrongWay->SetMaxColumns( 1 );
+
+	m_IsGoingUp = rand() % 2;
 }
 
 void UggWrongWay::Update()
 {
 	if ( !m_IsAlive ) return;
 	if ( !m_CanMove ) return;
+	SetStartPos();
+
 	m_Timer += dae::GameTime::GetInstance().GetDeltaTime();
 
 	switch ( m_CurrentState )
@@ -57,11 +62,40 @@ void UggWrongWay::Render() const
 
 void UggWrongWay::Jump()
 {
-	srand( rand() );
+	if ( m_IsGoingUp ) 
+	{
+		if ( m_IsInLeftCorner ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, SingleMovementComponent::Direction::RightUp );
+		if ( !m_IsInLeftCorner ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, -1.2f }, SingleMovementComponent::Direction::LeftUp );
+	}
+	else
+	{
+		if ( m_Up )
+		{
+			if ( m_IsInLeftCorner )
+			{
+				m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, SingleMovementComponent::Direction::RightUp );
+			}
+			else
+			{
+				m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, -1.2f }, SingleMovementComponent::Direction::LeftUp );
+			}
 
-	bool random = rand() % 2;
-	if ( random == 1 ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, SingleMovementComponent::Direction::RightUp );
-	if ( random == 0 ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, SingleMovementComponent::Direction::LeftUp );
+			m_Up = false;
+		}
+		else
+		{
+			if ( m_IsInLeftCorner )
+			{
+				m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, SingleMovementComponent::Direction::RightDown );
+			}
+			else
+			{
+				m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, SingleMovementComponent::Direction::LeftDown );
+			}
+
+			m_Up = true;
+		}
+	}
 }
 
 void UggWrongWay::SetAnimationState( AnimationState state )
@@ -82,19 +116,25 @@ void UggWrongWay::Moved( SingleMovementComponent::Direction dir )
 	{
 	case SingleMovementComponent::Direction::LeftUp:
 		SetAnimationState( AnimationState::front );
-		Mirror( true );
+		m_Row -= oldActiveCol;
+		m_Col -= 1;
+		break;
+	case SingleMovementComponent::Direction::RightDown:
+		m_Row += oldActiveCol + 1;
+		m_Col += 1;
+		break;
+	case SingleMovementComponent::Direction::LeftDown:
 		m_Row += oldActiveCol;
 		m_Col += 1;
 		break;
 	case SingleMovementComponent::Direction::RightUp:
 		SetAnimationState( AnimationState::front );
-		Mirror( false );
-		m_Row += oldActiveCol + 1;
-		m_Col += 1;
+		m_Row -= oldActiveCol - 1;
+		m_Col -= 1;
 		break;
 	}
 
-	if ( m_Col > m_LevelSize )
+	if ( m_Col <= 1 || m_Row > GetRowEndIndex( m_Col ) || m_Row < GetRowStartIndex( m_Col ) )
 	{
 		m_IsAlive = false;
 		return;
@@ -109,4 +149,27 @@ int UggWrongWay::GetRowStartIndex( int col ) const
 int UggWrongWay::GetRowEndIndex( int col ) const
 {
 	return  GetRowStartIndex( col ) + col - 1;
+}
+
+void UggWrongWay::SetStartPos()
+{
+	if ( m_SettetStartPos ) return;
+
+	srand( rand() );
+
+	bool random = rand() % 2;
+	for ( int i = 0; i < m_LevelSize; ++i )
+	{
+		if ( random == 1 )
+		{
+			m_IsInLeftCorner = true;
+			m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, SingleMovementComponent::Direction::LeftDown );
+		}
+		else 
+		{
+			m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, SingleMovementComponent::Direction::RightDown );
+			Mirror( true );
+		}
+	}
+	m_SettetStartPos= true;
 }

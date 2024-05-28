@@ -26,7 +26,7 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	if ( level > m_MAX_LEVEL ) level = m_MAX_LEVEL;
 	m_Level = level;
 	m_LevelSize = howLongLevel;
-	m_MaxEnemies = level * 2;
+	m_MaxScoreEnemies = level * 2;
 
 	auto background = std::make_shared<dae::TextureComponent>( parentGameObject, m_Textures.m_BgTexture );
 	background->SetLocalPosition( -parentGameObject->GetLocalTransform().GetPosition().x, -parentGameObject->GetLocalTransform().GetPosition().y );
@@ -156,15 +156,6 @@ void Level::Update()
 		for ( const auto& enemy : m_EnemiesGameObjects )
 		{
 			enemy->Update();
-
-			m_EnemiesGameObjects.erase(
-				std::remove_if( m_EnemiesGameObjects.begin(), m_EnemiesGameObjects.end(),
-					[]( const std::shared_ptr<dae::GameObject>& enemy ) 
-					{
-						auto slickSam = enemy->GetComponent<SlickSam>();
-						return slickSam != nullptr && !slickSam->IsAlive();
-					} ),
-				m_EnemiesGameObjects.end() );
 		}
 
 		if ( m_Timer > m_SpawnEnemyTime )
@@ -277,28 +268,18 @@ void Level::PlayerMoved()
 
 void Level::SpawnSlickSam()
 {
-	if ( m_HowManyEnemies < m_MaxEnemies )
+	if ( m_HowManyEnemies < m_MaxScoreEnemies )
 	{
 		if ( m_pPyramidCubes->GetActiveRow() != 0 )
 		{
 			if ( !m_HasCoily ) return;
 
-			++m_HowManyEnemies;
-
-			bool wichOne = rand() % 2;
-
-			if ( wichOne ) 
+			bool randomPoints = rand() % 2;
+			if ( randomPoints ) 
 			{
-				m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
-				m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
-				auto uggWrongWay = std::make_shared<UggWrongWay>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(),
-					m_Textures.m_UggWrongWay, m_LevelSize, m_pPyramidCubes.get() );
-				m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( uggWrongWay );
-																							//TODO: left or right bottom random
-				m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 110 } );
-			}
-			else 
-			{
+
+				++m_HowManyEnemies;
+
 				bool random = rand() % 2;
 				if ( random )
 				{
@@ -307,7 +288,7 @@ void Level::SpawnSlickSam()
 					auto slick = std::make_shared<SlickSam>
 						( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Slick, m_LevelSize, m_pPyramidCubes.get() );
 					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( slick );
-					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 110 } );
+					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 310, 100 } );
 				}
 				else
 				{
@@ -315,9 +296,35 @@ void Level::SpawnSlickSam()
 					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
 					auto sam = std::make_shared<SlickSam>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Sam, m_LevelSize, m_pPyramidCubes.get() );
 					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( sam );
-					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 110 } );
+					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 310, 100 } );
 				}
 			}
+			else 
+			{
+				if ( m_pPyramidCubes->GetActiveRow() != m_pPyramidCubes->GetRowStartIndex( m_pPyramidCubes->GetSize() ) &&
+					m_pPyramidCubes->GetActiveRow() != m_pPyramidCubes->GetRowEndIndex( m_pPyramidCubes->GetSize() ) )
+				{
+					m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
+					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
+					auto uggWrongWay = std::make_shared<UggWrongWay>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(),
+						m_Textures.m_UggWrongWay, m_LevelSize, m_pPyramidCubes.get() );
+					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( uggWrongWay );
+					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 310, 120 } );
+				}
+			}
+		}
+	}
+	else 
+	{
+		if ( m_pPyramidCubes->GetActiveRow() != m_pPyramidCubes->GetRowStartIndex( m_pPyramidCubes->GetSize()) &&
+			m_pPyramidCubes->GetActiveRow() != m_pPyramidCubes->GetRowEndIndex( m_pPyramidCubes->GetSize() ) )
+		{
+			m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
+			m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
+			auto uggWrongWay = std::make_shared<UggWrongWay>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(),
+				m_Textures.m_UggWrongWay, m_LevelSize, m_pPyramidCubes.get() );
+			m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( uggWrongWay );
+			m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 310, 120 } );
 		}
 	}
 }

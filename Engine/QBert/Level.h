@@ -74,7 +74,7 @@ private:
 	bool m_HasCoily{ false };
 	std::shared_ptr<PyramidCubes> m_pPyramidCubes;
 	int m_HowManyEnemies{ 0 };
-	int m_MaxEnemies{};
+	int m_MaxScoreEnemies{};
 
 	float m_Timer{ 0 };
 	const float m_BeginTime{ 3.f };

@@ -39,6 +39,7 @@ class UggWrongWay : public dae::BaseComponent, public dae::GameActor
 private:
 	int GetRowStartIndex( int col ) const;
 	int GetRowEndIndex( int col ) const;
+	void SetStartPos();
 
 	const float m_FrameTime = 0.5f;
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureUggWrongWay;
@@ -56,6 +57,10 @@ private:
 	const float m_JumpTime = 3.f;
 	float m_Timer = 0.f;
 
+	bool m_IsInLeftCorner{ false };
+	bool m_IsGoingUp{ false };
+	bool m_Up{ true };
+	bool m_SettetStartPos{ false };
 	bool m_CanMove{ true };
 	const float m_Speed = 47.f;
 	const float m_SpeedBetweenSteps = 0.7f;

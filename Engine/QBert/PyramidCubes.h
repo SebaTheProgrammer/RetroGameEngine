@@ -35,6 +35,9 @@ public:
 
 	int GetActiveRow() const { return m_QBertColIndex; }
 	int GetActiveColumn() const { return m_QBertRowIndex; }
+	int GetRowStartIndex( int col ) const;
+	int GetRowEndIndex( int col ) const;
+	int GetSize() const { return m_Size; }
 
 	std::vector<std::shared_ptr<Cube>> GetCubes() const { return m_pCubes; }
 

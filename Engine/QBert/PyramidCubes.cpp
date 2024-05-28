@@ -154,6 +154,16 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
     }
 }
 
+int PyramidCubes::GetRowStartIndex( int col ) const
+{
+    return ( ( col - 1 ) * ( col ) ) / 2;
+}
+
+int PyramidCubes::GetRowEndIndex( int col ) const
+{
+    return  GetRowStartIndex( col ) + col - 1;
+}
+
 void PyramidCubes::KilledEnemy()
 {
 	NotifyObservers( dae::EventType::KILL_ENEMY, GetOwner() );
