@@ -210,6 +210,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
   <ItemGroup>
     <ClInclude Include="..\Minigin\SingleMovementComponent.h" />
     <ClInclude Include="Coily.h" />
+    <ClInclude Include="Commands.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="EnemyHandeler.h" />
     <ClInclude Include="HealthComponentQbert.h" />

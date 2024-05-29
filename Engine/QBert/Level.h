@@ -40,6 +40,9 @@ public:
 	void WinGame( int score );
 	void RestartLevel();
 	void PlayerMoved();
+	void SetMultiplayer( bool isMultiplayer );
+	void SetVersus( bool isVersus );
+	void SinglePlayer();
 
 	enum class LevelState
 	{
@@ -74,10 +77,14 @@ private:
 	bool m_HasCoily{ false };
 	std::shared_ptr<PyramidCubes> m_pPyramidCubes;
 	int m_HowManyEnemies{ 0 };
-	int m_MaxScoreEnemies{};
+	int m_MaxScoreEnemies{2};
 
 	float m_Timer{ 0 };
 	const float m_BeginTime{ 3.f };
-	const float m_SpawnEnemyTime{ 16.5f };
+	float m_SpawnEnemyTime{ 6.5f };
+	float m_MaxSpawnEnemyTime{ 16.5 };
 	int m_LevelSize;
+
+	bool m_IsMultiplayer{ false };
+	bool m_IsVersus{ false };
 };

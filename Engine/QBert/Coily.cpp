@@ -1,22 +1,62 @@
 #include "Coily.h"
 #include <GameTime.h>
 #include <iostream>
-
+#include "PlayerCommands.h"
 
 Coily::Coily( dae::GameObject* parentGameObject, 
-	std::shared_ptr<dae::Texture2D> textureCoily, int levelSize, PyramidCubes* pyramid ):
-	BaseComponent( parentGameObject ), m_pPyramid( pyramid )
+	std::shared_ptr<dae::Texture2D> textureCoily, int levelSize, PyramidCubes* pyramid, bool hasPlayer2Control ):
+	BaseComponent( parentGameObject ), m_pPyramid( pyramid ), m_Player2Control( hasPlayer2Control )
 {																										//Hardcoded values for the animation
 	m_pTextureCoily = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureCoily, 1.0f, 2, 8, 0, m_FrameTime );
 	m_pSingleMovenment = std::make_shared<SingleMovementComponent>( parentGameObject, m_Speed, m_SpeedBetweenSteps, true );
 	m_pSingleMovenment->SetCanMove( true );
 	m_LevelSize = levelSize;
 	Egged();
+
+	if ( m_Player2Control ) 
+	{
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed,
+			SingleMoveCommand{ GetOwner(),  glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
+
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsPressed,
+			SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown } );
+
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed,
+			SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp } );
+
+		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed,
+			SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown } );
+	}
 }
 
 void Coily::Update()
 {
 	if ( !m_CanMove ) return;
+
+	m_pTextureCoily->Update();
+
+	if ( !m_HasHitPlayer )
+	{
+		if ( m_pPyramid->GetActiveRow() == m_Col and m_pPyramid->GetActiveColumn() == m_Row )
+		{
+
+			m_pPyramid->PlayerHit();
+			m_HasHitPlayer = true;
+		}
+	}
+	else
+	{
+		m_TimerRespawn += dae::GameTime::GetInstance().GetDeltaTime();
+
+		if ( m_TimerRespawn >= m_RespawnTime )
+		{
+			m_TimerRespawn = 0.f;
+			m_HasHitPlayer = false;
+		}
+	}
+
+	//Stops the AI from moving when the player is controlling it
+	if ( m_Player2ControlActive ) return;
 
 	m_Timer += dae::GameTime::GetInstance().GetDeltaTime();
 
@@ -59,29 +99,6 @@ void Coily::Update()
 		}
 		break;
 	}
-
-	if ( !m_HasHitPlayer )
-	{
-		if ( m_pPyramid->GetActiveRow() == m_Col and m_pPyramid->GetActiveColumn() == m_Row )
-		{
-
-			m_pPyramid->PlayerHit();
-			m_HasHitPlayer = true;
-		}
-	}
-	else 
-	{
-		m_TimerRespawn += dae::GameTime::GetInstance().GetDeltaTime();
-
-		if ( m_TimerRespawn >= m_RespawnTime )
-		{
-			m_TimerRespawn = 0.f;
-			m_HasHitPlayer = false;
-		}
-	}
-
-	m_pSingleMovenment->Update();
-	m_pTextureCoily->Update();
 }
 
 void Coily::Render() const
@@ -91,6 +108,8 @@ void Coily::Render() const
 
 void Coily::Jump( SingleMovementComponent::Direction dir )
 {
+	if ( m_Player2ControlActive ) return;
+
 	if ( dir == SingleMovementComponent::Direction::LeftUp ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, -1.2f }, dir );
 	else if ( dir == SingleMovementComponent::Direction::RightUp ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, dir );
 	else if ( dir == SingleMovementComponent::Direction::RightDown ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, dir );
@@ -154,7 +173,8 @@ void Coily::Moved( SingleMovementComponent::Direction dir )
 	if ( ( m_Row < 0 || m_Col >= m_LevelSize ) || ( m_Row < rowStartIndex || m_Row > rowEndIndex ) || m_Col == 0 )
 	{
 		//At the bottom of the pyramid
-		//CanTakeControl for multiplayer = true
+		m_Player2ControlActive = m_Player2Control;
+		m_pSingleMovenment->SetInstantJump(!m_Player2Control);
 		IdleSnake();
 	}
 }

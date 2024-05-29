@@ -8,7 +8,7 @@ class Coily : public dae::BaseComponent, public dae::GameActor
 {
 public:
 	Coily( dae::GameObject* parentGameObject, 
-		std::shared_ptr<dae::Texture2D> textureCoily, int levelSize, PyramidCubes* pyramid);
+		std::shared_ptr<dae::Texture2D> textureCoily, int levelSize, PyramidCubes* pyramid, bool hasPlayer2Control);
 	~Coily() = default;
 	Coily( const Coily& other ) = delete;
 	Coily( Coily&& other ) = delete;
@@ -68,5 +68,8 @@ private:
 	const float m_Speed = 47.f;
 	const float m_SpeedBetweenSteps = 0.7f;
 	SingleMovementComponent::Direction m_PrevDirection{};
+
+	bool m_Player2Control{ false };
+	bool m_Player2ControlActive{ false };
 };
 

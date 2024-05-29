@@ -22,9 +22,6 @@
     <Filter Include="Level\Pyramid">
       <UniqueIdentifier>{7c1e46b0-0b2f-4937-aaec-570d2a946182}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Level\Player\Commands">
-      <UniqueIdentifier>{853e7f2f-3d25-41de-8340-3650f72ef225}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Level\Components">
       <UniqueIdentifier>{e50f0a3f-a894-4023-89ba-0a794955de89}</UniqueIdentifier>
     </Filter>
@@ -36,6 +33,9 @@
     </Filter>
     <Filter Include="Level\HighScore">
       <UniqueIdentifier>{2c8363ad-288c-4c1c-af6b-4be73a25af0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Commands">
+      <UniqueIdentifier>{853e7f2f-3d25-41de-8340-3650f72ef225}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -96,7 +96,7 @@
       <Filter>Level\Player</Filter>
     </ClInclude>
     <ClInclude Include="PlayerCommands.h">
-      <Filter>Level\Player\Commands</Filter>
+      <Filter>Commands</Filter>
     </ClInclude>
     <ClInclude Include="LevelHandeler.h">
       <Filter>Level</Filter>
@@ -124,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="UggWrongWay.h">
       <Filter>Level\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>Commands</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

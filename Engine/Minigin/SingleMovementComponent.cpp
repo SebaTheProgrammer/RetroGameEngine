@@ -68,6 +68,10 @@ void SingleMovementComponent::SingleMove( glm::vec2 direction, Direction dir )
             {
                 GetOwner()->GetComponent<QBert>().get()->Moved( m_Direction );
             }
+            if ( GetOwner()->GetComponent<Coily>() )
+            {
+                GetOwner()->GetComponent<Coily>().get()->Moved( m_Direction );
+            }
         }
 
         m_MovementDelayTimer -= dae::GameTime::GetInstance().GetDeltaTime();

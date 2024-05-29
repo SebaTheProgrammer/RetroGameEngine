@@ -22,6 +22,7 @@
 #include "LevelFile.h"
 #include "ScoreFile.h"
 #include "HighScoreScreen.h"
+#include "Commands.h"
 
 void load()
 {
@@ -66,7 +67,6 @@ void load()
 	int hp = 4;
 	Level::allTextures LevelTextures;
 	{
-		//saved 60mb
 		LevelTextures.m_QbertIdle = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "qbertIdle.png" ) };
 		LevelTextures.m_QbertBackfaceIdle = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "qbertBackFaceIdle.png" ) };
 		LevelTextures.m_Coily = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "SnakePurple.png" ) };
@@ -106,7 +106,10 @@ void load()
 	//for debug purposes
 	auto levelswitcher = std::make_shared<dae::GameObject>(-1);
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_0, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 0 } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_1, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 1 } );
+
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_1, InputTypeKeyBoard::IsDownThisFrame, SinglePlayer{ go.get() } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_2, InputTypeKeyBoard::IsDownThisFrame, MultiplayerCommand{ go.get()} );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_3, InputTypeKeyBoard::IsDownThisFrame, VersusCommand{ go.get() } );
 
 	//HIGHSCORE
 	auto& highScore = dae::SceneManager::GetInstance().CreateScene( "Highscores" );

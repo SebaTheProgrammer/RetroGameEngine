@@ -21,6 +21,7 @@ public:
 
 	void SingleMove( glm::vec2 direction, Direction dir );
 	void SetCanMove( bool canMove ) { m_CanMove = canMove; }
+	void SetInstantJump( bool instantJump ) { m_InstantJump = instantJump; }
 	bool GetCanMove(){return m_CanMove;}
 
 	bool IsMovementInProgress() const { return m_MovementInProgress; }

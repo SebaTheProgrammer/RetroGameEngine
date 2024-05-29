@@ -26,7 +26,7 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	if ( level > m_MAX_LEVEL ) level = m_MAX_LEVEL;
 	m_Level = level;
 	m_LevelSize = howLongLevel;
-	m_MaxScoreEnemies = level * 2;
+	m_MaxScoreEnemies = howManuJumpsNeeded * 2;
 
 	auto background = std::make_shared<dae::TextureComponent>( parentGameObject, m_Textures.m_BgTexture );
 	background->SetLocalPosition( -parentGameObject->GetLocalTransform().GetPosition().x, -parentGameObject->GetLocalTransform().GetPosition().y );
@@ -76,7 +76,7 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	m_QbertGameObject->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x, parentGameObject->GetLocalTransform().GetPosition().y - 40 } );
 	auto qbert = std::shared_ptr<QBert>{};
 
-	qbert = ( std::make_shared<QBert>( m_QbertGameObject.get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle, true) );
+	qbert = ( std::make_shared<QBert>( m_QbertGameObject.get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle, false) );
 	m_QbertGameObject->AddComponent( qbert );
 
 	//Levelhandeler
@@ -164,6 +164,8 @@ void Level::Update()
 			{
 				SpawnSlickSam();
 				SpawnCoily();
+
+				m_SpawnEnemyTime = m_MaxSpawnEnemyTime;
 			}
 			m_Timer = 0;
 		}
@@ -249,11 +251,12 @@ void Level::RestartLevel()
 
 void Level::SpawnCoily()
 {
-	if( m_HasCoily ) return;
+	if ( m_HasCoily ) return;
+
 	m_HasCoily = true;
-	m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex()) );
+	m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
 	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
-	auto coily = std::make_shared<Coily>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Coily, m_LevelSize, m_pPyramidCubes.get() );
+	auto coily = std::make_shared<Coily>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Coily, m_LevelSize, m_pPyramidCubes.get(), m_IsVersus );
 	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( coily );
 	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 110 } );
 }
@@ -264,6 +267,28 @@ void Level::PlayerMoved()
 	{
 		m_PlayerMoved = true;
 	}
+}
+
+void Level::SetMultiplayer( bool isMultiplayer )
+{
+	if ( !m_IsMultiplayer ) 
+	{
+		m_IsMultiplayer = isMultiplayer;
+	}
+}
+
+void Level::SetVersus( bool isVersus )
+{
+	if ( !m_IsVersus ) 
+	{
+		m_IsVersus = isVersus;
+	}
+}
+
+void Level::SinglePlayer()
+{
+	m_IsMultiplayer = false;
+	m_IsVersus = false;
 }
 
 void Level::SpawnSlickSam()
