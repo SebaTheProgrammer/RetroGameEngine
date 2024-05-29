@@ -9,23 +9,26 @@ Coily::Coily( dae::GameObject* parentGameObject,
 {																										//Hardcoded values for the animation
 	m_pTextureCoily = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureCoily, 1.0f, 2, 8, 0, m_FrameTime );
 	m_pSingleMovenment = std::make_shared<SingleMovementComponent>( parentGameObject, m_Speed, m_SpeedBetweenSteps, true );
+	parentGameObject->AddComponent( m_pSingleMovenment );
 	m_pSingleMovenment->SetCanMove( true );
+	m_pSingleMovenment->SetHasControl( false );
+
 	m_LevelSize = levelSize;
 	Egged();
 
 	if ( m_Player2Control ) 
 	{
 		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ GetOwner(),  glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
+			SingleMoveCommand{ parentGameObject,  glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
 
 		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown } );
+			SingleMoveCommand{ parentGameObject, glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown } );
 
 		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp } );
+			SingleMoveCommand{ parentGameObject, glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp } );
 
 		dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown } );
+			SingleMoveCommand{ parentGameObject, glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown } );
 	}
 }
 
@@ -116,10 +119,10 @@ void Coily::Jump( SingleMovementComponent::Direction dir )
 {
 	if ( m_Player2ControlActive ) return;
 
-	if ( dir == SingleMovementComponent::Direction::LeftUp ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, -1.2f }, dir );
-	else if ( dir == SingleMovementComponent::Direction::RightUp ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, dir );
-	else if ( dir == SingleMovementComponent::Direction::RightDown ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, dir );
-	else if ( dir == SingleMovementComponent::Direction::LeftDown ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, dir );
+	if ( dir == SingleMovementComponent::Direction::LeftUp ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, -1.2f }, dir, true );
+	else if ( dir == SingleMovementComponent::Direction::RightUp ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, dir, true );
+	else if ( dir == SingleMovementComponent::Direction::RightDown ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, dir, true );
+	else if ( dir == SingleMovementComponent::Direction::LeftDown ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, dir, true );
 }
 
 void Coily::SetAnimationState( AnimationState state )
@@ -157,18 +160,38 @@ void Coily::Moved( SingleMovementComponent::Direction dir )
 		case SingleMovementComponent::Direction::LeftUp:
 			IdleBackSnake();
 			Mirror( true );
+			if ( m_Player2ControlActive ) 
+			{
+				m_Row -= oldActiveCol;
+				m_Col -= 1;
+			}
 			break;
 		case SingleMovementComponent::Direction::RightDown:
 			IdleSnake();
 			Mirror( false );
+			if ( m_Player2ControlActive )
+			{
+				m_Row += oldActiveCol + 1;
+				m_Col += 1;
+			}
 			break;
 		case SingleMovementComponent::Direction::LeftDown:
 			IdleSnake();
 			Mirror( true );
+			if ( m_Player2ControlActive )
+			{
+				m_Row += oldActiveCol;
+				m_Col += 1;
+			}
 			break;
 		case SingleMovementComponent::Direction::RightUp:
 			IdleBackSnake();
 			Mirror( false );
+			if ( m_Player2ControlActive )
+			{
+				m_Row -= oldActiveCol - 1;
+				m_Col -= 1;
+			}
 			break;
 		}
 	}
@@ -181,6 +204,7 @@ void Coily::Moved( SingleMovementComponent::Direction dir )
 		//At the bottom of the pyramid
 		m_Player2ControlActive = m_Player2Control;
 		m_pSingleMovenment->SetInstantJump(!m_Player2Control);
+		m_pSingleMovenment->SetHasControl( true );
 		IdleSnake();
 	}
 }

@@ -19,9 +19,11 @@ public:
 	SingleMovementComponent& operator=( const SingleMovementComponent& other ) = delete;
 	SingleMovementComponent& operator=( SingleMovementComponent&& other ) = delete;
 
-	void SingleMove( glm::vec2 direction, Direction dir );
+	void SingleMove( glm::vec2 direction, Direction dir, bool byPC );
 	void SetCanMove( bool canMove ) { m_CanMove = canMove; }
 	void SetInstantJump( bool instantJump ) { m_InstantJump = instantJump; }
+	void SetHasControl( bool hasControl ) { m_HasControl = hasControl; }
+
 	bool GetCanMove(){return m_CanMove;}
 
 	bool IsMovementInProgress() const { return m_MovementInProgress; }
@@ -37,6 +39,7 @@ private:
 	float m_MovementDelayTimer{ -1 };
 	float m_ElapsedTime{ 0.0f };
 	bool m_InstantJump;
+	bool m_HasControl{ true };
 
 	const float m_TimeBetweenSteps{ 0.5f };
 };

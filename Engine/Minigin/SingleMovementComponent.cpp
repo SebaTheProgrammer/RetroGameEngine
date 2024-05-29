@@ -14,11 +14,11 @@ SingleMovementComponent::SingleMovementComponent( dae::GameObject* const parentG
 {
 }
 
-void SingleMovementComponent::SingleMove( glm::vec2 direction, Direction dir )
+void SingleMovementComponent::SingleMove( glm::vec2 direction, Direction dir, bool byPC )
 {
     if ( m_CanMove )
     {
-        if ( m_InstantJump )
+        if ( m_InstantJump && byPC )
         {
             m_Direction=dir;
             glm::vec2 totalDistance = direction * m_StepSize*30.f;
@@ -41,7 +41,7 @@ void SingleMovementComponent::SingleMove( glm::vec2 direction, Direction dir )
 
         //This is a simple way to make sure the movement is not interrupted
         //you also need to hold the key to have a old school feel
-        if ( !m_MovementInProgress && m_MovementDelayTimer <= 0.0f )
+        else if ( !m_MovementInProgress && m_MovementDelayTimer <= 0.0f && m_HasControl )
         {
             m_MovementInProgress = true;
             glm::vec2 totalDistance = direction * m_StepSize;

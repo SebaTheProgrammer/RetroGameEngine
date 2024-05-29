@@ -47,7 +47,7 @@ public:
 		{
 			if ( auto movementComp{ GetGameObject()->GetComponent<SingleMovementComponent>() } )
 			{
-				movementComp->SingleMove( m_Direction, m_Dir );
+				movementComp->SingleMove( m_Direction, m_Dir, false );
 			}
 		}
 	}

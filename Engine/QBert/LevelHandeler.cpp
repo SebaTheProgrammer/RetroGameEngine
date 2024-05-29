@@ -60,7 +60,10 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::PLAYER_DIED:
 
 		m_pQbert->ResetPosition();
-		m_pQbert2->ResetPosition();
+		if ( m_pQbert2 != nullptr ) 
+		{
+			m_pQbert2->ResetPosition();
+		}
 
 		GetOwner()->GetComponent<PyramidCubes>()->ResetIndex1();
 		GetOwner()->GetComponent<PyramidCubes>()->ResetIndex2();

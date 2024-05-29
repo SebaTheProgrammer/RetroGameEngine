@@ -70,8 +70,8 @@ void UggWrongWay::Jump()
 {
 	if ( m_IsGoingUp ) 
 	{
-		if ( m_IsInLeftCorner ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, SingleMovementComponent::Direction::RightUp );
-		if ( !m_IsInLeftCorner ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, -1.2f }, SingleMovementComponent::Direction::LeftUp );
+		if ( m_IsInLeftCorner ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, SingleMovementComponent::Direction::RightUp, true );
+		if ( !m_IsInLeftCorner ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, -1.2f }, SingleMovementComponent::Direction::LeftUp, true );
 	}
 	else
 	{
@@ -79,11 +79,11 @@ void UggWrongWay::Jump()
 		{
 			if ( m_IsInLeftCorner )
 			{
-				m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, SingleMovementComponent::Direction::RightUp );
+				m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, SingleMovementComponent::Direction::RightUp, true );
 			}
 			else
 			{
-				m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, -1.2f }, SingleMovementComponent::Direction::LeftUp );
+				m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, -1.2f }, SingleMovementComponent::Direction::LeftUp, true );
 			}
 
 			m_Up = false;
@@ -92,11 +92,11 @@ void UggWrongWay::Jump()
 		{
 			if ( m_IsInLeftCorner )
 			{
-				m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, SingleMovementComponent::Direction::RightDown );
+				m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, SingleMovementComponent::Direction::RightDown, true );
 			}
 			else
 			{
-				m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, SingleMovementComponent::Direction::LeftDown );
+				m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, SingleMovementComponent::Direction::LeftDown, true );
 			}
 
 			m_Up = true;
@@ -169,11 +169,11 @@ void UggWrongWay::SetStartPos()
 		if ( random == 1 )
 		{
 			m_IsInLeftCorner = true;
-			m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, SingleMovementComponent::Direction::LeftDown );
+			m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, SingleMovementComponent::Direction::LeftDown, true );
 		}
 		else 
 		{
-			m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, SingleMovementComponent::Direction::RightDown );
+			m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, SingleMovementComponent::Direction::RightDown, true );
 			Mirror( true );
 		}
 	}

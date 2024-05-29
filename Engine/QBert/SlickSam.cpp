@@ -62,8 +62,8 @@ void SlickSam::Jump()
 	srand( rand() );
 
 	bool random = rand() % 2;
-	if ( random == 1 ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, SingleMovementComponent::Direction::RightDown );
-	if ( random == 0 ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, SingleMovementComponent::Direction::LeftDown );
+	if ( random == 1 ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, SingleMovementComponent::Direction::RightDown, true );
+	if ( random == 0 ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, SingleMovementComponent::Direction::LeftDown, true );
 }
 
 void SlickSam::SetAnimationState( AnimationState state )
