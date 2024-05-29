@@ -37,8 +37,8 @@ public:
 
 	int GetActiveRow() const { return m_QBert1ColIndex; }
 	int GetActiveColumn() const { return m_QBert1RowIndex; }
-	int GetActiveRow2() const { return m_QBert2ColIndex; }
-	int GetActiveColumn2() const { return m_QBert2RowIndex; }
+	int GetActiveRow2() const;
+	int GetActiveColumn2() const;
 
 	int GetRowStartIndex( int col ) const;
 	int GetRowEndIndex( int col ) const;
@@ -50,6 +50,8 @@ public:
 	void Player1Hit();
 	void Player2Hit();
 	void PlayerDied();
+
+	void SetCoop( bool coop ) { m_IsCoop = coop; };
 
 private:
 	std::shared_ptr<dae::Texture2D> m_pTexture;
@@ -71,5 +73,6 @@ private:
 	int m_CompletedCubes = 0;
 
 	bool m_CanMove = true;
+	bool m_IsCoop = false;
 };
 

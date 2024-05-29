@@ -174,7 +174,8 @@ void Level::Update()
 
 		if ( m_Timer > m_SpawnEnemyTime )
 		{
-			if ( m_Player1Moved && m_Player2Moved )
+
+			if ( m_Player1Moved && m_Player2Moved || !m_IsMultiplayer && m_Player1Moved )
 			{
 				SpawnSlickSam();
 				SpawnCoily();
@@ -331,6 +332,8 @@ void Level::SetMultiplayer( bool isMultiplayer )
 		auto healthDisplay = std::make_shared<HealthComponentQbert>( GetOwner(), GetOwner()->GetComponent<LevelHandeler>().get()->GetLives2(), 2 );
 		healthDisplay->SetLocalPosition( -250, 0 );
 		GetOwner()->AddComponent( healthDisplay );
+
+		GetOwner()->GetComponent <PyramidCubes>()->SetCoop( true );
 	}
 }
 

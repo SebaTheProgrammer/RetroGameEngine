@@ -210,6 +210,30 @@ void PyramidCubes::ReverseCube( int row )
 	}
 }
 
+int PyramidCubes::GetActiveRow2() const
+{
+    if ( m_IsCoop )
+    {
+        return m_QBert2ColIndex;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int PyramidCubes::GetActiveColumn2() const
+{
+    if ( m_IsCoop )
+    {
+        return m_QBert2RowIndex;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 int PyramidCubes::GetRowStartIndex( int col ) const
 {
     return ( ( col - 1 ) * ( col ) ) / 2;
