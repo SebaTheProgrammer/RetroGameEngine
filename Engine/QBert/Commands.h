@@ -86,6 +86,12 @@ public:
 			}
 
 			dae::SceneManager::GetInstance().SetCurrentScene( 1 );
+
+			//std::string playerName;
+			//std::cout << "Enter your name: ";
+			//std::getline( std::cin, playerName );
+			//ScoreFile::GetInstance().SetName( playerName );
+			//std::cout << "Hello, " << playerName << "!" << std::endl;
 		}
 	}
 };

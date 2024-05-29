@@ -71,6 +71,13 @@ namespace dae
 				}
 			}
 		}
+		template<typename T>
+		void RemoveComponent( std::shared_ptr<T> component ) {
+			auto it = std::find( m_pComponents.begin(), m_pComponents.end(), component );
+			if ( it != m_pComponents.end() ) {
+				m_pComponents.erase( it );
+			}
+		}
 
 		void ClearComponents() { m_pComponents.clear(); }
 

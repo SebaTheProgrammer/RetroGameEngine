@@ -149,8 +149,6 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 			}
 
 			GetOwner()->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetDirection(), qbert->GetWichPlayer() );
-
-
 		}
 		break;
 
@@ -160,6 +158,9 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 
 	case dae::EventType::LEVEL_RESTART:
 		ResetLevel();
+		break;
+	case dae::EventType::REMOVE_PLAYER:
+		m_pQbert2 = nullptr;
 		break;
 	}
 

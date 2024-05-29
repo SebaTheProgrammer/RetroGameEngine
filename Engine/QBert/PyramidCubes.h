@@ -51,6 +51,7 @@ public:
 	void Player2Hit();
 	void PlayerDied();
 	void CoilyDead();
+	void RemovePlayer();
 
 	void SetCoop( bool coop ) { m_IsCoop = coop; };
 

@@ -19,6 +19,7 @@ namespace dae
 		PLAYER2_OUT_OF_BOUNDS,
 		NEW_CUBE_COMPLETED,
 		COILY_DEAD,
+		REMOVE_PLAYER,
 	};
 }
 

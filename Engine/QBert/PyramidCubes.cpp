@@ -268,3 +268,9 @@ void PyramidCubes::CoilyDead()
 	NotifyObservers( dae::EventType::COILY_DEAD, GetOwner() );
 }
 
+void PyramidCubes::RemovePlayer()
+{
+	NotifyObservers( dae::EventType::REMOVE_PLAYER, GetOwner() );
+    m_IsCoop= false;
+}
+

@@ -343,6 +343,24 @@ void Level::SetMultiplayer( bool isMultiplayer )
 
 		GetOwner()->GetComponent <PyramidCubes>()->SetCoop( true );
 	}
+	else if( !isMultiplayer )
+	{
+		std::cout<<"Single Player" << std::endl;
+		if ( m_QbertGameObject.size() > 1 ) 
+		{
+			m_QbertGameObject.pop_back();
+			m_pPyramidCubes->RemovePlayer();
+
+			auto healths = GetOwner()->GetComponents<HealthComponentQbert>();
+			for ( const auto& health : healths ) 
+			{
+				if ( health->GetWhichPlayer() == 2 )
+				{
+					GetOwner()->RemoveComponent( health );
+				}
+			}
+		}
+	}
 }
 
 void Level::SetVersus( bool isVersus )
@@ -350,6 +368,8 @@ void Level::SetVersus( bool isVersus )
 	if ( !m_IsVersus ) 
 	{
 		m_IsVersus = isVersus;
+		m_IsMultiplayer = false;
+		SetMultiplayer( false );
 	}
 }
 
@@ -357,6 +377,7 @@ void Level::SinglePlayer()
 {
 	m_IsMultiplayer = false;
 	m_IsVersus = false;
+	SetMultiplayer( false );
 }
 
 void Level::SpawnSlickSam()

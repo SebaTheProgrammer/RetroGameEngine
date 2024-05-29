@@ -103,7 +103,7 @@ void load()
 		levelgameobjectNumber += 1;
 	}
 
-	//for debug purposes
+	//for debug purposes, should make a button class if extra time
 	auto levelswitcher = std::make_shared<dae::GameObject>(-1);
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_0, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 0 } );
 
