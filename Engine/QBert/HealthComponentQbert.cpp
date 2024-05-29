@@ -4,9 +4,10 @@
 #include "QBert.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
+#include <iostream>
 
-HealthComponentQbert::HealthComponentQbert( dae::GameObject* parentGameObject, int lives) :
-	BaseComponent( parentGameObject ), m_Lives( lives ), m_StartLives( lives )
+HealthComponentQbert::HealthComponentQbert( dae::GameObject* parentGameObject, int lives, int wichPlayer ) :
+	BaseComponent( parentGameObject ), m_Lives( lives ), m_StartLives( lives ), m_WhichPlayer( wichPlayer )
 {
 	m_pTexture = dae::ResourceManager::GetInstance().LoadTexture( "Heart.png" );
 }

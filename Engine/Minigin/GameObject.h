@@ -45,6 +45,21 @@ namespace dae
 			return nullptr;
 		}
 		template<typename T>
+		std::vector<std::shared_ptr<T>> GetComponents()
+		{
+			std::vector<std::shared_ptr<T>> components;
+
+			for ( auto& component : m_pComponents )
+			{
+				if ( auto castedComponent = std::dynamic_pointer_cast< T >( component ) )
+				{
+					components.push_back( castedComponent );
+				}
+			}
+
+			return components;
+		}
+		template<typename T>
 		void RemoveComponent()
 		{
 			for ( auto it = m_pComponents.begin(); it != m_pComponents.end(); ++it )

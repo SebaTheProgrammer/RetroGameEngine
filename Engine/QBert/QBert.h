@@ -40,9 +40,8 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 
 	void GameOver();
 
-	int GetHealth() const { return m_pStats->GetLives(); }
-	void SetHealth( int health ) { m_pStats->SetLives( health ); }
-
+	void SetWichPlayer( int player ) { m_WichPlayer = player; };
+	int GetWichPlayer() const { return m_WichPlayer; };
 private:
 	AnimationState m_CurrentState = AnimationState::Idle;
 
@@ -70,4 +69,6 @@ private:
 	bool m_GetsHit = false;
 	const float m_HitWaitTime = 2.5f;
 	float m_HitTimer = 0;
+
+	int m_WichPlayer = 1;
 };

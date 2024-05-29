@@ -39,7 +39,8 @@ public:
 	void CompletedLevel();
 	void WinGame( int score );
 	void RestartLevel();
-	void PlayerMoved();
+	void Player1Moved();
+	void Player2Moved();
 	void SetMultiplayer( bool isMultiplayer );
 	void SetVersus( bool isVersus );
 	void SinglePlayer();
@@ -69,8 +70,9 @@ private:
 	std::shared_ptr<dae::GameObject> m_pWinObject;
 
 	//Player
-	std::shared_ptr<dae::GameObject> m_QbertGameObject;
-	bool m_PlayerMoved = false;
+	std::vector < std::shared_ptr<dae::GameObject>> m_QbertGameObject;
+	bool m_Player1Moved = false;
+	bool m_Player2Moved = false;
 
 	//Enemies
 	std::vector<std::shared_ptr<dae::GameObject>> m_EnemiesGameObjects;

@@ -82,14 +82,22 @@ void PyramidCubes::ResetLevel()
         cube->Reset();
     }
     m_CompletedCubes = 0;
-    ResetIndex();
+    ResetIndex1();
+    ResetIndex2();
 }
 
-void PyramidCubes::ResetIndex()
+void PyramidCubes::ResetIndex1()
 {
     m_CanMove = true;
-    m_QBertColIndex = 1;
-    m_QBertRowIndex = 0;
+    m_QBert1ColIndex = 1;
+    m_QBert1RowIndex = 0;
+}
+
+void PyramidCubes::ResetIndex2()
+{
+	m_CanMove = true;
+	m_QBert2ColIndex = 1;
+	m_QBert2RowIndex = 0;
 }
 
 void PyramidCubes::GameOver()
@@ -97,45 +105,85 @@ void PyramidCubes::GameOver()
     m_CanMove = false;
 }
 
-void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
+void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir, int wichplayer)
 {
     if( !m_CanMove ) return;
 
-    int oldActiveCol = m_QBertColIndex;
-    // Update cube index and active row based on movement direction
-    switch (dir) 
+    if ( wichplayer == 1 )
     {
+        int oldActiveCol = m_QBert1ColIndex;
+        switch ( dir )
+        {
         case SingleMovementComponent::Direction::LeftUp:
-            m_QBertRowIndex -= oldActiveCol;
-            m_QBertColIndex -= 1;
+            m_QBert1RowIndex -= oldActiveCol;
+            m_QBert1ColIndex -= 1;
             break;
         case SingleMovementComponent::Direction::RightDown:
-            m_QBertRowIndex += oldActiveCol + 1;
-            m_QBertColIndex += 1;
+            m_QBert1RowIndex += oldActiveCol + 1;
+            m_QBert1ColIndex += 1;
             break;
         case SingleMovementComponent::Direction::LeftDown:
-            m_QBertRowIndex += oldActiveCol;
-            m_QBertColIndex += 1;
+            m_QBert1RowIndex += oldActiveCol;
+            m_QBert1ColIndex += 1;
             break;
         case SingleMovementComponent::Direction::RightUp:
-            m_QBertRowIndex -= oldActiveCol - 1;
-            m_QBertColIndex -= 1;
+            m_QBert1RowIndex -= oldActiveCol - 1;
+            m_QBert1ColIndex -= 1;
             break;
+        }
+
+        int rowStartIndex = ( ( m_QBert1ColIndex - 1 ) * ( m_QBert1ColIndex ) ) / 2;
+        int rowEndIndex = rowStartIndex + m_QBert1ColIndex - 1;
+
+        if ( ( m_QBert1RowIndex < 0 || m_QBert1ColIndex > m_Size ) || ( m_QBert1RowIndex < rowStartIndex || m_QBert1RowIndex > rowEndIndex ) || m_QBert1ColIndex == 0 )
+        {
+            //TODO: check for platforms
+            NotifyObservers( dae::EventType::PLAYER1_OUT_OF_BOUNDS, GetOwner() );
+            return;
+        }
+
+        if ( m_QBert1RowIndex >= 0 && unsigned( m_QBert1RowIndex ) < m_pCubes.size() && m_pCubes[ m_QBert1RowIndex ] != nullptr )
+        {
+            m_pCubes[ m_QBert1RowIndex ]->LandedOnThisCube();
+        }
     }
-
-    int rowStartIndex = ( (m_QBertColIndex-1) * ( m_QBertColIndex)) / 2;
-    int rowEndIndex = rowStartIndex + m_QBertColIndex-1;
-
-    if ( (m_QBertRowIndex < 0 || m_QBertColIndex > m_Size) || (m_QBertRowIndex < rowStartIndex || m_QBertRowIndex > rowEndIndex) || m_QBertColIndex == 0)
+    else 
     {
-        //TODO: check for platforms
-        NotifyObservers(dae::EventType::PLAYER_OUT_OF_BOUNDS, GetOwner());
-        return;
-    }
+        int oldActiveCol = m_QBert2ColIndex;
+        switch ( dir )
+        {
+        case SingleMovementComponent::Direction::LeftUp:
+            m_QBert2RowIndex -= oldActiveCol;
+            m_QBert2ColIndex -= 1;
+            break;
+        case SingleMovementComponent::Direction::RightDown:
+            m_QBert2RowIndex += oldActiveCol + 1;
+            m_QBert2ColIndex += 1;
+            break;
+        case SingleMovementComponent::Direction::LeftDown:
+            m_QBert2RowIndex += oldActiveCol;
+            m_QBert2ColIndex += 1;
+            break;
+        case SingleMovementComponent::Direction::RightUp:
+            m_QBert2RowIndex -= oldActiveCol - 1;
+            m_QBert1ColIndex -= 1;
+            break;
+        }
 
-    if ( m_QBertRowIndex >= 0 && unsigned(m_QBertRowIndex) < m_pCubes.size() && m_pCubes[ m_QBertRowIndex ] != nullptr )
-    {
-        m_pCubes[ m_QBertRowIndex ]->LandedOnThisCube();
+        int rowStartIndex = ( ( m_QBert2ColIndex - 1 ) * ( m_QBert2ColIndex ) ) / 2;
+        int rowEndIndex = rowStartIndex + m_QBert2ColIndex - 1;
+
+        if ( ( m_QBert2RowIndex < 0 || m_QBert2ColIndex > m_Size ) || ( m_QBert2RowIndex < rowStartIndex || m_QBert2RowIndex > rowEndIndex ) || m_QBert2ColIndex == 0 )
+        {
+            //TODO: check for platforms
+            NotifyObservers( dae::EventType::PLAYER2_OUT_OF_BOUNDS, GetOwner() );
+            return;
+        }
+
+        if ( m_QBert2RowIndex >= 0 && unsigned( m_QBert2RowIndex ) < m_pCubes.size() && m_pCubes[ m_QBert2RowIndex ] != nullptr )
+        {
+            m_pCubes[ m_QBert2RowIndex ]->LandedOnThisCube();
+        }
     }
 
     m_CompletedCubes = 0;
@@ -177,9 +225,13 @@ void PyramidCubes::KilledEnemy()
 	NotifyObservers( dae::EventType::KILL_ENEMY, GetOwner() );
 }
 
-void PyramidCubes::PlayerHit()
+void PyramidCubes::Player1Hit()
 {
-	NotifyObservers( dae::EventType::PLAYER_HIT, GetOwner() );
+	NotifyObservers( dae::EventType::PLAYER1_HIT, GetOwner() );
+}
+void PyramidCubes::Player2Hit()
+{
+    NotifyObservers( dae::EventType::PLAYER2_HIT, GetOwner() );
 }
 
 void PyramidCubes::PlayerDied()

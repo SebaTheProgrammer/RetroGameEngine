@@ -47,10 +47,16 @@ void UggWrongWay::Update()
 	m_pSingleMovenment->Update();
 	m_pTextureUggWrongWay->Update();
 
-	if ( m_pPyramid->GetActiveRow() == m_Col and m_pPyramid->GetActiveColumn() == m_Row )
+	if ( m_pPyramid->GetActiveRow() == m_Col and m_pPyramid->GetActiveColumn() == m_Row && m_IsAlive ==true)
 	{
 		m_IsAlive = false;
-		m_pPyramid->PlayerHit();
+		m_pPyramid->Player1Hit();
+	}
+
+	else if ( m_pPyramid->GetActiveRow2() == m_Col and m_pPyramid->GetActiveColumn2() == m_Row && m_IsAlive == true )
+	{
+		m_IsAlive = false;
+		m_pPyramid->Player2Hit();
 	}
 }
 

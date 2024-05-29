@@ -72,12 +72,13 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 
 	//players
 	 // add 2 players, but is for later
-	m_QbertGameObject = std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() );
-	m_QbertGameObject->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x, parentGameObject->GetLocalTransform().GetPosition().y - 40 } );
+	m_QbertGameObject.push_back( std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() ) );
+	m_QbertGameObject[ m_QbertGameObject.size() - 1 ] = std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() );
+	m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x, parentGameObject->GetLocalTransform().GetPosition().y - 40 } );
 	auto qbert = std::shared_ptr<QBert>{};
 
-	qbert = ( std::make_shared<QBert>( m_QbertGameObject.get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle, false) );
-	m_QbertGameObject->AddComponent( qbert );
+	qbert = ( std::make_shared<QBert>( m_QbertGameObject[ m_QbertGameObject.size() - 1 ].get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle, true) );
+	m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->AddComponent( qbert );
 
 	//Levelhandeler
 	auto levelHandeler = std::make_shared<LevelHandeler>( parentGameObject, qbertlives, maxLevels );
@@ -88,7 +89,7 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	for ( const auto& cube : pyramid->GetCubes() ) { cube->AddObserver( levelHandeler.get() ); };
 
 	//Health display
-	auto healthDisplay = std::make_shared<HealthComponentQbert>( parentGameObject, levelHandeler->GetLives());
+	auto healthDisplay = std::make_shared<HealthComponentQbert>( parentGameObject, levelHandeler->GetLives1(), qbert->GetWichPlayer() );
 	healthDisplay->SetLocalPosition( -250, -100 );
 	parentGameObject->AddComponent( healthDisplay );
 
@@ -101,7 +102,11 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	{
 		m_CurrentState = LevelState::Normal;
 		m_Timer = 0;
-		m_QbertGameObject->GetComponent<QBert>()->SetCanMove( true );
+
+		for ( const auto& players : m_QbertGameObject )
+		{
+			players->GetComponent<QBert>()->SetCanMove( true );
+		}
 	}
 }
 
@@ -117,7 +122,10 @@ void Level::Update()
 		{
 			m_CurrentState = LevelState::Normal;
 			m_Timer = 0;
-			m_QbertGameObject->GetComponent<QBert>()->SetCanMove( true );
+			for ( const auto& players : m_QbertGameObject )
+			{
+				players->GetComponent<QBert>()->SetCanMove( true );
+			}
 		}
 		m_BeginScreenObject->Update();
 		break;
@@ -129,7 +137,10 @@ void Level::Update()
 		{
 			m_CurrentState = LevelState::Normal;
 			m_Timer = 0;
-			m_QbertGameObject->GetComponent<QBert>()->SetCanMove( true );
+			for ( const auto& players : m_QbertGameObject )
+			{
+				players->GetComponent<QBert>()->SetCanMove( true );
+			}
 			dae::SceneManager::GetInstance().SetCurrentScene( 0 );
 		}
 		m_pGameOverObject->Update();
@@ -143,7 +154,10 @@ void Level::Update()
 		{
 			m_CurrentState = LevelState::Normal;
 			m_Timer = 0;
-			m_QbertGameObject->GetComponent<QBert>()->SetCanMove( true );
+			for ( const auto& players : m_QbertGameObject )
+			{
+				players->GetComponent<QBert>()->SetCanMove( true );
+			}
 			dae::SceneManager::GetInstance().SetCurrentScene( dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1 );
 		}
 		m_pWinObject->Update();
@@ -160,7 +174,7 @@ void Level::Update()
 
 		if ( m_Timer > m_SpawnEnemyTime )
 		{
-			if ( m_PlayerMoved ) 
+			if ( m_Player1Moved && m_Player2Moved )
 			{
 				SpawnSlickSam();
 				SpawnCoily();
@@ -171,7 +185,10 @@ void Level::Update()
 		}
 		break;
 	}
-	m_QbertGameObject->Update();
+	for ( const auto& players : m_QbertGameObject )
+	{
+		players->Update();
+	}
 }
 
 void Level::Render() const
@@ -191,7 +208,10 @@ void Level::Render() const
 		break;
 
 	case LevelState::Normal:
-		m_QbertGameObject->Render();
+		for ( const auto& players : m_QbertGameObject )
+		{
+			players->Render();
+		}
 		for ( const auto& enemy : m_EnemiesGameObjects )
 		{
 			if ( enemy != nullptr )
@@ -207,7 +227,10 @@ void Level::GameOver(int score)
 {
 	m_Timer = 0;
 	m_CurrentState = LevelState::GameOver;
-	m_QbertGameObject->GetComponent<QBert>()->SetCanMove( false );
+	for ( const auto& players : m_QbertGameObject )
+	{
+		players->GetComponent<QBert>()->SetCanMove( false );
+	}
 	std::string scoreString = std::to_string( score );
 	m_pGameOverObject->GetComponent<dae::TextComponent>()->SetText( { "SCORE: " + scoreString } );
 	ScoreFile::GetInstance().UpdateHighScores( score );
@@ -226,7 +249,10 @@ void Level::CompletedLevel()
 			enemy->GetComponent<SlickSam>()->SetCanMove( false );
 		}
 	}
-	m_QbertGameObject->GetComponent<QBert>()->SetCanMove( false );
+	for ( const auto& players : m_QbertGameObject )
+	{
+		players->GetComponent<QBert>()->SetCanMove( false );
+	}
 }
 
 void Level::WinGame( int score )
@@ -234,7 +260,10 @@ void Level::WinGame( int score )
 	//Played All Games Out
 	m_CurrentState = LevelState::Win;
 	m_Timer = 0;
-	m_QbertGameObject->GetComponent<QBert>()->SetCanMove( false );
+	for ( const auto& players : m_QbertGameObject )
+	{
+		players->GetComponent<QBert>()->SetCanMove( false );
+	}
 	std::string scoreString = std::to_string( score );
 	m_pWinObject->GetComponent<dae::TextComponent>()->SetText( { "SCORE: " + scoreString } );
 	ScoreFile::GetInstance().UpdateHighScores( score );
@@ -243,8 +272,12 @@ void Level::WinGame( int score )
 void Level::RestartLevel()
 {
 	m_Timer = 0;
-	m_QbertGameObject->GetComponent<QBert>()->SetCanMove( false );
-	m_PlayerMoved = false;
+	for ( const auto& players : m_QbertGameObject )
+	{
+		players->GetComponent<QBert>()->SetCanMove( false );
+	}
+	m_Player1Moved = false;
+	m_Player2Moved = false;
 	m_HowManyEnemies = 0;
 	m_EnemiesGameObjects.clear();
 }
@@ -261,11 +294,19 @@ void Level::SpawnCoily()
 	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 110 } );
 }
 
-void Level::PlayerMoved()
+void Level::Player1Moved()
 {
-	if ( !m_PlayerMoved )
+	if ( !m_Player1Moved )
 	{
-		m_PlayerMoved = true;
+		m_Player1Moved = true;
+	}
+}
+
+void Level::Player2Moved()
+{
+	if ( !m_Player2Moved )
+	{
+		m_Player2Moved = true;
 	}
 }
 
@@ -274,6 +315,22 @@ void Level::SetMultiplayer( bool isMultiplayer )
 	if ( !m_IsMultiplayer ) 
 	{
 		m_IsMultiplayer = isMultiplayer;
+
+		//add extra player
+		m_QbertGameObject.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex()));
+		m_QbertGameObject[ m_QbertGameObject.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
+
+		m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->SetLocalTransform( { GetOwner()->GetLocalTransform().GetPosition().x,  GetOwner()->GetLocalTransform().GetPosition().y - 40 } );
+		auto qbert = std::shared_ptr<QBert>{};
+
+		qbert = ( std::make_shared<QBert>( m_QbertGameObject[ m_QbertGameObject.size() - 1 ].get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle, false ) );
+		qbert->SetWichPlayer( 2 );
+		qbert->AddObserver( GetOwner()->GetComponent<LevelHandeler>().get() );
+		m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->AddComponent( qbert );
+
+		auto healthDisplay = std::make_shared<HealthComponentQbert>( GetOwner(), GetOwner()->GetComponent<LevelHandeler>().get()->GetLives2(), 2 );
+		healthDisplay->SetLocalPosition( -250, 0 );
+		GetOwner()->AddComponent( healthDisplay );
 	}
 }
 

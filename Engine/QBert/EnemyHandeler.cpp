@@ -51,7 +51,7 @@ void EnemyHandeler::CheckEnemy( const int row, const int col )
 	{
 		if ( m_pCoilies[ i ]->GetRow() == row && m_pCoilies[ i ]->GetCol() == col )
 		{
-			NotifyObservers( dae::EventType::PLAYER_HIT, GetOwner() );
+			NotifyObservers( dae::EventType::PLAYER1_HIT, GetOwner() );
 			break;
 		}
 	}

@@ -37,10 +37,16 @@ void Coily::Update()
 
 	if ( !m_HasHitPlayer )
 	{
+		//TODO:: PLAYER 2
 		if ( m_pPyramid->GetActiveRow() == m_Col and m_pPyramid->GetActiveColumn() == m_Row )
 		{
+			m_pPyramid->Player1Hit();
+			m_HasHitPlayer = true;
+		}
 
-			m_pPyramid->PlayerHit();
+		if ( m_pPyramid->GetActiveRow2() == m_Col and m_pPyramid->GetActiveColumn2() == m_Row )
+		{
+			m_pPyramid->Player2Hit();
 			m_HasHitPlayer = true;
 		}
 	}

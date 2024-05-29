@@ -29,13 +29,17 @@ public:
 
 	void CompleteLevel();
 	void ResetLevel();
-	void ResetIndex();
+	void ResetIndex1();
+	void ResetIndex2();
 	void GameOver();
-	void WalkedOnCube( SingleMovementComponent::Direction dir);
+	void WalkedOnCube( SingleMovementComponent::Direction dir, int wichplayer );
 	void ReverseCube(int row );
 
-	int GetActiveRow() const { return m_QBertColIndex; }
-	int GetActiveColumn() const { return m_QBertRowIndex; }
+	int GetActiveRow() const { return m_QBert1ColIndex; }
+	int GetActiveColumn() const { return m_QBert1RowIndex; }
+	int GetActiveRow2() const { return m_QBert2ColIndex; }
+	int GetActiveColumn2() const { return m_QBert2RowIndex; }
+
 	int GetRowStartIndex( int col ) const;
 	int GetRowEndIndex( int col ) const;
 	int GetSize() const { return m_Size; }
@@ -43,7 +47,8 @@ public:
 	std::vector<std::shared_ptr<Cube>> GetCubes() const { return m_pCubes; }
 
 	void KilledEnemy();
-	void PlayerHit();
+	void Player1Hit();
+	void Player2Hit();
 	void PlayerDied();
 
 private:
@@ -57,8 +62,11 @@ private:
 
 	float m_Scale = 1.5f;
 
-	int m_QBertRowIndex = 0;
-	int m_QBertColIndex = 1;
+	int m_QBert1RowIndex = 0;
+	int m_QBert1ColIndex = 1;
+
+	int m_QBert2RowIndex = 0;
+	int m_QBert2ColIndex = 1;
 
 	int m_CompletedCubes = 0;
 

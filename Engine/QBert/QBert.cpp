@@ -101,7 +101,14 @@ void QBert::GetsHit()
 {
 	m_GetsHit = true;
 	m_pSingleMovenment->SetCanMove( false );
-	NotifyObservers( dae::EventType::PLAYER_HIT, GetOwner() );
+	if ( m_WichPlayer == 1 ) 
+	{
+		NotifyObservers( dae::EventType::PLAYER1_HIT, GetOwner() );
+	}
+	else
+	{
+		NotifyObservers( dae::EventType::PLAYER2_HIT, GetOwner() );
+	}
 }
 
 void QBert::Moved( SingleMovementComponent::Direction dir )

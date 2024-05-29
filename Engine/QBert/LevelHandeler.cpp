@@ -15,7 +15,7 @@
 
 LevelHandeler::LevelHandeler( dae::GameObject* parentGameObject, int& lives, int maxLevels ):
 	BaseComponent( parentGameObject ),
-	m_Lives( lives ), m_Score(0), m_StartLives( lives ), m_MaxLevels( maxLevels )
+	m_Lives1( lives ), m_Lives2(lives), m_Score(0), m_StartLives( lives ), m_MaxLevels( maxLevels )
 {
 	
 }
@@ -24,14 +24,25 @@ void LevelHandeler::Update()
 {
 	if ( m_NeedsUpdate )
 	{
-		if ( HealthComponentQbert * healthComponent{ GetOwner()->GetComponent<HealthComponentQbert>().get()} )
+		std::vector<std::shared_ptr<HealthComponentQbert>> m_HealthComponents = GetOwner()->GetComponents<HealthComponentQbert>();
+
+		for ( const auto& healthComponent : m_HealthComponents )
 		{
-			healthComponent->SetLives( m_Lives );
+			if ( healthComponent->GetWhichPlayer() == 1 )
+			{
+				healthComponent->SetLives( m_Lives1 );
+			}
+			if ( healthComponent->GetWhichPlayer() == 2 )
+			{
+				healthComponent->SetLives( m_Lives2 );
+			}
 		}
+
 		if ( dae::ScoreComponent * scoreComponent{ GetOwner()->GetComponent< dae::ScoreComponent>().get() } )
 		{
 			scoreComponent->SetScore( m_Score );
 		}
+
 		m_NeedsUpdate = false;
 	}
 
@@ -49,28 +60,54 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::PLAYER_DIED:
 
 		m_pQbert->ResetPosition();
-		GetOwner()->GetComponent<PyramidCubes>()->ResetIndex();
-		GetOwner()->GetComponent<Level>()->GameOver(m_Score);
+		m_pQbert2->ResetPosition();
+
+		GetOwner()->GetComponent<PyramidCubes>()->ResetIndex1();
+		GetOwner()->GetComponent<PyramidCubes>()->ResetIndex2();
+		GetOwner()->GetComponent<Level>()->GameOver( m_Score );
 		Notify( dae::EventType::LEVEL_RESTART, gameObj );
 
 		break;
 
-	case dae::EventType::PLAYER_OUT_OF_BOUNDS:
+	case dae::EventType::PLAYER1_OUT_OF_BOUNDS:
 
-		Notify( dae::EventType::PLAYER_HIT, gameObj );
+		Notify( dae::EventType::PLAYER1_HIT, gameObj );
 		break;
 
-	case dae::EventType::PLAYER_HIT:
-		if ( m_Lives > 1 )
+	case dae::EventType::PLAYER2_OUT_OF_BOUNDS:
+
+		Notify( dae::EventType::PLAYER2_HIT, gameObj );
+		break;
+
+	case dae::EventType::PLAYER1_HIT:
+		if ( m_Lives1 > 1 )
 		{
-			--m_Lives;
-			if ( m_Score > 25 ) { m_Score -= 25;}
+			--m_Lives1;
+			if ( m_Score > 25 ) { m_Score -= 25; }
 			m_pQbert->ResetPosition();
-			GetOwner()->GetComponent<PyramidCubes>()->ResetIndex();
+			GetOwner()->GetComponent<PyramidCubes>()->ResetIndex1();
+			m_NeedsUpdate = true;
 		}
 		else
 		{
-			m_Lives = 0;
+			m_Lives1 = 0;
+			Notify( dae::EventType::PLAYER_DIED, gameObj );
+		}
+		break;
+
+	case dae::EventType::PLAYER2_HIT:
+		if ( m_Lives2 > 1 )
+		{
+			--m_Lives2;
+			if ( m_Score > 25 ) { m_Score -= 25; }
+
+			m_pQbert2->ResetPosition();
+			GetOwner()->GetComponent<PyramidCubes>()->ResetIndex2();
+			m_NeedsUpdate = true;
+		}
+		else
+		{
+			m_Lives2 = 0;
 			Notify( dae::EventType::PLAYER_DIED, gameObj );
 		}
 		break;
@@ -86,13 +123,22 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 
 	case dae::EventType::PLAYER_MOVED:
-		if ( QBert * qbert{ gameObj->GetComponent<QBert>().get() } )
+		if ( auto qbert = gameObj->GetComponent<QBert>() )
 		{
-			m_pQbert = qbert;
-			GetOwner()->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetDirection() );
-			m_QBertRowIndex = GetOwner()->GetComponent<PyramidCubes>()->GetActiveRow();
-			m_QBertColIndex = GetOwner()->GetComponent<PyramidCubes>()->GetActiveColumn();
-			GetOwner()->GetComponent<Level>()->PlayerMoved();
+			if ( qbert->GetWichPlayer() == 1 )
+			{
+				m_pQbert = qbert;
+				GetOwner()->GetComponent<Level>()->Player1Moved();
+			}
+			else
+			{
+				m_pQbert2 = qbert;
+				GetOwner()->GetComponent<Level>()->Player2Moved();
+			}
+
+			GetOwner()->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetDirection(), qbert->GetWichPlayer() );
+
+	
 		}
 		break;
 
@@ -110,7 +156,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 
 void LevelHandeler::SetLives( int lives )
 {	
-	m_Lives = lives;
+	m_Lives1 = lives;
 	m_NeedsUpdate = true;
 }
 void LevelHandeler::SetScore( int score )
@@ -118,9 +164,13 @@ void LevelHandeler::SetScore( int score )
 	m_NeedsUpdate = true;
 	m_Score = score;
 }
-int LevelHandeler::GetLives() const
+int LevelHandeler::GetLives1() const
 {	
-	return m_Lives;
+	return m_Lives1;
+}
+int LevelHandeler::GetLives2() const
+{
+	return m_Lives2;
 }
 int LevelHandeler::GetScore() const
 {
@@ -145,7 +195,7 @@ void LevelHandeler::ChangeLevel()
 			{
 				if ( dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects()[ index ]->GetComponent<LevelHandeler>() != nullptr )
 				{
-					dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects()[ index ]->GetComponent<LevelHandeler>()->SetLives( m_Lives );
+					dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects()[ index ]->GetComponent<LevelHandeler>()->SetLives( m_Lives1 );
 					dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects()[ index ]->GetComponent<LevelHandeler>()->SetScore( m_Score );
 				}
 			}
@@ -164,7 +214,7 @@ void LevelHandeler::ChangeLevel()
 
 void LevelHandeler::ResetLevel()
 {
-	m_Lives = m_StartLives;
+	m_Lives1 = m_StartLives;
 	m_Score = 0;
 	m_NeedsUpdate = true;
 	m_CompletedLevel = false;
@@ -172,4 +222,5 @@ void LevelHandeler::ResetLevel()
 	GetOwner()->GetComponent<PyramidCubes>()->ResetLevel();
 	GetOwner()->GetComponent<Level>()->RestartLevel();
 	m_pQbert->ResetPosition();
+	m_pQbert2->ResetPosition();
 }
