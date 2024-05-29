@@ -295,6 +295,13 @@ void Level::SpawnCoily()
 	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 110 } );
 }
 
+void Level::CoilyDied()
+{
+	m_HasCoily = false;
+	m_Timer = 0;
+	m_EnemiesGameObjects.clear();
+}
+
 void Level::Player1Moved()
 {
 	if ( !m_Player1Moved )
@@ -313,7 +320,7 @@ void Level::Player2Moved()
 
 void Level::SetMultiplayer( bool isMultiplayer )
 {
-	if ( !m_IsMultiplayer ) 
+	if ( !m_IsMultiplayer && isMultiplayer )
 	{
 		m_IsMultiplayer = isMultiplayer;
 
@@ -327,6 +334,7 @@ void Level::SetMultiplayer( bool isMultiplayer )
 		qbert = ( std::make_shared<QBert>( m_QbertGameObject[ m_QbertGameObject.size() - 1 ].get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle, false ) );
 		qbert->SetWichPlayer( 2 );
 		qbert->AddObserver( GetOwner()->GetComponent<LevelHandeler>().get() );
+		qbert->SetCanMove( true );
 		m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->AddComponent( qbert );
 
 		auto healthDisplay = std::make_shared<HealthComponentQbert>( GetOwner(), GetOwner()->GetComponent<LevelHandeler>().get()->GetLives2(), 2 );

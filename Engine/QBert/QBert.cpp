@@ -20,6 +20,7 @@ QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D>
 	m_pMovenment = std::make_shared<dae::MovenmentComponent>( parentGameObject, m_Speed );
 	GetOwner()->AddComponent( m_pMovenment );
 	m_pSingleMovenment = std::make_shared<SingleMovementComponent>( parentGameObject, m_Speed, m_SpeedBetweenSteps, false );
+	m_pSingleMovenment->SetHasControl( true );
 	GetOwner()->AddComponent( m_pSingleMovenment );
 
 	if ( m_KeyBoardInput )

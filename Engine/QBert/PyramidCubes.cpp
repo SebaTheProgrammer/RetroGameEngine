@@ -263,3 +263,8 @@ void PyramidCubes::PlayerDied()
 	NotifyObservers( dae::EventType::PLAYER_DIED, GetOwner() );
 }
 
+void PyramidCubes::CoilyDead()
+{
+	NotifyObservers( dae::EventType::COILY_DEAD, GetOwner() );
+}
+

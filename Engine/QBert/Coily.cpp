@@ -207,6 +207,12 @@ void Coily::Moved( SingleMovementComponent::Direction dir )
 		m_pSingleMovenment->SetHasControl( true );
 		IdleSnake();
 	}
+
+	if ( ( m_Row < 0 || m_Col > m_LevelSize ) || ( m_Row < rowStartIndex || m_Row > rowEndIndex ) || m_Col == 0 )
+	{
+		m_pPyramid->CoilyDead();
+		return;
+	}
 }
 
 void Coily::FollowPlayer( int playerRow, int playerCol )

@@ -71,5 +71,7 @@ private:
 
 	bool m_Player2Control{ false };
 	bool m_Player2ControlActive{ false };
+
+	bool m_Alive{ true };
 };
 

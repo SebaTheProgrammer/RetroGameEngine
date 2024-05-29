@@ -59,8 +59,12 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	{
 	case dae::EventType::PLAYER_DIED:
 
-		m_pQbert->ResetPosition();
-		if ( m_pQbert2 != nullptr ) 
+		if ( m_pQbert )
+		{
+			m_pQbert->ResetPosition();
+		}
+
+		if ( m_pQbert2 )
 		{
 			m_pQbert2->ResetPosition();
 		}
@@ -69,6 +73,11 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		GetOwner()->GetComponent<PyramidCubes>()->ResetIndex2();
 		GetOwner()->GetComponent<Level>()->GameOver( m_Score );
 		Notify( dae::EventType::LEVEL_RESTART, gameObj );
+
+		break;
+	case dae::EventType::COILY_DEAD:
+
+		GetOwner()->GetComponent<Level>()->CoilyDied();
 
 		break;
 
@@ -141,7 +150,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 
 			GetOwner()->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetDirection(), qbert->GetWichPlayer() );
 
-	
+
 		}
 		break;
 
@@ -224,6 +233,14 @@ void LevelHandeler::ResetLevel()
 	m_EndTimer = 0.0f;
 	GetOwner()->GetComponent<PyramidCubes>()->ResetLevel();
 	GetOwner()->GetComponent<Level>()->RestartLevel();
-	m_pQbert->ResetPosition();
-	m_pQbert2->ResetPosition();
+
+	if ( m_pQbert )
+	{
+		m_pQbert->ResetPosition();
+	}
+
+	if ( m_pQbert2 )
+	{
+		m_pQbert2->ResetPosition();
+	}
 }

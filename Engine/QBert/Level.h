@@ -45,6 +45,8 @@ public:
 	void SetVersus( bool isVersus );
 	void SinglePlayer();
 
+	void CoilyDied();
+
 	enum class LevelState
 	{
 		Begin,
