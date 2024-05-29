@@ -33,6 +33,7 @@ public:
 	void Mirror( bool mirror ) { m_pTextureCoily->Mirror( mirror ); }
 	void Moved( SingleMovementComponent::Direction dir );
 	bool IsAlive() const { return m_IsAlive; }
+
 private:
 	int GetRowStartIndex( int col ) const;
 	int GetRowEndIndex( int col ) const;

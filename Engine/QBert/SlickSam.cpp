@@ -95,6 +95,8 @@ void SlickSam::Moved( SingleMovementComponent::Direction dir )
 		m_IsAlive = false;
 		return;
 	}
+
+	m_pPyramid->ReverseCube( m_Row );
 }
 
 int SlickSam::GetRowStartIndex( int col ) const

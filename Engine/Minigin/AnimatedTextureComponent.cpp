@@ -85,6 +85,14 @@ void dae::AnimatedTextureComponent::NextFrame()
 	}
 }
 
+void dae::AnimatedTextureComponent::PreviousFrame()
+{
+	if ( m_CurrentRow > 0 ) 
+	{
+		--m_CurrentRow;
+	}
+}
+
 void dae::AnimatedTextureComponent::Reset()
 {
 	m_CurrentRow = 0;

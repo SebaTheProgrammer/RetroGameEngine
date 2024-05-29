@@ -154,6 +154,14 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir)
     }
 }
 
+void PyramidCubes::ReverseCube( int row )
+{
+    if ( unsigned( row ) < m_pCubes.size() && m_pCubes[ row ] != nullptr )
+    {
+		m_pCubes[ row ]->ReverseOne();
+	}
+}
+
 int PyramidCubes::GetRowStartIndex( int col ) const
 {
     return ( ( col - 1 ) * ( col ) ) / 2;

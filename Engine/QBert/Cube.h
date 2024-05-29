@@ -24,6 +24,7 @@ class Cube : public dae::BaseComponent, public dae::GameActor
 
 	void Won();
 	void LandedOnThisCube();
+	void ReverseOne();
 	void Reset();
 
 	bool IsCompleted() const { return m_Completed; }

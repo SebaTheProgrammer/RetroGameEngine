@@ -32,6 +32,7 @@ public:
 	void ResetIndex();
 	void GameOver();
 	void WalkedOnCube( SingleMovementComponent::Direction dir);
+	void ReverseCube(int row );
 
 	int GetActiveRow() const { return m_QBertColIndex; }
 	int GetActiveColumn() const { return m_QBertRowIndex; }

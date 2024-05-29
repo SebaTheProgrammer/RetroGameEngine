@@ -49,7 +49,7 @@ void load()
 	mainMenu.Add( text );
 
 	auto text2 = std::make_shared<dae::GameObject>( 0 );
-	text2->AddComponent( std::make_shared<dae::TextComponent>( text2.get(), "Press 1 to begin the game, 0 for the main menu, 9 for the highscores", font2 ) );
+	text2->AddComponent( std::make_shared<dae::TextComponent>( text2.get(), "Press 1 to play solo, 2 for two players, 3 Versus", font2 ) );
 	text2->SetLocalTransform( { 10, 280 } );
 	mainMenu.Add( text2 );
 
@@ -59,7 +59,7 @@ void load()
 	mainMenu.Add( text3 );
 
 	auto text4 = std::make_shared<dae::GameObject>( 0 );
-	text4->AddComponent( std::make_shared<dae::TextComponent>( text4.get(), "Hold WASD to move, you can complete the level and/or die", font2 ) );
+	text4->AddComponent( std::make_shared<dae::TextComponent>( text4.get(), "Hold WASD to move, press 0 for the main menu or 9 for the highscores", font2 ) );
 	text4->SetLocalTransform( { 10, 340 } );
 	mainMenu.Add( text4 );
 

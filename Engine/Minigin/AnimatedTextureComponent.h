@@ -21,6 +21,7 @@ namespace dae
 		void Animate( float frameTime ) { m_FrameTime = frameTime; }
 
 		void NextFrame();
+		void PreviousFrame();
 		void Reset();
 
 		void Mirror( bool mirror ) { m_Mirror = mirror; }
