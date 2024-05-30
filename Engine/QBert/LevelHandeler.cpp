@@ -12,6 +12,7 @@
 #include "ScoreComponent.h"
 #include "ScoreFile.h"
 #include "TextureComponent.h"
+#include <ServiceLocator.h>
 
 LevelHandeler::LevelHandeler( dae::GameObject* parentGameObject, int& lives, int maxLevels ):
 	BaseComponent( parentGameObject ),
@@ -54,6 +55,7 @@ void LevelHandeler::Update()
 
 void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 {
+	auto& ss = dae::ServiceLocator::GetSoundSystem();
 
 	switch ( event )
 	{
@@ -82,11 +84,15 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 
 	case dae::EventType::PLAYER1_OUT_OF_BOUNDS:
+		ss.AddSound( "QBertFall", "Sounds/QBertFall.wav" );
+		ss.Play( ss.GetSoundId( "QBertFall" ), m_Volume );
 
 		Notify( dae::EventType::PLAYER1_HIT, gameObj );
 		break;
 
 	case dae::EventType::PLAYER2_OUT_OF_BOUNDS:
+		ss.AddSound( "QBertFall", "Sounds/QBertFall.wav" );
+		ss.Play( ss.GetSoundId( "QBertFall" ), m_Volume );
 
 		Notify( dae::EventType::PLAYER2_HIT, gameObj );
 		break;
@@ -94,6 +100,12 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::PLAYER1_HIT:
 		if ( m_Lives1 > 1 )
 		{
+			ss.AddSound( "QbertHit", "Sounds/QbertHit.wav" );
+			ss.Play( ss.GetSoundId( "QbertHit" ), m_Volume );
+
+			ss.AddSound( "Swearing", "Sounds/Swearing.wav" );
+			ss.Play( ss.GetSoundId( "Swearing" ), m_Volume );
+
 			--m_Lives1;
 			if ( m_Score > 25 ) { m_Score -= 25; }
 			m_pQbert->ResetPosition();
@@ -110,6 +122,12 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::PLAYER2_HIT:
 		if ( m_Lives2 > 1 )
 		{
+			ss.AddSound( "QbertHit", "Sounds/QbertHit.wav" );
+			ss.Play( ss.GetSoundId( "QbertHit" ), m_Volume );
+
+			ss.AddSound( "Swearing", "Sounds/Swearing.wav" );
+			ss.Play( ss.GetSoundId( "Swearing" ), m_Volume );
+
 			--m_Lives2;
 			if ( m_Score > 25 ) { m_Score -= 25; }
 
@@ -127,8 +145,11 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::KILL_ENEMY:
 		m_Score += 300;
 		break;
-
+		
 	case dae::EventType::PLAYER_WON:
+		ss.AddSound( "CompleteRound", "Sounds/CompleteRound.wav" );
+		ss.Play( ss.GetSoundId( "CompleteRound" ), m_Volume );
+
 		GetOwner()->GetComponent<PyramidCubes>()->CompleteLevel();
 		GetOwner()->GetComponent<Level>()->CompletedLevel();
 		m_CompletedLevel = true;
@@ -137,6 +158,9 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::PLAYER_MOVED:
 		if ( auto qbert = gameObj->GetComponent<QBert>() )
 		{
+			ss.AddSound( "QbertJump", "Sounds/QBertJump.wav" );
+			ss.Play( ss.GetSoundId( "QbertJump" ), m_Volume );
+
 			if ( qbert->GetWichPlayer() == 1 )
 			{
 				m_pQbert = qbert;

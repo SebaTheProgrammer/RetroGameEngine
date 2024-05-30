@@ -5,6 +5,7 @@
 #include <GameTime.h>
 #include "TextureComponent.h"
 #include <iostream>
+#include <ServiceLocator.h>
 
 QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureIdle, std::shared_ptr<dae::Texture2D> textureIdleBack, bool keyboardinput )
 	:BaseComponent( parentGameObject )

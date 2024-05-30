@@ -39,7 +39,6 @@ public:
         std::lock_guard<std::mutex> lock{ m_Mutex };
         auto it = m_MapSoundId.find( name );
         if ( it != m_MapSoundId.end() ) {
-            std::cout << "Sound already exists\n";
             return it->second;
         }
 
@@ -76,8 +75,23 @@ public:
         }
     }
 
-    void SetVolume( float volume ) {
+    void SetVolume( int volume ) 
+    {
         Mix_Volume( -1, static_cast< int >( MIX_MAX_VOLUME * volume ) );
+    }
+
+    int GetVolume() 
+    {
+		return m_Volume;
+	}
+
+    unsigned short GetSoundId( const std::string& name )
+    {
+        auto it = m_MapSoundId.find( name );
+        if ( it != m_MapSoundId.end() ) {
+            return it->second;
+        }
+        return 0;
     }
 
 private:
@@ -129,6 +143,11 @@ unsigned short SDLSoundSystem::AddSound( const std::string& name, const std::str
     return m_pImplSoundSystem->AddSound( name, path );
 }
 
+unsigned short dae::SDLSoundSystem::GetSoundId( const std::string& name )
+{
+    return m_pImplSoundSystem->GetSoundId( name );
+}
+
 void SDLSoundSystem::Play( unsigned short id, int volume ) {
     m_pImplSoundSystem->Play( id, volume );
 }
@@ -149,6 +168,11 @@ void SDLSoundSystem::Unmute() {
     m_pImplSoundSystem->Unmute();
 }
 
-void SDLSoundSystem::SetVolume( float volume ) {
+void SDLSoundSystem::SetVolume( int volume ) {
     m_pImplSoundSystem->SetVolume( volume );
+}
+
+int dae::SDLSoundSystem::GetVolume()
+{
+    return m_pImplSoundSystem->GetVolume();
 }

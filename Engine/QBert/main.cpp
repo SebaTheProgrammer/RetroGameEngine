@@ -29,9 +29,8 @@ void load()
 	//Sound
 	dae::ServiceLocator::RegisterSoundSystem( std::make_unique<dae::SDLSoundSystem>() );
 	auto& ss = dae::ServiceLocator::GetSoundSystem();
-	//ss.SetVolume( 50 );
 	ss.AddSound( "Start", "Sounds/Start.wav" );
-	ss.Play( 0, 50 );
+	ss.Play( ss.GetSoundId( "Start" ), 50 );
 
 	//MAIN MENU
 	auto& mainMenu = dae::SceneManager::GetInstance().CreateScene( "MainMenu" );
@@ -133,6 +132,8 @@ void load()
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_9, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), max });
 
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_F1, InputTypeKeyBoard::IsDownThisFrame, dae::OpenNextLevelCommand{ levelswitcher.get() } );
+
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_M, InputTypeKeyBoard::IsDownThisFrame, SoundCommand{} );
 }
 
 int main( int, char* [] ) 

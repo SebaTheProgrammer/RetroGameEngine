@@ -95,3 +95,29 @@ public:
 		}
 	}
 };
+
+class SoundCommand : public dae::Command
+{
+public:
+	SoundCommand() {};
+
+	virtual void Execute() override
+	{
+		auto& ss = dae::ServiceLocator::GetSoundSystem();
+		if ( m_IsMuted )
+		{
+			m_IsMuted = false;
+			ss.SetVolume( 100 );
+			std::cout<<"ON"<<std::endl;
+		}
+		else 
+		{
+			m_IsMuted = true;
+			std::cout<<"OFF"<<std::endl;
+			ss.SetVolume( 0 );
+		}
+	}
+
+private:
+		bool m_IsMuted{ false };
+};

@@ -17,6 +17,7 @@
 #include "SlickSam.h"
 #include "UggWrongWay.h"
 #include "EnemyHandeler.h"
+#include <ServiceLocator.h>
 
 Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, int howManuJumpsNeeded, int maxLevels,
 	allTextures textures, int qbertlives )
@@ -122,6 +123,15 @@ void Level::Update()
 	case LevelState::Begin:
 
 		m_Timer += dae::GameTime::GetInstance().GetDeltaTime();
+
+		if ( m_StartSound )
+		{
+			m_StartSound = false;
+			auto& ss = dae::ServiceLocator::GetSoundSystem();
+			ss.AddSound( "Start", "Sounds/Start.wav" );
+			ss.Play( ss.GetSoundId( "Start" ), 50 );
+		}
+
 		if ( m_Timer > m_BeginTime )
 		{
 			m_CurrentState = LevelState::Normal;
@@ -260,6 +270,7 @@ void Level::WinGame( int score )
 void Level::RestartLevel()
 {
 	m_Timer = 0;
+	m_StartSound = true;
 	for ( const auto& players : m_QbertGameObject )
 	{
 		players->GetComponent<QBert>()->SetCanMove( false );

@@ -24,7 +24,9 @@ namespace dae
 		virtual void Mute() = 0;
 		virtual void Unmute() = 0;
 
-		virtual void SetVolume( float volume ) = 0;
+		virtual void SetVolume( int volume ) = 0;
+		virtual int GetVolume() = 0;
+		virtual unsigned short GetSoundId( const std::string& name )=0;
 	};
 
 	class NullSoundSystem final : public SoundSystem
@@ -52,13 +54,23 @@ namespace dae
 		{
 			std::cout << "NullSoundSystem::Unmute\n";
 		};
-		virtual void SetVolume( float volume ) override
+		virtual void SetVolume( int volume ) override
 		{
 			std::cout << "NullSoundSystem::SetVolume::" << volume << "\n";
 		};
+		virtual int GetVolume() override
+		{
+			std::cout << "NullSoundSystem::GetVolume\n";
+			return 0;
+		}
 		virtual unsigned short AddSound( const std::string& name, const std::string& path ) override
 		{
 			std::cout << "NullSoundSystem::AddSound::" << name << " " << path << "\n";
+			return 0;
+		}
+		virtual unsigned short GetSoundId( const std::string& name ) override
+		{
+			std::cout << "NullSoundSystem::GetSoundId::" << name << "\n";
 			return 0;
 		}
 	};
@@ -97,10 +109,22 @@ namespace dae
 			m_SoundSystem->Mute(); std::cout << "Sound unmuted \n";
 		}
 
-		virtual void SetVolume( float volume ) override 
+		virtual void SetVolume( int volume ) override
 		{
 			std::cout << "Set volume to: " << volume << "\n";
 			m_SoundSystem->SetVolume( volume ); 
+		}
+
+		virtual int GetVolume() override
+		{
+			std::cout << "GetVolume\n";
+			return m_SoundSystem->GetVolume();
+		}
+
+		virtual unsigned short GetSoundId( const std::string& name ) override
+		{
+			std::cout << "GetSoundId: " << name << "\n";
+			return m_SoundSystem->GetSoundId(name);
 		}
 
 	private:
@@ -121,13 +145,16 @@ namespace dae
 
 		virtual unsigned short AddSound( const std::string& name, const std::string& path ) override;
 
+		unsigned short GetSoundId( const std::string& name ) override;
+
 		virtual void Play( unsigned short id, int volume ) override;
 		virtual void Pause() override;
 		virtual void Resume() override;
 		virtual void Mute() override;
 		virtual void Unmute() override;
 
-		virtual void SetVolume( float volume ) override;
+		virtual void SetVolume( int volume ) override;
+		virtual int GetVolume() override;
 
 	private:
 		class SoundSystemImpl;

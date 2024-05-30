@@ -1,8 +1,8 @@
 RandomPlayer 175
+RandomPlayer 175
+RandomPlayer 125
 RandomPlayer 25
 RandomPlayer 25
-Player1 0
-Player1 0
 Player1 0
 Player1 0
 Player1 0

@@ -23,6 +23,7 @@ public:
 	int GetScore() const;
 
 private:
+	const int m_Volume = 50;
 	bool m_NeedsUpdate{ false };
 	int m_Lives1;
 	int m_Lives2;

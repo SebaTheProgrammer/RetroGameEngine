@@ -88,4 +88,6 @@ private:
 
 	bool m_IsMultiplayer{ false };
 	bool m_IsVersus{ false };
+
+	bool m_StartSound{ true };
 };

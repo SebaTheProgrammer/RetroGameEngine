@@ -5,6 +5,7 @@
 #include "../QBert/Coily.h"
 #include "../QBert/SlickSam.h"
 #include "../QBert/UggWrongWay.h"
+#include <ServiceLocator.h>
 
 SingleMovementComponent::SingleMovementComponent( dae::GameObject* const parentGameObject, float speed, float timeTakenForStep, bool instantJump)
 	: MovenmentComponent( parentGameObject, speed )
@@ -20,6 +21,10 @@ void SingleMovementComponent::SingleMove( glm::vec2 direction, Direction dir, bo
     {
         if ( m_InstantJump && byPC )
         {
+            auto& ss = dae::ServiceLocator::GetSoundSystem();
+            ss.AddSound( "Jump", "Sounds/Jump.wav" );
+            ss.Play( ss.GetSoundId( "Jump" ), 25 );
+
             m_Direction=dir;
             glm::vec2 totalDistance = direction * m_StepSize*30.f;
             MovenmentComponent::Move( totalDistance );
