@@ -166,7 +166,7 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir, int wic
             break;
         case SingleMovementComponent::Direction::RightUp:
             m_QBert2RowIndex -= oldActiveCol - 1;
-            m_QBert1ColIndex -= 1;
+            m_QBert2ColIndex -= 1;
             break;
         }
 

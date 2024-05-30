@@ -141,5 +141,6 @@ void EnemyHandeler::Clear()
 {
 	m_HowManyEnemies = 0;
 	m_HasCoily = false;
+	m_pCoily = nullptr;
 	m_EnemiesGameObjects.clear();
 }

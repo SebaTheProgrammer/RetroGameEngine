@@ -224,7 +224,6 @@ void LevelHandeler::ChangeLevel()
 		m_CompletedLevel = false;
 	}
 }
-
 void LevelHandeler::ResetLevel()
 {
 	m_Lives1 = m_StartLives;
