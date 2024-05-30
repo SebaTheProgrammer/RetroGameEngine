@@ -1,10 +1,15 @@
 #include "EnemyHandeler.h"
 #include "Coily.h"
 #include <memory>
+#include "SlickSam.h"
+#include "UggWrongWay.h"
+#include "Level.h"
 
-EnemyHandeler::EnemyHandeler( dae::GameObject* parentGameObject):
-	BaseComponent( parentGameObject )
+EnemyHandeler::EnemyHandeler( dae::GameObject* parentGameObject, PyramidCubes* pyramid, Level::allTextures textures, int maxScoreEnemies, int levelsize ):
+	BaseComponent( parentGameObject ), m_pPyramid( pyramid ), m_MaxScoreEnemies( maxScoreEnemies )
 {
+	m_Textures = textures;
+	m_LevelSize = levelsize;
 }
 
 EnemyHandeler::~EnemyHandeler()
@@ -13,46 +18,128 @@ EnemyHandeler::~EnemyHandeler()
 
 void EnemyHandeler::Update()
 {
-	for ( unsigned i = 0; i < m_pCoilies.size(); ++i )
+	for ( auto enemy : m_EnemiesGameObjects )
 	{
-		m_pCoilies[i]->Update();
+		if ( enemy != nullptr ) {
+			enemy->Update();
+		}
+	}
+
+	if ( m_pCoily != nullptr ) {
+		m_pCoily->Update();
 	}
 }
 
 void EnemyHandeler::Render() const
 {
-	for ( unsigned i = 0; i < m_pCoilies.size(); ++i )
+	for ( auto enemy : m_EnemiesGameObjects )
 	{
-		m_pCoilies[i]->Render();
+		if ( enemy != nullptr ) {
+			enemy->Render();
+		}
+	}
+	if ( m_pCoily != nullptr ) {
+		m_pCoily->Render();
 	}
 }
 
-void EnemyHandeler::SpawnCoily( const int row, const int col )
+void EnemyHandeler::SpawnCoily()
 {
-	//m_pCoilies.push_back( std::make_shared<Coily>( GetOwner(), m_pTextureIdleEgg, m_pTextureJumpEgg, m_pTextureIdleSnake, m_pTextureJumpSnake ) );
-	m_pCoilies[m_pCoilies.size() - 1]->SetPyramidPosition( row, col );
+	m_HasCoily = true;
+	m_pCoily = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
+	auto coily = std::make_shared<Coily>( m_pCoily.get(), m_Textures.m_Coily, m_LevelSize, m_pPyramid, m_IsVersus );
+	m_pCoily->AddComponent( coily );
+	m_pCoily->SetLocalTransform( { 300, 110 } );
 }
 
-void EnemyHandeler::DeleteCoily( const int row, const int col )
+void EnemyHandeler::SpawnEnemies()
 {
-	for ( unsigned i = 0; i < m_pCoilies.size(); ++i )
+	if ( !m_HasCoily ) 
 	{
-		if ( m_pCoilies[ i ]->GetRow() == row && m_pCoilies[ i ]->GetCol() == col )
+		SpawnCoily();
+	}
+	else {
+		if ( m_HowManyEnemies < m_MaxScoreEnemies )
 		{
-			m_pCoilies.erase( m_pCoilies.begin() + i );
-			break;
+			if ( m_pPyramid->GetActiveRow() != 0 )
+			{
+				bool randomPoints = rand() % 2;
+				if ( randomPoints )
+				{
+					++m_HowManyEnemies;
+
+					bool random = rand() % 2;
+					if ( random )
+					{
+						m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
+						m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
+						auto slick = std::make_shared<SlickSam>
+							( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Slick, m_LevelSize, m_pPyramid );
+						m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( slick );
+						m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 310, 100 } );
+					}
+					else
+					{
+						m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
+						m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
+						auto sam = std::make_shared<SlickSam>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Sam, m_LevelSize, m_pPyramid );
+						m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( sam );
+						m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 310, 100 } );
+					}
+				}
+				else
+				{
+					if ( m_pPyramid->GetActiveRow() != m_pPyramid->GetRowStartIndex( m_pPyramid->GetSize() ) &&
+						m_pPyramid->GetActiveRow() != m_pPyramid->GetRowEndIndex( m_pPyramid->GetSize() ) )
+					{
+						m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
+						m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
+						auto uggWrongWay = std::make_shared<UggWrongWay>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(),
+							m_Textures.m_UggWrongWay, m_LevelSize, m_pPyramid );
+						m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( uggWrongWay );
+						m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 310, 120 } );
+					}
+				}
+			}
+		}
+		else
+		{
+			if ( m_pPyramid->GetActiveRow() != m_pPyramid->GetRowStartIndex( m_pPyramid->GetSize() ) &&
+				m_pPyramid->GetActiveRow() != m_pPyramid->GetRowEndIndex( m_pPyramid->GetSize() ) )
+			{
+				m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
+				m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
+				auto uggWrongWay = std::make_shared<UggWrongWay>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(),
+					m_Textures.m_UggWrongWay, m_LevelSize, m_pPyramid );
+				m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( uggWrongWay );
+				m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 310, 120 } );
+			}
 		}
 	}
 }
 
-void EnemyHandeler::CheckEnemy( const int row, const int col )
+void EnemyHandeler::SetCanMove( bool move )
 {
-	for ( unsigned i = 0; i < m_pCoilies.size(); ++i )
+	for ( auto enemy : m_EnemiesGameObjects )
 	{
-		if ( m_pCoilies[ i ]->GetRow() == row && m_pCoilies[ i ]->GetCol() == col )
-		{
-			NotifyObservers( dae::EventType::PLAYER1_HIT, GetOwner() );
-			break;
+		if ( enemy->GetComponent<SlickSam>() ) {
+			enemy->GetComponent<SlickSam>()->SetCanMove( move );
+		}
+		else if ( enemy->GetComponent<UggWrongWay>() ) {
+			enemy->GetComponent<UggWrongWay>()->SetCanMove( move );
 		}
 	}
+}
+
+void EnemyHandeler::SetHasCoily( bool hasCoily )
+{
+	m_HasCoily = hasCoily;
+	m_pCoily = nullptr;
+}
+
+void EnemyHandeler::Clear()
+{
+	m_HowManyEnemies = 0;
+	m_HasCoily = false;
+	m_EnemiesGameObjects.clear();
 }

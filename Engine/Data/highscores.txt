@@ -1,10 +1,10 @@
 Seba 100000
 Noah 19000
 Seba 10000
+RandomPlayer 1700
 RandomPlayer 1500
 RandomPlayer 1100
 Seba 1000
 RandomPlayer 925
 RandomPlayer 900
 RandomPlayer 850
-RandomPlayer 675

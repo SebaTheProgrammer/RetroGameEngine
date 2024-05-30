@@ -4,11 +4,12 @@
 #include "Coily.h"
 #include "BaseComponent.h"
 #include "GameActor.h"
+#include "Level.h"
 
 class EnemyHandeler : public dae::BaseComponent, public dae::GameActor
 {
 public:
-	EnemyHandeler( dae::GameObject* parentGameObject);
+	EnemyHandeler( dae::GameObject* parentGameObject, PyramidCubes* pyramid, Level::allTextures textures, int maxScoreEnemies, int levelsize );
 	~EnemyHandeler();
 	EnemyHandeler( const EnemyHandeler& other ) = delete;
 	EnemyHandeler( EnemyHandeler&& other ) = delete;
@@ -18,19 +19,26 @@ public:
 	void Update() override;
 	void Render() const override;
 
-	void SpawnCoily( const int row, const int col);
+	void SpawnCoily();
+	void SpawnEnemies();
 
-	void DeleteCoily( const int row, const int col );
-
-	void CheckEnemy( const int row, const int col );
+	void SetCanMove( bool move );
+	void SetHasCoily( bool hasCoily );
+	void SetVersus( bool isVersus ) { m_IsVersus = isVersus; }
+	void Clear();
 
 private:
-	std::vector<std::shared_ptr<Coily>> m_pCoilies;
+	std::vector<std::shared_ptr<dae::GameObject>> m_EnemiesGameObjects;
+	std::shared_ptr<dae::GameObject> m_pCoily;
 
-	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdleEgg;
-	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureJumpEgg;
-	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdleSnake;
-	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureJumpSnake;
+	Level::allTextures m_Textures;
+	PyramidCubes* m_pPyramid;
 
+	int m_LevelSize;
+	int m_HowManyEnemies{ 0 };
+	int m_MaxScoreEnemies;
+
+	bool m_HasCoily{ false };
+	bool m_IsVersus{ false };
 };
 

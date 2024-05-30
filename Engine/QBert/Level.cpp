@@ -16,6 +16,7 @@
 #include "Coily.h"
 #include "SlickSam.h"
 #include "UggWrongWay.h"
+#include "EnemyHandeler.h"
 
 Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, int howManuJumpsNeeded, int maxLevels,
 	allTextures textures, int qbertlives )
@@ -108,6 +109,9 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 			players->GetComponent<QBert>()->SetCanMove( true );
 		}
 	}
+	m_EnemyHandeler = std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() );
+	auto enemyhandeler = std::make_shared<EnemyHandeler>( m_EnemyHandeler.get(), m_pPyramidCubes.get(), m_Textures, m_MaxScoreEnemies, m_LevelSize);
+	m_EnemyHandeler->AddComponent( enemyhandeler );
 }
 
 void Level::Update()
@@ -167,18 +171,14 @@ void Level::Update()
 
 		m_Timer += dae::GameTime::GetInstance().GetDeltaTime();
 
-		for ( const auto& enemy : m_EnemiesGameObjects )
-		{
-			enemy->Update();
-		}
+		m_EnemyHandeler->Update();
 
 		if ( m_Timer > m_SpawnEnemyTime )
 		{
 
 			if ( m_Player1Moved && m_Player2Moved || !m_IsMultiplayer && m_Player1Moved )
 			{
-				SpawnSlickSam();
-				SpawnCoily();
+				m_EnemyHandeler->GetComponent<EnemyHandeler>()->SpawnEnemies();
 
 				m_SpawnEnemyTime = m_MaxSpawnEnemyTime;
 			}
@@ -213,13 +213,9 @@ void Level::Render() const
 		{
 			players->Render();
 		}
-		for ( const auto& enemy : m_EnemiesGameObjects )
-		{
-			if ( enemy != nullptr )
-			{
-				enemy->Render();
-			}
-		}
+
+		m_EnemyHandeler->Render();
+
 		break;
 	}
 }
@@ -239,17 +235,8 @@ void Level::GameOver(int score)
 
 void Level::CompletedLevel()
 {
-	for ( const auto& enemy : m_EnemiesGameObjects )
-	{
-		if ( enemy->GetComponent<Coily>() != nullptr ) 
-		{
-			enemy->GetComponent<Coily>()->SetCanMove( false );
-		}
-		if ( enemy->GetComponent<SlickSam>() != nullptr ) 
-		{
-			enemy->GetComponent<SlickSam>()->SetCanMove( false );
-		}
-	}
+	m_EnemyHandeler->GetComponent<EnemyHandeler>()->SetCanMove( false );
+
 	for ( const auto& players : m_QbertGameObject )
 	{
 		players->GetComponent<QBert>()->SetCanMove( false );
@@ -280,26 +267,13 @@ void Level::RestartLevel()
 	m_Player1Moved = false;
 	m_Player2Moved = false;
 	m_HowManyEnemies = 0;
-	m_EnemiesGameObjects.clear();
-}
-
-void Level::SpawnCoily()
-{
-	if ( m_HasCoily ) return;
-
-	m_HasCoily = true;
-	m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
-	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
-	auto coily = std::make_shared<Coily>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Coily, m_LevelSize, m_pPyramidCubes.get(), m_IsVersus );
-	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( coily );
-	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 110 } );
+	m_EnemyHandeler->GetComponent<EnemyHandeler>()->Clear();
 }
 
 void Level::CoilyDied()
 {
-	m_HasCoily = false;
 	m_Timer = 0;
-	m_EnemiesGameObjects.clear();
+	m_EnemyHandeler->GetComponent<EnemyHandeler>()->SetHasCoily( false );
 }
 
 void Level::Player1Moved()
@@ -345,7 +319,6 @@ void Level::SetMultiplayer( bool isMultiplayer )
 	}
 	else if( !isMultiplayer )
 	{
-		std::cout<<"Single Player" << std::endl;
 		if ( m_QbertGameObject.size() > 1 ) 
 		{
 			m_QbertGameObject.pop_back();
@@ -365,12 +338,10 @@ void Level::SetMultiplayer( bool isMultiplayer )
 
 void Level::SetVersus( bool isVersus )
 {
-	if ( !m_IsVersus ) 
-	{
-		m_IsVersus = isVersus;
-		m_IsMultiplayer = false;
-		SetMultiplayer( false );
-	}
+	m_IsVersus = isVersus;
+	m_IsMultiplayer = false;
+	m_EnemyHandeler->GetComponent<EnemyHandeler>()->SetVersus( isVersus );
+	SetMultiplayer( false );
 }
 
 void Level::SinglePlayer()
@@ -378,67 +349,4 @@ void Level::SinglePlayer()
 	m_IsMultiplayer = false;
 	m_IsVersus = false;
 	SetMultiplayer( false );
-}
-
-void Level::SpawnSlickSam()
-{
-	if ( m_HowManyEnemies < m_MaxScoreEnemies )
-	{
-		if ( m_pPyramidCubes->GetActiveRow() != 0 )
-		{
-			if ( !m_HasCoily ) return;
-
-			bool randomPoints = rand() % 2;
-			if ( randomPoints ) 
-			{
-
-				++m_HowManyEnemies;
-
-				bool random = rand() % 2;
-				if ( random )
-				{
-					m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
-					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
-					auto slick = std::make_shared<SlickSam>
-						( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Slick, m_LevelSize, m_pPyramidCubes.get() );
-					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( slick );
-					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 310, 100 } );
-				}
-				else
-				{
-					m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
-					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
-					auto sam = std::make_shared<SlickSam>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Sam, m_LevelSize, m_pPyramidCubes.get() );
-					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( sam );
-					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 310, 100 } );
-				}
-			}
-			else 
-			{
-				if ( m_pPyramidCubes->GetActiveRow() != m_pPyramidCubes->GetRowStartIndex( m_pPyramidCubes->GetSize() ) &&
-					m_pPyramidCubes->GetActiveRow() != m_pPyramidCubes->GetRowEndIndex( m_pPyramidCubes->GetSize() ) )
-				{
-					m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
-					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
-					auto uggWrongWay = std::make_shared<UggWrongWay>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(),
-						m_Textures.m_UggWrongWay, m_LevelSize, m_pPyramidCubes.get() );
-					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( uggWrongWay );
-					m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 310, 120 } );
-				}
-			}
-		}
-	}
-	else 
-	{
-		if ( m_pPyramidCubes->GetActiveRow() != m_pPyramidCubes->GetRowStartIndex( m_pPyramidCubes->GetSize()) &&
-			m_pPyramidCubes->GetActiveRow() != m_pPyramidCubes->GetRowEndIndex( m_pPyramidCubes->GetSize() ) )
-		{
-			m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
-			m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
-			auto uggWrongWay = std::make_shared<UggWrongWay>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(),
-				m_Textures.m_UggWrongWay, m_LevelSize, m_pPyramidCubes.get() );
-			m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( uggWrongWay );
-			m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 310, 120 } );
-		}
-	}
 }

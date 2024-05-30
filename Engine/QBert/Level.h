@@ -56,9 +56,6 @@ public:
 	};
 
 private:
-	void SpawnSlickSam();
-	void SpawnCoily();
-
 	allTextures m_Textures;
 
 	LevelState m_CurrentState = LevelState::Begin;
@@ -77,7 +74,7 @@ private:
 	bool m_Player2Moved = false;
 
 	//Enemies
-	std::vector<std::shared_ptr<dae::GameObject>> m_EnemiesGameObjects;
+	std::shared_ptr<dae::GameObject> m_EnemyHandeler;
 	bool m_HasCoily{ false };
 	std::shared_ptr<PyramidCubes> m_pPyramidCubes;
 	int m_HowManyEnemies{ 0 };
