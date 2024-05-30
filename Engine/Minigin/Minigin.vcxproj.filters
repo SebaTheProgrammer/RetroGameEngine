@@ -122,6 +122,9 @@
     <ClInclude Include="BaseState.h">
       <Filter>StateSystem</Filter>
     </ClInclude>
+    <ClInclude Include="AudioClip.h">
+      <Filter>SoundSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -180,6 +183,9 @@
     </ClCompile>
     <ClCompile Include="AnimatedTextureComponent.cpp">
       <Filter>Objects\Components\Rest</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLSoundSystem.cpp">
+      <Filter>SoundSystem</Filter>
     </ClCompile>
     <ClCompile Include="ServiceLocator.cpp">
       <Filter>SoundSystem</Filter>

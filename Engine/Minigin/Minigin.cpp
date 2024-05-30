@@ -13,6 +13,7 @@
 #include <chrono>
 #include "GameTime.h"
 #include <thread>
+#include "ServiceLocator.h"
 
 SDL_Window* g_window{};
 
@@ -119,4 +120,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		const auto sleep_time = current_time + std::chrono::milliseconds( static_cast< int >(fixed_time_step) ) - std::chrono::high_resolution_clock::now();
 		std::this_thread::sleep_for( sleep_time );
 	}
+
+	dae::ServiceLocator::CleanUp();
 }

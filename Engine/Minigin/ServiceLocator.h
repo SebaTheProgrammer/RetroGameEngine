@@ -4,13 +4,28 @@
 
 namespace dae
 {
+    class SoundSystem;
+    class NullSoundSystem;
+
 	class ServiceLocator final
 	{
-		static std::unique_ptr<SoundSystem> _ss_instance;
 	public:
-		static SoundSystem& GetSoundSystem() { return *_ss_instance; }
-		static void RegisterSoundSystem( std::unique_ptr<SoundSystem>&& ss ) { _ss_instance = std::move( ss ); }
+		~ServiceLocator();
 
-		~ServiceLocator() {};
+		ServiceLocator( const ServiceLocator& other ) = delete;
+		ServiceLocator( ServiceLocator&& other ) noexcept = delete;
+		ServiceLocator& operator=( const ServiceLocator& other ) = delete;
+		ServiceLocator& operator=( ServiceLocator&& other ) noexcept = delete;
+
+		static SoundSystem& GetSoundSystem();
+		static void RegisterSoundSystem( std::unique_ptr<SoundSystem> ss );
+
+		static void CleanUp();
+
+	private:
+		ServiceLocator() = default;
+
+		static std::unique_ptr<SoundSystem> s_SoundSystemInstance;
+
 	};
 }

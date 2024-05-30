@@ -29,7 +29,9 @@ void load()
 	//Sound
 	dae::ServiceLocator::RegisterSoundSystem( std::make_unique<dae::SDLSoundSystem>() );
 	auto& ss = dae::ServiceLocator::GetSoundSystem();
-	ss.Play( 1, 100.f );
+	//ss.SetVolume( 50 );
+	ss.AddSound( "Start", "Sounds/Start.wav" );
+	ss.Play( 0, 50 );
 
 	//MAIN MENU
 	auto& mainMenu = dae::SceneManager::GetInstance().CreateScene( "MainMenu" );
