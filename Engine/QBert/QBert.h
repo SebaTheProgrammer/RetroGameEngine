@@ -67,7 +67,7 @@ private:
 	const float m_SpeedBetweenSteps = 0.7f;
 
 	bool m_GetsHit = false;
-	const float m_HitWaitTime = 2.5f;
+	const float m_HitWaitTime = 2.f;
 	float m_HitTimer = 0;
 
 	int m_WichPlayer = 1;

@@ -147,6 +147,7 @@ void Level::Update()
 	case LevelState::GameOver:
 
 		m_Timer += dae::GameTime::GetInstance().GetDeltaTime();
+
 		if ( m_Timer > ( m_BeginTime * 2 ) )
 		{
 			m_CurrentState = LevelState::Normal;
@@ -156,6 +157,27 @@ void Level::Update()
 				players->GetComponent<QBert>()->SetCanMove( true );
 			}
 			dae::SceneManager::GetInstance().SetCurrentScene( 0 );
+
+			if ( 5 == m_LevelSize )
+			{
+				m_CurrentState = LevelState::Begin;
+				m_Timer = 0;
+
+				for ( const auto& players : m_QbertGameObject )
+				{
+					players->GetComponent<QBert>()->SetCanMove( false );
+				}
+			}
+			else
+			{
+				m_CurrentState = LevelState::Normal;
+				m_Timer = 0;
+
+				for ( const auto& players : m_QbertGameObject )
+				{
+					players->GetComponent<QBert>()->SetCanMove( false );
+				}
+			}
 		}
 		m_pGameOverObject->Update();
 		break;
@@ -194,6 +216,15 @@ void Level::Update()
 			}
 			m_Timer = 0;
 		}
+
+		if ( m_IsMultiplayer && !m_AddedHp )
+		{
+			auto healthDisplay = std::make_shared<HealthComponentQbert>( GetOwner(), GetOwner()->GetComponent<LevelHandeler>().get()->GetLives2(), 2 );
+			healthDisplay->SetLocalPosition( -250, 0 );
+			GetOwner()->AddComponent( healthDisplay );
+			m_AddedHp = true;
+		}
+
 		break;
 	}
 	for ( const auto& players : m_QbertGameObject )
@@ -241,6 +272,20 @@ void Level::GameOver(int score)
 	std::string scoreString = std::to_string( score );
 	m_pGameOverObject->GetComponent<dae::TextComponent>()->SetText( { "SCORE: " + scoreString } );
 	ScoreFile::GetInstance().UpdateHighScores( score );
+
+	if ( m_AddedHp ) 
+	{
+		m_AddedHp = false;
+		auto healths = GetOwner()->GetComponents<HealthComponentQbert>();
+		for ( const auto& health : healths )
+		{
+			if ( health->GetWhichPlayer() == 2 )
+			{
+				GetOwner()->RemoveComponent( health );
+				health->~HealthComponentQbert();
+			}
+		}
+	}
 }
 
 void Level::CompletedLevel()
@@ -278,6 +323,7 @@ void Level::RestartLevel()
 	m_Player1Moved = false;
 	m_Player2Moved = false;
 	m_HowManyEnemies = 0;
+	m_AddedHp = false;
 	m_EnemyHandeler->GetComponent<EnemyHandeler>()->Clear();
 }
 
@@ -321,10 +367,6 @@ void Level::SetMultiplayer( bool isMultiplayer )
 		qbert->AddObserver( GetOwner()->GetComponent<LevelHandeler>().get() );
 		qbert->SetCanMove( true );
 		m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->AddComponent( qbert );
-
-		auto healthDisplay = std::make_shared<HealthComponentQbert>( GetOwner(), GetOwner()->GetComponent<LevelHandeler>().get()->GetLives2(), 2 );
-		healthDisplay->SetLocalPosition( -250, 0 );
-		GetOwner()->AddComponent( healthDisplay );
 
 		GetOwner()->GetComponent <PyramidCubes>()->SetCoop( true );
 	}

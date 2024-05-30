@@ -129,6 +129,8 @@ void EnemyHandeler::SetCanMove( bool move )
 			enemy->GetComponent<UggWrongWay>()->SetCanMove( move );
 		}
 	}
+
+	m_pCoily->GetComponent<Coily>()->SetCanMove( move );
 }
 
 void EnemyHandeler::SetHasCoily( bool hasCoily )

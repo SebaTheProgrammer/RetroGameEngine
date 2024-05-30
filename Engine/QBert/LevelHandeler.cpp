@@ -56,6 +56,7 @@ void LevelHandeler::Update()
 void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 {
 	auto& ss = dae::ServiceLocator::GetSoundSystem();
+	size_t maxScenes = dae::SceneManager::GetInstance().GetMaxScenes();
 
 	switch ( event )
 	{
@@ -181,6 +182,16 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 
 	case dae::EventType::LEVEL_RESTART:
+		for ( int i = 0; i < maxScenes; ++i )
+		{
+			for ( unsigned index{}; index < dae::SceneManager::GetInstance().GetScene( i )->GetObjects().size(); ++index )
+			{
+				if ( dae::SceneManager::GetInstance().GetScene( i )->GetObjects()[ index ]->GetComponent<LevelHandeler>() != nullptr )
+				{
+					dae::SceneManager::GetInstance().GetScene( i )->GetObjects()[ index ]->GetComponent<LevelHandeler>()->ResetLevel();
+				}
+			}
+		}
 		ResetLevel();
 		break;
 	case dae::EventType::REMOVE_PLAYER:

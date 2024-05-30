@@ -1,10 +1,10 @@
+RandomPlayer 975
+RandomPlayer 400
+RandomPlayer 275
 RandomPlayer 175
 RandomPlayer 175
 RandomPlayer 125
 RandomPlayer 25
 RandomPlayer 25
-Player1 0
-Player1 0
-Player1 0
-Player1 0
-Player1 0
+RandomPlayer 25
+RandomPlayer 25

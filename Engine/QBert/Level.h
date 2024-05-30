@@ -87,6 +87,7 @@ private:
 	int m_LevelSize;
 
 	bool m_IsMultiplayer{ false };
+	bool m_AddedHp{ false };
 	bool m_IsVersus{ false };
 
 	bool m_StartSound{ true };

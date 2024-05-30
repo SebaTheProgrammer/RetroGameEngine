@@ -16,6 +16,7 @@ namespace dae
 		void SetCurrentScene(int index) { m_CurrentSceneIndex = index; }
 		int GetCurrentSceneIndex() { return m_CurrentSceneIndex; }
 		size_t GetMaxScenes() { return m_Scenes.size(); }
+		std::shared_ptr<Scene> GetScene(int index) { return m_Scenes[ index ]; }
 
 		void Update();
 		void FixedUpdate();
