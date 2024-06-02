@@ -28,6 +28,7 @@ void SingleMovementComponent::SingleMove( glm::vec2 direction, Direction dir, bo
             m_Direction=dir;
             glm::vec2 totalDistance = direction * m_StepSize*30.f;
             MovenmentComponent::Move( totalDistance );
+
             //Should make a base class for the enemies
             if ( GetOwner()->GetComponent<Coily>() )
             {

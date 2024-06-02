@@ -310,6 +310,20 @@ void Level::WinGame( int score )
 	std::string scoreString = std::to_string( score );
 	m_pWinObject->GetComponent<dae::TextComponent>()->SetText( { "SCORE: " + scoreString } );
 	ScoreFile::GetInstance().UpdateHighScores( score );
+
+	if ( m_AddedHp )
+	{
+		m_AddedHp = false;
+		auto healths = GetOwner()->GetComponents<HealthComponentQbert>();
+		for ( const auto& health : healths )
+		{
+			if ( health->GetWhichPlayer() == 2 )
+			{
+				GetOwner()->RemoveComponent( health );
+				health->~HealthComponentQbert();
+			}
+		}
+	}
 }
 
 void Level::RestartLevel()
@@ -368,7 +382,29 @@ void Level::SetMultiplayer( bool isMultiplayer )
 		qbert->SetCanMove( true );
 		m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->AddComponent( qbert );
 
-		GetOwner()->GetComponent <PyramidCubes>()->SetCoop( true );
+		m_pPyramidCubes->SetCoop( true );
+		m_pPyramidCubes->SetLeftBottom();
+		m_pPyramidCubes->SetRightBottom();
+
+		m_Player1Moved = true;
+		m_Player2Moved = true;
+
+		for ( const auto& players : m_QbertGameObject )
+		{
+			for ( int index = 0; index < m_LevelSize-1; index++ )
+			{
+				if ( players->GetComponent<QBert>()->GetWichPlayer()==1 )
+				{
+					players->GetComponent<QBert>()->SetCanMove( true );
+					players->GetComponent<QBert>()->SetLeftBottom( m_pPyramidCubes->GetSize() );
+				}
+				else
+				{
+					players->GetComponent<QBert>()->SetCanMove( true );
+					players->GetComponent<QBert>()->SetRightBottom( m_pPyramidCubes->GetSize() );
+				}
+			}
+		}
 	}
 	else if( !isMultiplayer )
 	{

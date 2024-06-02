@@ -42,6 +42,9 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 
 	void SetWichPlayer( int player ) { m_WichPlayer = player; };
 	int GetWichPlayer() const { return m_WichPlayer; };
+
+	void SetLeftBottom(int levelsize);
+	void SetRightBottom( int levelsize );
 private:
 	AnimationState m_CurrentState = AnimationState::Idle;
 

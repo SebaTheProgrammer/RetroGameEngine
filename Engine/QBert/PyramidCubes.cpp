@@ -238,17 +238,14 @@ int PyramidCubes::GetRowStartIndex( int col ) const
 {
     return ( ( col - 1 ) * ( col ) ) / 2;
 }
-
 int PyramidCubes::GetRowEndIndex( int col ) const
 {
     return  GetRowStartIndex( col ) + col - 1;
 }
-
 void PyramidCubes::KilledEnemy()
 {
 	NotifyObservers( dae::EventType::KILL_ENEMY, GetOwner() );
 }
-
 void PyramidCubes::Player1Hit()
 {
 	NotifyObservers( dae::EventType::PLAYER1_HIT, GetOwner() );
@@ -257,20 +254,41 @@ void PyramidCubes::Player2Hit()
 {
     NotifyObservers( dae::EventType::PLAYER2_HIT, GetOwner() );
 }
-
 void PyramidCubes::PlayerDied()
 {
 	NotifyObservers( dae::EventType::PLAYER_DIED, GetOwner() );
 }
-
 void PyramidCubes::CoilyDead()
 {
 	NotifyObservers( dae::EventType::COILY_DEAD, GetOwner() );
 }
-
 void PyramidCubes::RemovePlayer()
 {
 	NotifyObservers( dae::EventType::REMOVE_PLAYER, GetOwner() );
     m_IsCoop= false;
+}
+
+void PyramidCubes::SetLeftBottom()
+{
+    for ( int index = 0; index < m_Size - 1; ++index ) 
+    {
+        int oldActiveCol = m_QBert1ColIndex;
+
+        m_QBert1RowIndex += oldActiveCol;
+        m_QBert1ColIndex += 1;
+    }
+
+}
+
+void PyramidCubes::SetRightBottom()
+{
+    for ( int index = 0; index < m_Size - 1; ++index )
+    {
+        int oldActiveCol = m_QBert2ColIndex;
+
+        m_QBert2RowIndex += oldActiveCol + 1;
+        m_QBert2ColIndex += 1;
+    }
+
 }
 

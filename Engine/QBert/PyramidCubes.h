@@ -55,6 +55,9 @@ public:
 
 	void SetCoop( bool coop ) { m_IsCoop = coop; };
 
+	void SetLeftBottom();
+	void SetRightBottom();
+
 private:
 	std::shared_ptr<dae::Texture2D> m_pTexture;
 	int m_Size;

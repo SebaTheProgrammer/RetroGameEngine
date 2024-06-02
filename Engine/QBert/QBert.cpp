@@ -161,3 +161,21 @@ void QBert::GameOver()
 {
 	m_pSingleMovenment->SetCanMove( false );
 }
+
+void QBert::SetLeftBottom( int levelsize )
+{
+	glm::vec2 totalDistance{};
+	for ( int index = 0; index < levelsize - 1; ++index ) {
+		totalDistance += glm::vec2{ -0.75f, 1.2f } * 30.f;
+	}
+	GetOwner()->SetLocalTransform( { 300 + totalDistance.x, 85 + totalDistance.y } );
+}
+
+void QBert::SetRightBottom( int levelsize )
+{
+	glm::vec2 totalDistance{};
+	for ( int index = 0; index < levelsize - 1; ++index ) {
+		totalDistance += glm::vec2{ 0.75f, 1.2f } * 30.f;
+	}
+	GetOwner()->SetLocalTransform( { 300 + totalDistance.x, 85 + totalDistance.y } );
+}
