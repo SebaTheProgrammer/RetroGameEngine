@@ -44,6 +44,8 @@ public:
 	void SetMultiplayer( bool isMultiplayer );
 	void SetVersus( bool isVersus );
 	void SinglePlayer();
+	void SetBottomLeft();
+	void SetBottomRight();
 
 	void CoilyDied();
 

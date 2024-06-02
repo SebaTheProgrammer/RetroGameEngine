@@ -383,28 +383,10 @@ void Level::SetMultiplayer( bool isMultiplayer )
 		m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->AddComponent( qbert );
 
 		m_pPyramidCubes->SetCoop( true );
-		m_pPyramidCubes->SetLeftBottom();
-		m_pPyramidCubes->SetRightBottom();
 
-		m_Player1Moved = true;
-		m_Player2Moved = true;
+		SetBottomLeft();
+		SetBottomRight();
 
-		for ( const auto& players : m_QbertGameObject )
-		{
-			for ( int index = 0; index < m_LevelSize-1; index++ )
-			{
-				if ( players->GetComponent<QBert>()->GetWichPlayer()==1 )
-				{
-					players->GetComponent<QBert>()->SetCanMove( true );
-					players->GetComponent<QBert>()->SetLeftBottom( m_pPyramidCubes->GetSize() );
-				}
-				else
-				{
-					players->GetComponent<QBert>()->SetCanMove( true );
-					players->GetComponent<QBert>()->SetRightBottom( m_pPyramidCubes->GetSize() );
-				}
-			}
-		}
 	}
 	else if( !isMultiplayer )
 	{
@@ -438,4 +420,44 @@ void Level::SinglePlayer()
 	m_IsMultiplayer = false;
 	m_IsVersus = false;
 	SetMultiplayer( false );
+}
+
+void Level::SetBottomLeft()
+{
+	if ( m_IsMultiplayer ) {
+		m_pPyramidCubes->SetLeftBottom();
+		m_Player1Moved = true;
+
+		for ( const auto& players : m_QbertGameObject )
+		{
+			for ( int index = 0; index < m_LevelSize - 1; index++ )
+			{
+				if ( players->GetComponent<QBert>()->GetWichPlayer() == 1 )
+				{
+					players->GetComponent<QBert>()->SetCanMove( true );
+					players->GetComponent<QBert>()->SetLeftBottom( m_pPyramidCubes->GetSize() );
+				}
+			}
+		}
+	}
+}
+
+void Level::SetBottomRight()
+{
+	if ( m_IsMultiplayer ) {
+		m_pPyramidCubes->SetRightBottom();
+		m_Player2Moved = true;
+
+		for ( const auto& players : m_QbertGameObject )
+		{
+			for ( int index = 0; index < m_LevelSize - 1; index++ )
+			{
+				if ( players->GetComponent<QBert>()->GetWichPlayer() == 2 )
+				{
+					players->GetComponent<QBert>()->SetCanMove( true );
+					players->GetComponent<QBert>()->SetRightBottom( m_pPyramidCubes->GetSize() );
+				}
+			}
+		}
+	}
 }

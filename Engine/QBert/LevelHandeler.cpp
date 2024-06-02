@@ -111,6 +111,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 			if ( m_Score > 25 ) { m_Score -= 25; }
 			m_pQbert->ResetPosition();
 			GetOwner()->GetComponent<PyramidCubes>()->ResetIndex1();
+			GetOwner()->GetComponent<Level>()->SetBottomLeft();
 			m_NeedsUpdate = true;
 		}
 		else
@@ -134,6 +135,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 
 			m_pQbert2->ResetPosition();
 			GetOwner()->GetComponent<PyramidCubes>()->ResetIndex2();
+			GetOwner()->GetComponent<Level>()->SetBottomRight();
 			m_NeedsUpdate = true;
 		}
 		else
