@@ -36,6 +36,8 @@ namespace dae
 
 		void SetLocalPosition( float x, float y );
 
+		const glm::vec3& GetLocalPosition() { return m_TextComponent->GetLocalPosition(); }
+
 	private:
 		std::shared_ptr<dae::Command> m_Command;
 		std::shared_ptr<TextComponent> m_TextComponent;

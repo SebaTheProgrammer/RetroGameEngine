@@ -29,6 +29,7 @@ namespace dae
 		virtual void SetText( const std::string& text );
 		virtual void GetText() { m_Text; }
 		virtual void SetPosition( float x, float y );
+		const glm::vec3& GetLocalPosition() const { return m_Transform.GetPosition(); }
 
 	private:
 		bool m_NeedsUpdate;

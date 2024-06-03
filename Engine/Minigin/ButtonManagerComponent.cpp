@@ -1,7 +1,8 @@
 #include "ButtonManagerComponent.h"
 #include <iostream>
+#include "TextureComponent.h"
 
-dae::ButtonManagerComponent::ButtonManagerComponent( GameObject* const parentGameObject, std::vector<std::shared_ptr<ButtonComponent>> buttons )
+dae::ButtonManagerComponent::ButtonManagerComponent( GameObject* const parentGameObject, std::shared_ptr<dae::Texture2D> arrow, std::vector<std::shared_ptr<ButtonComponent>> buttons )
 	: BaseComponent( parentGameObject ),
 	m_Buttons{ buttons }
 {
@@ -9,6 +10,18 @@ dae::ButtonManagerComponent::ButtonManagerComponent( GameObject* const parentGam
 	{
 		m_SelectedButton = m_Buttons[0];
 	}
+
+	m_Arrow = std::make_shared<dae::TextureComponent>( parentGameObject, arrow );
+}
+
+void dae::ButtonManagerComponent::Update()
+{
+	m_Arrow->Update();
+}
+
+void dae::ButtonManagerComponent::Render() const
+{
+	m_Arrow->Render();
 }
 
 void dae::ButtonManagerComponent::AddButton( std::shared_ptr<ButtonComponent> button )
@@ -39,6 +52,9 @@ void dae::ButtonManagerComponent::SelectNextButton()
 				it = m_Buttons.begin();
 			}
 			m_SelectedButton = *it;
+
+			m_Arrow->SetLocalPosition( m_SelectedButton->GetLocalPosition().x - GetOwner()->GetLocalTransform().GetPosition().x, 
+				m_SelectedButton->GetLocalPosition().y - GetOwner()->GetLocalTransform().GetPosition().y );
 		}
 	}
 }
@@ -56,6 +72,9 @@ void dae::ButtonManagerComponent::SelectPreviousButton()
 			}
 			--it;
 			m_SelectedButton = *it;
+
+			m_Arrow->SetLocalPosition( m_SelectedButton->GetLocalPosition().x - GetOwner()->GetLocalTransform().GetPosition().x,
+				m_SelectedButton->GetLocalPosition().y - GetOwner()->GetLocalTransform().GetPosition().y );
 		}
 	}
 }

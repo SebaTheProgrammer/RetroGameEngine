@@ -149,12 +149,13 @@ void load()
 	auto buttonGo4 = std::make_shared<dae::GameObject>( 0 );
 	std::shared_ptr<dae::Command> myCommand4 = std::make_shared< dae::OpenLevelCommand>( buttonGo4.get(), max );
 	auto button4 = std::make_shared<dae::ButtonComponent>( buttonGo4.get(), "Highscores", font, myCommand4 );
-	buttonGo4->SetLocalTransform( { 200, 350 } );
+	buttonGo4->SetLocalTransform( { 225, 350 } );
 	buttonGo4->AddComponent( button4 );
 	mainMenu.Add( buttonGo4 );
 
+	auto selectionArrow = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Selection Arrow.png" ) };
 	std::vector<std::shared_ptr<dae::ButtonComponent>> allButtons = { button,button2,button3, button4 };
-	auto buttonManager = std::make_shared<dae::ButtonManagerComponent>( buttonGo.get(), allButtons );
+	auto buttonManager = std::make_shared<dae::ButtonManagerComponent>( buttonGo.get(), selectionArrow, allButtons );
 	buttonGo->AddComponent( buttonManager );
 }
 
