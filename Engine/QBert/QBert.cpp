@@ -157,6 +157,13 @@ void QBert::ResetPosition()
 	GetOwner()->SetLocalTransform( { 300, 90 } );
 }
 
+void QBert::ResetQBert()
+{
+	ResetPosition();
+	m_GetsHit = false;
+	m_HitTimer = 0;
+}
+
 void QBert::GameOver()
 {
 	m_pSingleMovenment->SetCanMove( false );

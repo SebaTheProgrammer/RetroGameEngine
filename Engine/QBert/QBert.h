@@ -37,6 +37,7 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 	void SetCanMove( bool canMove ) { m_pSingleMovenment->SetCanMove( canMove ); };
 
 	void ResetPosition();
+	void ResetQBert();
 
 	void GameOver();
 

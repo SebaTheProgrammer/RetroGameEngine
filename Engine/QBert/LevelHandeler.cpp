@@ -273,11 +273,11 @@ void LevelHandeler::ResetLevel()
 
 	if ( m_pQbert )
 	{
-		m_pQbert->ResetPosition();
+		m_pQbert->ResetQBert();
 	}
 
 	if ( m_pQbert2 )
 	{
-		m_pQbert2->ResetPosition();
+		m_pQbert2->ResetQBert();
 	}
 }
