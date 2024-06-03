@@ -38,6 +38,12 @@ namespace dae
 			std::shared_ptr<ButtonComponent> m_SelectedButton;
 
 			std::shared_ptr<dae::TextureComponent> m_Arrow;
+
+			float m_TimeSinceLastButtonPress{ 0.f };
+			float m_ButtonPressDelay{ 0.2f };
+			bool m_CanPressButton{ true };
+
+			glm::vec2 m_ArrowOffset{ -17.f, 3.f };
 	};
 }
 

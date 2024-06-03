@@ -49,12 +49,4 @@ void HighScoreScreen::Update()
 		m_NeedsUpdate = false;
 		GetAllScores();
 	}
-
-	m_UpdateTime+= dae::GameTime::GetInstance().GetDeltaTime();
-
-	if ( m_UpdateTime > 1.f )
-	{
-		m_UpdateTime = 0.f;
-		m_NeedsUpdate = true;
-	}
 }

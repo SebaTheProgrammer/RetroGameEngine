@@ -1,6 +1,8 @@
 #include "ButtonManagerComponent.h"
 #include <iostream>
 #include "TextureComponent.h"
+#include "GameTime.h"
+#include "ServiceLocator.h"
 
 dae::ButtonManagerComponent::ButtonManagerComponent( GameObject* const parentGameObject, std::shared_ptr<dae::Texture2D> arrow, std::vector<std::shared_ptr<ButtonComponent>> buttons )
 	: BaseComponent( parentGameObject ),
@@ -17,6 +19,22 @@ dae::ButtonManagerComponent::ButtonManagerComponent( GameObject* const parentGam
 void dae::ButtonManagerComponent::Update()
 {
 	m_Arrow->Update();
+
+	if ( m_SelectedButton ) 
+	{
+		m_Arrow->SetLocalPosition( m_SelectedButton->GetLocalPosition().x - GetOwner()->GetLocalTransform().GetPosition().x + m_ArrowOffset.x,
+			m_SelectedButton->GetLocalPosition().y - GetOwner()->GetLocalTransform().GetPosition().y + m_ArrowOffset.y );
+	}
+
+	if ( !m_CanPressButton )
+	{
+		m_TimeSinceLastButtonPress += dae::GameTime::GetInstance().GetDeltaTime();
+		if ( m_TimeSinceLastButtonPress >= m_ButtonPressDelay )
+		{
+			m_CanPressButton = true;
+			m_TimeSinceLastButtonPress = 0.f;
+		}
+	}
 }
 
 void dae::ButtonManagerComponent::Render() const
@@ -53,8 +71,9 @@ void dae::ButtonManagerComponent::SelectNextButton()
 			}
 			m_SelectedButton = *it;
 
-			m_Arrow->SetLocalPosition( m_SelectedButton->GetLocalPosition().x - GetOwner()->GetLocalTransform().GetPosition().x, 
-				m_SelectedButton->GetLocalPosition().y - GetOwner()->GetLocalTransform().GetPosition().y );
+			auto& ss = dae::ServiceLocator::GetSoundSystem();
+			ss.AddSound( "Change", "Sounds/Change Selection.wav" );
+			ss.Play( ss.GetSoundId( "Change" ), 50 );
 		}
 	}
 }
@@ -73,16 +92,22 @@ void dae::ButtonManagerComponent::SelectPreviousButton()
 			--it;
 			m_SelectedButton = *it;
 
-			m_Arrow->SetLocalPosition( m_SelectedButton->GetLocalPosition().x - GetOwner()->GetLocalTransform().GetPosition().x,
-				m_SelectedButton->GetLocalPosition().y - GetOwner()->GetLocalTransform().GetPosition().y );
+			auto& ss = dae::ServiceLocator::GetSoundSystem();
+			ss.AddSound( "Change", "Sounds/Change Selection.wav" );
+			ss.Play( ss.GetSoundId( "Change" ), 50 );
 		}
 	}
 }
 
 void dae::ButtonManagerComponent::PressSelectedButton()
 {
-	if ( m_SelectedButton )
+	if ( m_SelectedButton && m_CanPressButton )
 	{
 		m_SelectedButton->Clicked();
+		m_CanPressButton = false;
+
+		auto& ss = dae::ServiceLocator::GetSoundSystem();
+		ss.AddSound( "Change", "Sounds/Change Selection.wav" );
+		ss.Play( ss.GetSoundId( "Change" ), 50 );
 	}
 }

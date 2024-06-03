@@ -48,7 +48,7 @@ void load()
 	mainMenu.Add( go );
 
 	//buttons
-
+	auto selectionArrow = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Selection Arrow.png" ) };
 	auto buttonGo = std::make_shared<dae::GameObject>( 0 );
 	std::shared_ptr<dae::Command> myCommand = std::make_shared< SinglePlayer>( buttonGo.get() );
 	auto button = std::make_shared<dae::ButtonComponent>( buttonGo.get(), "Solo", font, myCommand );
@@ -75,9 +75,9 @@ void load()
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsDownThisFrame, dae::NextButtonCommand{ buttonGo.get() } );
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_SPACE, InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ buttonGo.get() } );
 
-	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed, dae::PreviousButtonCommand{ buttonGo.get() } );
-	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed, dae::NextButtonCommand{ buttonGo.get() } );
-	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_A, InputTypeGamePad::IsPressed, dae::PressButtonCommand{ buttonGo.get() } );
+	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsUpThisFrame, dae::PreviousButtonCommand{ buttonGo.get() } );
+	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsUpThisFrame, dae::NextButtonCommand{ buttonGo.get() } );
+	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ buttonGo.get() } );
 
 	//Resources
 	int hp = 4;
@@ -120,18 +120,27 @@ void load()
 		}
 	}
 
-	//for debug purposes
-	auto levelswitcher = std::make_shared<dae::GameObject>( -1 );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_0, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 0 } );
-
 	//HIGHSCORE
 	auto& highScore = dae::SceneManager::GetInstance().CreateScene( "Highscores" );
-	auto score = std::make_shared<dae::GameObject>( 0 );
+	int max = static_cast< int >( dae::SceneManager::GetInstance().GetMaxScenes() - 1 );
+	auto score = std::make_shared<dae::GameObject>( max );
 	auto highscore = std::make_shared<HighScoreScreen>( score.get(), font, font2 );
 	score->AddComponent( highscore );
 	highScore.Add( score );
 
-	dae::SceneManager::GetInstance().SetCurrentScene( 0 );
+	auto buttonBackOb = std::make_shared<dae::GameObject>( max );
+	std::shared_ptr<dae::Command> back = std::make_shared< OpenMainMenuCommand>( buttonBackOb.get() );
+	auto buttonB = std::make_shared<dae::ButtonComponent>( buttonBackOb.get(), "Back", font, back );
+	buttonBackOb->SetLocalTransform( { 550, 425 } );
+	buttonBackOb->AddComponent( buttonB );
+	highScore.Add( buttonBackOb );
+
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_SPACE, InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ buttonBackOb.get() } );
+	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ buttonBackOb.get() } );
+	std::vector<std::shared_ptr<dae::ButtonComponent>> allButtonsHighscore = { buttonB };
+	auto buttonManagerHighscore = std::make_shared<dae::ButtonManagerComponent>( buttonBackOb.get(), selectionArrow, allButtonsHighscore );
+	buttonBackOb->AddComponent( buttonManagerHighscore );
+
 
 	//std::string playerName;
 	//std::cout << "Enter your name: ";
@@ -140,23 +149,25 @@ void load()
 	//std::cout << "Hello, " << playerName << "!" << std::endl;
 	std::cout << "!Welcome and enjoy QBert!" << std::endl;
 	std::cout << "Made by Vryens Sebastiaan, 2GD18 " << std::endl;
-	int max = static_cast< int >( dae::SceneManager::GetInstance().GetMaxScenes() - 1 );
 
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_9, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), max } );
+	auto levelswitcher = std::make_shared<dae::GameObject>( -1 );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_0, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 0 } );
+
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_F1, InputTypeKeyBoard::IsDownThisFrame, dae::OpenNextLevelCommand{ levelswitcher.get() } );
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_M, InputTypeKeyBoard::IsDownThisFrame, SoundCommand{} );
 
 	auto buttonGo4 = std::make_shared<dae::GameObject>( 0 );
-	std::shared_ptr<dae::Command> myCommand4 = std::make_shared< dae::OpenLevelCommand>( buttonGo4.get(), max );
+	std::shared_ptr<dae::Command> myCommand4 = std::make_shared< OpenHighScoreCommand>( buttonGo4.get(), max, highscore.get() );
 	auto button4 = std::make_shared<dae::ButtonComponent>( buttonGo4.get(), "Highscores", font, myCommand4 );
 	buttonGo4->SetLocalTransform( { 225, 350 } );
 	buttonGo4->AddComponent( button4 );
 	mainMenu.Add( buttonGo4 );
 
-	auto selectionArrow = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Selection Arrow.png" ) };
 	std::vector<std::shared_ptr<dae::ButtonComponent>> allButtons = { button,button2,button3, button4 };
 	auto buttonManager = std::make_shared<dae::ButtonManagerComponent>( buttonGo.get(), selectionArrow, allButtons );
 	buttonGo->AddComponent( buttonManager );
+
+	dae::SceneManager::GetInstance().SetCurrentScene( 0 );
 }
 
 int main( int, char* [] ) 

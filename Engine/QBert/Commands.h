@@ -5,6 +5,21 @@
 #include "Scene.h"
 #include "Level.h"
 #include <iostream>
+#include "HighScoreScreen.h"
+
+class OpenMainMenuCommand : public dae::GameObjectCommand
+{
+public:
+	OpenMainMenuCommand( dae::GameObject* gameObject ) : dae::GameObjectCommand( gameObject ) {}
+
+	virtual void Execute() override
+	{
+		if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
+		{
+			dae::SceneManager::GetInstance().SetCurrentScene( 0 );
+		}
+	}
+};
 
 class MultiplayerCommand : public dae::GameObjectCommand
 {
@@ -108,16 +123,35 @@ public:
 		{
 			m_IsMuted = false;
 			ss.SetVolume( 100 );
-			std::cout<<"ON"<<std::endl;
 		}
 		else 
 		{
 			m_IsMuted = true;
-			std::cout<<"OFF"<<std::endl;
 			ss.SetVolume( 0 );
 		}
 	}
 
 private:
 		bool m_IsMuted{ false };
+};
+
+
+class OpenHighScoreCommand : public dae::GameObjectCommand
+{
+public:
+	OpenHighScoreCommand( dae::GameObject* gameObject, int level, HighScoreScreen* highscore ) : GameObjectCommand( gameObject )
+	{
+		m_Level = level;
+		m_pHighScore = highscore;
+	}
+
+	virtual void Execute() override
+	{
+		dae::SceneManager::GetInstance().SetCurrentScene( m_Level );
+		m_pHighScore->GetAllScores();
+	}
+
+private:
+	int m_Level{};
+	HighScoreScreen* m_pHighScore{};
 };

@@ -25,5 +25,4 @@ private:
 	std::vector < std::shared_ptr<dae::TextComponent>> m_TextComponents;
 
 	bool m_NeedsUpdate = true;
-	float m_UpdateTime = 0.f;
 };
