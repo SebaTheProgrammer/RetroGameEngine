@@ -20,6 +20,9 @@ public:
 	void Render() const override;
 
 	void SpawnCoily();
+	void SpawnSlick();
+	void SpawnSam();
+	void SpawnUggWrongway();
 	void SpawnEnemies();
 
 	void SetCanMove( bool move );

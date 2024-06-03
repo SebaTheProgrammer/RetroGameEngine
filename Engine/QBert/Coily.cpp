@@ -76,7 +76,7 @@ void Coily::Update()
 			m_Timer = 0.f;
 			if ( !m_HasHitPlayer )
 			{
-				FollowPlayer( m_pPyramid->GetActiveRow(), m_pPyramid->GetActiveColumn() );
+				FollowPlayer( m_pPyramid->GetActiveRow(), m_pPyramid->GetActiveColumn(), m_pPyramid->GetActiveRow2(), m_pPyramid->GetActiveColumn2() );
 			}
 		}
 		break;
@@ -86,7 +86,7 @@ void Coily::Update()
 			m_Timer = 0.f;
 			if ( !m_HasHitPlayer )
 			{
-				FollowPlayer( m_pPyramid->GetActiveRow(), m_pPyramid->GetActiveColumn() );
+				FollowPlayer( m_pPyramid->GetActiveRow(), m_pPyramid->GetActiveColumn(), m_pPyramid->GetActiveRow2(), m_pPyramid->GetActiveColumn2() );
 			}
 		}
 		break;
@@ -214,92 +214,79 @@ void Coily::Moved( SingleMovementComponent::Direction dir )
 	}
 }
 
-void Coily::FollowPlayer( int playerRow, int playerCol )
+void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int playerCol2 )
 {
 	int oldActiveCol = m_Col;
-	srand( rand() );
+	int targetRow{}, targetCol{};
 
-	// Calculate the potential new positions
-	int newRow{}, newCol{};
+	//Check wich player is closer
+	if ( playerRow2 == 0 && playerCol2 == 0 ) 
+	{
+		targetRow = playerRow1;
+		targetCol = playerCol1;
+	}
+	else 
+	{
+		auto distance = []( int row1, int col1, int row2, int col2 ) {
+			return std::abs( row1 - row2 ) + std::abs( col1 - col2 );
+			};
+
+		int distanceToPlayer1 = distance( m_Row, m_Col, playerRow1, playerCol1 );
+		int distanceToPlayer2 = distance( m_Row, m_Col, playerRow2, playerCol2 );
+
+		if ( distanceToPlayer1 <= distanceToPlayer2 ) {
+			targetRow = playerRow1;
+			targetCol = playerCol1;
+		}
+		else {
+			targetRow = playerRow2;
+			targetCol = playerCol2;
+		}
+	}
+
+	std::cout << "targetRow: " << targetRow << " targetCol: " << targetCol << std::endl;
+
+	int newRow = m_Row, newCol = m_Col;
 	SingleMovementComponent::Direction direction{};
 
-	if ( playerRow <= m_Row ) // Player is above Coily
+	//int left = m_Col - m_Row;
+
+	if ( targetCol < m_Col )
 	{
-		if ( playerCol <= m_Col ) // Player is to the left
+		//up
+		if ( targetRow < m_Row - m_Col )
 		{
-			// Prefer LeftUp, fallback to RightUp
 			newRow = m_Row - oldActiveCol;
 			newCol = m_Col - 1;
 			direction = SingleMovementComponent::Direction::LeftUp;
-
-			int rowStartIndex = GetRowStartIndex( newCol );
-			int rowEndIndex = GetRowEndIndex( newCol );
-
-			if ( newRow < 0 || newRow < rowStartIndex || newRow > rowEndIndex || newCol == 0 )
-			{
-				newRow = m_Row - oldActiveCol + 1;
-				newCol = m_Col - 1;
-				direction = SingleMovementComponent::Direction::RightUp;
-			}
 		}
-		else // Player is to the right
+		else
 		{
-			// Prefer RightUp, fallback to LeftUp
 			newRow = m_Row - oldActiveCol + 1;
 			newCol = m_Col - 1;
 			direction = SingleMovementComponent::Direction::RightUp;
-
-			int rowStartIndex = GetRowStartIndex( newCol );
-			int rowEndIndex = GetRowEndIndex( newCol );
-
-			if ( newRow < 0 || newRow < rowStartIndex || newRow > rowEndIndex || newCol == 0 )
-			{
-				newRow = m_Row - oldActiveCol;
-				newCol = m_Col - 1;
-				direction = SingleMovementComponent::Direction::LeftUp;
-			}
 		}
 	}
-	else if ( playerRow > m_Row ) // Player is below Coily
+	else
 	{
-		if ( playerCol <= m_Col ) // Player is to the left
+		//down
+		if ( targetRow < m_Row - m_Col )
 		{
-			// Prefer LeftDown, fallback to RightDown
 			newRow = m_Row + oldActiveCol;
 			newCol = m_Col + 1;
 			direction = SingleMovementComponent::Direction::LeftDown;
-
-			int rowStartIndex = GetRowStartIndex( newCol );
-			int rowEndIndex = GetRowEndIndex( newCol );
-
-			if ( newRow < 0 || newRow < rowStartIndex || newRow > rowEndIndex || newCol == 0 )
-			{
-				newRow = m_Row + oldActiveCol + 1;
-				newCol = m_Col + 1;
-				direction = SingleMovementComponent::Direction::RightDown;
-			}
 		}
-		else // Player is to the right
+		else 
 		{
-			// Prefer RightDown, fallback to LeftDown
 			newRow = m_Row + oldActiveCol + 1;
 			newCol = m_Col + 1;
 			direction = SingleMovementComponent::Direction::RightDown;
-
-			int rowStartIndex = GetRowStartIndex( newCol );
-			int rowEndIndex = GetRowEndIndex( newCol );
-
-			if ( newRow < 0 || newRow < rowStartIndex || newRow > rowEndIndex || newCol == 0 )
-			{
-				newRow = m_Row + oldActiveCol;
-				newCol = m_Col + 1;
-				direction = SingleMovementComponent::Direction::LeftDown;
-			}
 		}
 	}
 
 	int rowStartIndex = GetRowStartIndex( newCol );
 	int rowEndIndex = GetRowEndIndex( newCol );
+	std::cout<< "Row: " << newRow << " Col: " << newCol << std::endl;
 
 	if ( ( newRow > 0 && newCol < m_LevelSize ) &&
 		( newRow >= rowStartIndex && newRow <= rowEndIndex ) &&
@@ -324,7 +311,6 @@ int Coily::GetRowEndIndex( int col ) const
 
 void Coily::IdleSnake()
 {
-	//Animations
 	m_pTextureCoily->SetCurrentColumn( 1 );
 	m_pTextureCoily->SetMinColumns( 0 );
 	m_pTextureCoily->SetMaxColumns( 4 );
@@ -335,7 +321,6 @@ void Coily::IdleSnake()
 
 void Coily::IdleBackSnake()
 {
-	//Animations
 	m_pTextureCoily->SetCurrentColumn( 5 );
 	m_pTextureCoily->SetMinColumns( 4 );
 	m_pTextureCoily->SetMaxColumns( 8 );
