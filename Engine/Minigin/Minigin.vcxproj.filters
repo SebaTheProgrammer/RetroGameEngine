@@ -125,6 +125,12 @@
     <ClInclude Include="AudioClip.h">
       <Filter>SoundSystem</Filter>
     </ClInclude>
+    <ClInclude Include="ButtonComponent.h">
+      <Filter>Objects\Components\Rest</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonManagerComponent.h">
+      <Filter>Objects\Components\Rest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -189,6 +195,15 @@
     </ClCompile>
     <ClCompile Include="ServiceLocator.cpp">
       <Filter>SoundSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonComponent.cpp">
+      <Filter>Objects\Components\Rest</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonManagerComponent.cpp">
+      <Filter>Objects\Components\Rest</Filter>
+    </ClCompile>
+    <ClCompile Include="InputCommands.cpp">
+      <Filter>InputSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -10,6 +10,8 @@
 
 namespace dae
 {
+	class ButtonManagerComponent;
+
 	class Command
 	{
 	public:
@@ -183,5 +185,32 @@ namespace dae
 				dae::SceneManager::GetInstance().SetCurrentScene( 0 );
 			}
 		}
+	};
+
+	class NextButtonCommand : public GameObjectCommand
+	{
+	public:
+
+		NextButtonCommand( GameObject* gameObject ) : GameObjectCommand( gameObject ) {}
+
+		virtual void Execute() override;
+	};
+
+	class PreviousButtonCommand : public GameObjectCommand
+	{
+	public:
+
+		PreviousButtonCommand( GameObject* gameObject ) : GameObjectCommand( gameObject ) {}
+
+		virtual void Execute() override;
+	};
+
+	class PressButtonCommand : public GameObjectCommand
+	{
+	public:
+
+		PressButtonCommand( GameObject* gameObject ) : GameObjectCommand( gameObject ) {}
+
+		virtual void Execute() override;
 	};
 }
