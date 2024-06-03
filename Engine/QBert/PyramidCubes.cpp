@@ -212,9 +212,13 @@ void PyramidCubes::ReverseCube( int row )
 
 int PyramidCubes::GetActiveRow2() const
 {
-    if ( m_IsCoop )
+    if ( this != nullptr )
     {
-        return m_QBert2ColIndex;
+        if( m_IsCoop )
+        {
+			return m_QBert2ColIndex;
+		}
+        else{ return 0; }
     }
     else
     {

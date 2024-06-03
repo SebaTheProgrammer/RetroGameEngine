@@ -226,14 +226,13 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 	}
 	else
 	{
-		auto distance = []( int row1, int col1, int row2, int col2 ) {
-			return std::abs( row1 - row2 ) + std::abs( col1 - col2 );
-			};
+		int rowDifference1 = std::abs( m_Row - playerRow1 );
+		int colDifference1 = std::abs( m_Col - playerCol1 );
+		int rowDifference2 = std::abs( m_Row - playerRow2 );
+		int colDifference2 = std::abs( m_Col - playerCol2 );
 
-		int distanceToPlayer1 = distance( m_Row, m_Col, playerRow1, playerCol1 );
-		int distanceToPlayer2 = distance( m_Row, m_Col, playerRow2, playerCol2 );
-
-		if ( distanceToPlayer1 <= distanceToPlayer2 ) {
+		// Compare the sum of row and column differences to decide the target
+		if ( rowDifference1 + colDifference1 >= rowDifference2 + colDifference2 ) {
 			targetRow = playerRow1;
 			targetCol = playerCol1;
 		}

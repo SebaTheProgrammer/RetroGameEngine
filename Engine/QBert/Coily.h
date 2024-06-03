@@ -59,7 +59,7 @@ private:
 	const float m_JumpTime = 3.f;
 	float m_Timer = 0.f;
 
-	const float m_RespawnTime = 3.f;
+	const float m_RespawnTime = 5.f;
 	float m_TimerRespawn = 0.f;
 
 	bool m_CanMove{ true };
