@@ -219,13 +219,12 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 	int oldActiveCol = m_Col;
 	int targetRow{}, targetCol{};
 
-	//Check wich player is closer
-	if ( playerRow2 == 0 && playerCol2 == 0 ) 
+	if ( playerRow2 == 0 && playerCol2 == 0 )
 	{
 		targetRow = playerRow1;
 		targetCol = playerCol1;
 	}
-	else 
+	else
 	{
 		auto distance = []( int row1, int col1, int row2, int col2 ) {
 			return std::abs( row1 - row2 ) + std::abs( col1 - col2 );
@@ -244,17 +243,16 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 		}
 	}
 
-	std::cout << "targetRow: " << targetRow << " targetCol: " << targetCol << std::endl;
+	std::swap( targetRow, targetCol );		//Swap the values because i somehow got them mixed up
 
 	int newRow = m_Row, newCol = m_Col;
 	SingleMovementComponent::Direction direction{};
 
 	//int left = m_Col - m_Row;
 
-	if ( targetCol < m_Col )
+	if ( targetCol <= m_Col )
 	{
-		//up
-		if ( targetRow < m_Row - m_Col )
+		if ( targetRow < m_Row - m_Col || targetRow < m_Row )
 		{
 			newRow = m_Row - oldActiveCol;
 			newCol = m_Col - 1;
@@ -269,14 +267,13 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 	}
 	else
 	{
-		//down
-		if ( targetRow < m_Row - m_Col )
+		if ( targetRow > m_Row + m_Col )
 		{
 			newRow = m_Row + oldActiveCol;
 			newCol = m_Col + 1;
 			direction = SingleMovementComponent::Direction::LeftDown;
 		}
-		else 
+		else
 		{
 			newRow = m_Row + oldActiveCol + 1;
 			newCol = m_Col + 1;
@@ -286,16 +283,63 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 
 	int rowStartIndex = GetRowStartIndex( newCol );
 	int rowEndIndex = GetRowEndIndex( newCol );
-	std::cout<< "Row: " << newRow << " Col: " << newCol << std::endl;
 
-	if ( ( newRow > 0 && newCol < m_LevelSize ) &&
-		( newRow >= rowStartIndex && newRow <= rowEndIndex ) &&
-		newCol != 0 )
+	bool validMove = ( newRow > 0 && newCol <= m_LevelSize ) &&
+		( newRow >= rowStartIndex && newRow <= rowEndIndex );
+
+	if ( validMove )
 	{
 		m_Row = newRow;
 		m_Col = newCol;
 		Jump( direction );
 		m_PrevDirection = direction;
+	}
+	else
+	{
+		if ( targetCol < m_Col )
+		{
+			if ( direction == SingleMovementComponent::Direction::LeftUp )
+			{
+				newRow = m_Row - oldActiveCol + 1;
+				newCol = m_Col - 1;
+				direction = SingleMovementComponent::Direction::RightUp;
+			}
+			else
+			{
+				newRow = m_Row + oldActiveCol;
+				newCol = m_Col + 1;
+				direction = SingleMovementComponent::Direction::LeftDown;
+			}
+		}
+		else
+		{
+			if ( direction == SingleMovementComponent::Direction::LeftDown )
+			{
+				newRow = m_Row + oldActiveCol + 1;
+				newCol = m_Col + 1;
+				direction = SingleMovementComponent::Direction::RightDown;
+			}
+			else
+			{
+				newRow = m_Row - oldActiveCol + 1;
+				newCol = m_Col - 1;
+				direction = SingleMovementComponent::Direction::RightUp;
+			}
+		}
+
+		rowStartIndex = GetRowStartIndex( newCol );
+		rowEndIndex = GetRowEndIndex( newCol );
+
+		validMove = ( newRow > 0 && newCol <= m_LevelSize ) &&
+			( newRow >= rowStartIndex && newRow <= rowEndIndex );
+
+		if ( validMove )
+		{
+			m_Row = newRow;
+			m_Col = newCol;
+			Jump( direction );
+			m_PrevDirection = direction;
+		}
 	}
 }
 
