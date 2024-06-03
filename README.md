@@ -10,7 +10,6 @@ This game engine provides a foundation for creating 2D grid-based games. It incl
 
 - **Grid Management**: Easily create and manage 2D grids of any size.
 - **Entity Management**: Efficiently handle game entities within the grid.
-- **Collision Detection**: Detect collisions between entities and respond accordingly.
 - **Basic Rendering**: Render the game world with basic graphics.
 - **Customization**: Easily extend and customize functionality to suit specific game requirements.
 
