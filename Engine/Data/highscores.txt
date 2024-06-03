@@ -1,6 +1,6 @@
 RandomPlayer 900
+RandomPlayer 550
 RandomPlayer 25
-RandomPlayer 0
 RandomPlayer 0
 RandomPlayer 0
 RandomPlayer 0
