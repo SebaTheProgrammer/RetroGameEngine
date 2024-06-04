@@ -182,7 +182,15 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir, int wic
 
         if ( ( m_QBert2RowIndex < 0 || m_QBert2ColIndex > m_Size ) || ( m_QBert2RowIndex < rowStartIndex || m_QBert2RowIndex > rowEndIndex ) || m_QBert2ColIndex == 0 )
         {
-            //TODO: check for platforms
+            for ( const auto& discPos : allDiscPos )
+            {
+                if ( m_QBert2RowIndex == GetRowStartIndex( int( discPos.x ) ) || discPos.x + m_QBert2RowIndex == GetRowStartIndex( int( discPos.x ) ) )
+                {
+                    NotifyObservers( dae::EventType::PLAYER2_ON_DISC, GetOwner() );
+                    return;
+                }
+            }
+
             NotifyObservers( dae::EventType::PLAYER2_OUT_OF_BOUNDS, GetOwner() );
             return;
         }
