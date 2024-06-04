@@ -188,7 +188,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 
 	case dae::EventType::LEVEL_RESTART:
-		for ( int i = 0; i < maxScenes; ++i )
+		for ( unsigned i = 0; i < maxScenes; ++i )
 		{
 			for ( unsigned index{}; index < dae::SceneManager::GetInstance().GetScene( i )->GetObjects().size(); ++index )
 			{
