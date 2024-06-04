@@ -178,8 +178,8 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 				m_pQbert2 = qbert;
 				GetOwner()->GetComponent<Level>()->Player2Moved();
 			}
-
-			GetOwner()->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetDirection(), qbert->GetWichPlayer() );
+			GetOwner()->GetComponent<Level>()->GetDiscPos();
+			GetOwner()->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetDirection(), qbert->GetWichPlayer(), GetOwner()->GetComponent<Level>()->GetDiscPos() );
 		}
 		break;
 

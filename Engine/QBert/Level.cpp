@@ -116,10 +116,13 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	m_EnemyHandeler->AddComponent( enemyhandeler );
 
 	//Discs
-	m_FloatingDisc.push_back( std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() ) );
-	auto disc = std::make_shared<FloatingDisc>( m_FloatingDisc[ m_FloatingDisc.size() - 1 ].get(), m_Textures.m_DiscTexture, m_LevelSize, true);
-	m_FloatingDisc[ m_FloatingDisc.size() - 1 ]->AddComponent( disc );
-	m_FloatingDisc[ m_FloatingDisc.size() - 1 ]->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x, parentGameObject->GetLocalTransform().GetPosition().y - 40 } );
+	for ( int index=0; index < howManuJumpsNeeded; ++index )
+	{
+		m_FloatingDisc.push_back( std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() ) );
+		auto disc = std::make_shared<FloatingDisc>( m_FloatingDisc[ m_FloatingDisc.size() - 1 ].get(), m_Textures.m_DiscTexture, m_LevelSize, true );
+		m_FloatingDisc[ m_FloatingDisc.size() - 1 ]->AddComponent( disc );
+		m_FloatingDisc[ m_FloatingDisc.size() - 1 ]->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x, parentGameObject->GetLocalTransform().GetPosition().y - 40 } );
+	}
 }
 
 void Level::Update()
@@ -174,6 +177,8 @@ void Level::Update()
 				{
 					players->GetComponent<QBert>()->SetCanMove( false );
 				}
+
+				RestartLevel();
 			}
 			else
 			{
@@ -184,6 +189,8 @@ void Level::Update()
 				{
 					players->GetComponent<QBert>()->SetCanMove( false );
 				}
+
+				RestartLevel();
 			}
 		}
 		m_pGameOverObject->Update();
@@ -202,6 +209,7 @@ void Level::Update()
 				players->GetComponent<QBert>()->SetCanMove( true );
 			}
 			dae::SceneManager::GetInstance().SetCurrentScene( dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1 );
+			RestartLevel();
 		}
 		m_pWinObject->Update();
 		break;
@@ -235,6 +243,16 @@ void Level::Update()
 			healthDisplay->SetLocalPosition( -250, 0 );
 			GetOwner()->AddComponent( healthDisplay );
 			m_AddedHp = true;
+		}
+
+		if ( !m_UpdatedDisks ) 
+		{
+			m_DiscPos.clear();
+
+			for ( const auto& discs : m_FloatingDisc )
+			{
+				m_DiscPos.push_back( { discs->GetComponent<FloatingDisc>()->GetRowCol() } );
+			}
 		}
 
 		break;
@@ -351,7 +369,7 @@ void Level::RestartLevel()
 	m_StartSound = true;
 	for ( const auto& players : m_QbertGameObject )
 	{
-		players->GetComponent<QBert>()->SetCanMove( false );
+		players->GetComponent<QBert>()->SetCanMove( true );
 	}
 	m_Player1Moved = false;
 	m_Player2Moved = false;
@@ -387,6 +405,7 @@ void Level::SetMultiplayer( bool isMultiplayer )
 	if ( !m_IsMultiplayer && isMultiplayer )
 	{
 		m_IsMultiplayer = isMultiplayer;
+		RestartLevel();
 
 		//add extra player
 		m_QbertGameObject.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex()));
@@ -402,6 +421,7 @@ void Level::SetMultiplayer( bool isMultiplayer )
 		m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->AddComponent( qbert );
 
 		m_pPyramidCubes->SetCoop( true );
+		m_pPyramidCubes->ResetLevel();
 
 		SetBottomLeft();
 		SetBottomRight();
@@ -413,6 +433,7 @@ void Level::SetMultiplayer( bool isMultiplayer )
 		{
 			m_QbertGameObject.pop_back();
 			m_pPyramidCubes->RemovePlayer();
+			m_pPyramidCubes->ResetLevel();
 
 			auto healths = GetOwner()->GetComponents<HealthComponentQbert>();
 			for ( const auto& health : healths ) 
@@ -432,6 +453,9 @@ void Level::SetVersus( bool isVersus )
 	m_IsMultiplayer = false;
 	m_EnemyHandeler->GetComponent<EnemyHandeler>()->SetVersus( isVersus );
 	SetMultiplayer( false );
+	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->ResetQBert();
+	m_pPyramidCubes->ResetLevel();
+	RestartLevel();
 }
 
 void Level::SinglePlayer()
@@ -439,6 +463,9 @@ void Level::SinglePlayer()
 	m_IsMultiplayer = false;
 	m_IsVersus = false;
 	SetMultiplayer( false );
+	m_pPyramidCubes->ResetLevel();
+	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->ResetQBert();
+	RestartLevel();
 }
 
 void Level::SetBottomLeft()

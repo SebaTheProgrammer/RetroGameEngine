@@ -59,6 +59,9 @@ public:
 		Normal
 	};
 
+
+	std::vector < glm::vec2> GetDiscPos() { return m_DiscPos; }
+
 private:
 	allTextures m_Textures;
 
@@ -85,6 +88,7 @@ private:
 	int m_MaxScoreEnemies{2};
 
 	std::vector < std::shared_ptr<dae::GameObject>> m_FloatingDisc;
+	std::vector < glm::vec2> m_DiscPos;
 
 	//Parameters
 	float m_Timer{ 0 };
@@ -98,4 +102,5 @@ private:
 	bool m_IsVersus{ false };
 
 	bool m_StartSound{ true };
+	bool m_UpdatedDisks{ false };
 };

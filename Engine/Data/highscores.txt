@@ -5,6 +5,6 @@ RandomPlayer 25
 RandomPlayer 25
 RandomPlayer 25
 RandomPlayer 25
-RandomPlayer 0
-RandomPlayer 0
+RandomPlayer 25
+RandomPlayer 25
 RandomPlayer 0

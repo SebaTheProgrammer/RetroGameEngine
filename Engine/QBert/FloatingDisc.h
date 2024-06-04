@@ -21,14 +21,16 @@ public:
 
 	void FloatToTop();
 
-	void SetCanMove( bool move ) { m_CanMove = move; };
-	void SetPyramidPosition( const int x, const int y );
 	int GetRow() const { return m_Row; }
 	int GetCol() const { return m_Col; }
+
+	glm::vec2 GetRowCol() const { return glm::vec2( m_Row, m_Col ); }
 
 	void ResetPosition();
 	int GetRowStartIndex( int col )const;
 	int GetRowEndIndex( int col ) const;
+
+	bool IsAlive() const { return m_IsAlive; }
 
 private:
 	const float m_FrameTime = 0.5f;
@@ -41,9 +43,9 @@ private:
 	int m_Row{ 0 };
 	int m_Col{ 1 };
 
+	bool m_IsAlive{ true };
 	bool m_SettetStartPos = false;
 	bool m_IsLeftDisc;
-	bool m_CanMove = false;
 	float m_StepSize{ 1.2f };
 	const float m_Speed = 47.f;
 	const float m_SpeedBetweenSteps = 0.7f;

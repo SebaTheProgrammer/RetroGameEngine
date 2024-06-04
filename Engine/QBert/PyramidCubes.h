@@ -32,7 +32,7 @@ public:
 	void ResetIndex1();
 	void ResetIndex2();
 	void GameOver();
-	void WalkedOnCube( SingleMovementComponent::Direction dir, int wichplayer );
+	void WalkedOnCube( SingleMovementComponent::Direction dir, int wichplayer, std::vector < glm::vec2> allDiscPos );
 	void ReverseCube(int row );
 
 	int GetActiveRow() const { return m_QBert1ColIndex; }

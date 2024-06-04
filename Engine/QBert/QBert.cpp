@@ -152,7 +152,7 @@ void QBert::SetMirror( bool mirror )
 void QBert::ResetPosition()
 {
 	m_GetsHit = true;
-	m_pSingleMovenment->SetCanMove( false );
+	m_pSingleMovenment->SetCanMove( true );
 	SetAnimationState( AnimationState::Idle );
 	GetOwner()->SetLocalTransform( { 300, 90 } );
 }

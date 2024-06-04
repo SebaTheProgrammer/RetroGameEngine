@@ -105,7 +105,7 @@ void PyramidCubes::GameOver()
     m_CanMove = false;
 }
 
-void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir, int wichplayer)
+void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir, int wichplayer, std::vector < glm::vec2> allDiscPos)
 {
     if( !m_CanMove ) return;
 
@@ -137,7 +137,14 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir, int wic
 
         if ( ( m_QBert1RowIndex < 0 || m_QBert1ColIndex > m_Size ) || ( m_QBert1RowIndex < rowStartIndex || m_QBert1RowIndex > rowEndIndex ) || m_QBert1ColIndex == 0 )
         {
-            //TODO: check for platforms
+            for ( const auto& discPos : allDiscPos ) 
+            {
+                if ( m_QBert1RowIndex == GetRowStartIndex( int(discPos.x) ) || discPos.x+ m_QBert1RowIndex== GetRowStartIndex( int( discPos.x ) ) )
+                {
+                    NotifyObservers( dae::EventType::PLAYER1_ON_DISC, GetOwner() );
+					return;
+				}
+            }
             NotifyObservers( dae::EventType::PLAYER1_OUT_OF_BOUNDS, GetOwner() );
             return;
         }
@@ -225,7 +232,6 @@ int PyramidCubes::GetActiveRow2() const
         return 0;
     }
 }
-
 int PyramidCubes::GetActiveColumn2() const
 {
     if ( m_IsCoop )
@@ -246,6 +252,7 @@ int PyramidCubes::GetRowEndIndex( int col ) const
 {
     return  GetRowStartIndex( col ) + col - 1;
 }
+
 void PyramidCubes::KilledEnemy()
 {
 	NotifyObservers( dae::EventType::KILL_ENEMY, GetOwner() );
@@ -283,7 +290,6 @@ void PyramidCubes::SetLeftBottom()
     }
 
 }
-
 void PyramidCubes::SetRightBottom()
 {
     for ( int index = 0; index < m_Size - 1; ++index )

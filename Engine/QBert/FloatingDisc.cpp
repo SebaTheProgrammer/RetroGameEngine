@@ -14,40 +14,31 @@ FloatingDisc::FloatingDisc( dae::GameObject* parentGameObject, std::shared_ptr<d
 
 void FloatingDisc::Update()
 {
-	m_pSingleMovenment->Update();
+	if ( m_IsAlive ) {
+		m_pSingleMovenment->Update();
 
-	ResetPosition();
+		ResetPosition();
 
-	if ( m_CanMove )
-	{
-		FloatToTop();
+		if ( m_pTextureDisc )
+		{
+			m_pTextureDisc->Update();
+		}
 	}
-
-	if ( m_pTextureDisc )
-	{
-		m_pTextureDisc->Update();
-	}
-
 }
 
 void FloatingDisc::Render() const
 {
-	if ( m_pTextureDisc )
-	{
-		m_pTextureDisc->Render();
+	if ( m_IsAlive ) {
+		if ( m_pTextureDisc )
+		{
+			m_pTextureDisc->Render();
+		}
 	}
 }
 
 void FloatingDisc::FloatToTop()
 {
-}
-
-void FloatingDisc::SetPyramidPosition( const int x, const int y )
-{
-	m_Row = x;
-	m_Col = y;
-
-	glm::vec2 totalDistance = m_Direction * m_StepSize * 30.f;
+	m_IsAlive = false;
 }
 
 void FloatingDisc::ResetPosition()
@@ -56,7 +47,7 @@ void FloatingDisc::ResetPosition()
 		m_Row = 0;
 		m_Col = 0;
 
-		rand() % 2 == 0 ? m_IsLeftDisc = true : m_IsLeftDisc = false;
+		m_IsLeftDisc = ( rand() % 2 == 0 );
 
 		if ( m_IsLeftDisc )
 		{
