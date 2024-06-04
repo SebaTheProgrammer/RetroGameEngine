@@ -18,6 +18,7 @@
 #include "UggWrongWay.h"
 #include "EnemyHandeler.h"
 #include <ServiceLocator.h>
+#include "FloatingDisc.h"
 
 Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, int howManuJumpsNeeded, int maxLevels,
 	allTextures textures, int qbertlives )
@@ -113,6 +114,12 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	m_EnemyHandeler = std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() );
 	auto enemyhandeler = std::make_shared<EnemyHandeler>( m_EnemyHandeler.get(), m_pPyramidCubes.get(), m_Textures, m_MaxScoreEnemies, m_LevelSize);
 	m_EnemyHandeler->AddComponent( enemyhandeler );
+
+	//Discs
+	m_FloatingDisc.push_back( std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() ) );
+	auto disc = std::make_shared<FloatingDisc>( m_FloatingDisc[ m_FloatingDisc.size() - 1 ].get(), m_Textures.m_DiscTexture, m_LevelSize, true);
+	m_FloatingDisc[ m_FloatingDisc.size() - 1 ]->AddComponent( disc );
+	m_FloatingDisc[ m_FloatingDisc.size() - 1 ]->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x, parentGameObject->GetLocalTransform().GetPosition().y - 40 } );
 }
 
 void Level::Update()
@@ -205,6 +212,11 @@ void Level::Update()
 
 		m_EnemyHandeler->Update();
 
+		for ( const auto& discs : m_FloatingDisc )
+		{
+			discs->Update();
+		}
+
 		if ( m_Timer > m_SpawnEnemyTime )
 		{
 
@@ -250,12 +262,19 @@ void Level::Render() const
 		break;
 
 	case LevelState::Normal:
+
+		for ( const auto& discs : m_FloatingDisc )
+		{
+			discs->Render();
+		}
+
 		for ( const auto& players : m_QbertGameObject )
 		{
 			players->Render();
 		}
 
 		m_EnemyHandeler->Render();
+
 
 		break;
 	}

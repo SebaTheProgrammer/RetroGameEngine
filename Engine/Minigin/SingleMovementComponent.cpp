@@ -21,9 +21,11 @@ void SingleMovementComponent::SingleMove( glm::vec2 direction, Direction dir, bo
     {
         if ( m_InstantJump && byPC )
         {
-            auto& ss = dae::ServiceLocator::GetSoundSystem();
-            ss.AddSound( "Jump", "Sounds/Jump.wav" );
-            ss.Play( ss.GetSoundId( "Jump" ), 25 );
+            if ( m_PlayAudio ) {
+                auto& ss = dae::ServiceLocator::GetSoundSystem();
+                ss.AddSound( "Jump", "Sounds/Jump.wav" );
+                ss.Play( ss.GetSoundId( "Jump" ), 25 );
+            }
 
             m_Direction=dir;
             glm::vec2 totalDistance = direction * m_StepSize*30.f;

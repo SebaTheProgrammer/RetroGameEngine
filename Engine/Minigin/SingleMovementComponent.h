@@ -21,6 +21,7 @@ public:
 
 	void SingleMove( glm::vec2 direction, Direction dir, bool byPC );
 	void SetCanMove( bool canMove ) { m_CanMove = canMove; }
+	void SetPlayAudio( bool playAudio ) { m_PlayAudio = playAudio; }
 	void SetInstantJump( bool instantJump ) { m_InstantJump = instantJump; }
 	void SetHasControl( bool hasControl ) { m_HasControl = hasControl; }
 
@@ -32,7 +33,7 @@ public:
 
 private:
 	Direction m_Direction{ Direction::LeftDown };
-	float m_Speed;
+	float m_Speed{ 47 };
 	bool m_MovementInProgress{ false };
 	bool m_CanMove{ false };
 	float m_StepSize{ 1.2f };
@@ -40,6 +41,7 @@ private:
 	float m_ElapsedTime{ 0.0f };
 	bool m_InstantJump;
 	bool m_HasControl{ true };
+	bool m_PlayAudio{ true };
 
 	const float m_TimeBetweenSteps{ 0.5f };
 };

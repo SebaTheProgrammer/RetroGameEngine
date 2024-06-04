@@ -92,6 +92,7 @@ void load()
 		LevelTextures.m_GameOverTexture = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Game Over Title.png" ) };
 		LevelTextures.m_WinTexture = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Victory Title.png" ) };
 		LevelTextures.m_CubesTexture = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Qbert Cubes.png" ) };
+		LevelTextures.m_DiscTexture = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Disk Spritesheet.png" ) };
 	}
 
 	//Level loading from file:

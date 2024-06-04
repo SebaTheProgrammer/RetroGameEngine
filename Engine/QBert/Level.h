@@ -25,6 +25,8 @@ public:
 		std::shared_ptr<dae::Texture2D> m_UggWrongWay;
 		std::shared_ptr<dae::Texture2D> m_Slick;
 		std::shared_ptr<dae::Texture2D> m_Sam;
+
+		std::shared_ptr<dae::Texture2D> m_DiscTexture;
 	};
 
 	Level( dae::GameObject* parentGameObject, int howLongLevel, int level, int howManuJumpsNeeded, int maxLevels,
@@ -82,6 +84,9 @@ private:
 	int m_HowManyEnemies{ 0 };
 	int m_MaxScoreEnemies{2};
 
+	std::vector < std::shared_ptr<dae::GameObject>> m_FloatingDisc;
+
+	//Parameters
 	float m_Timer{ 0 };
 	const float m_BeginTime{ 3.f };
 	float m_SpawnEnemyTime{ 6.5f };
