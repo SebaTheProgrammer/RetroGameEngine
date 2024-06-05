@@ -32,17 +32,20 @@ void SingleMovementComponent::SingleMove( glm::vec2 direction, Direction dir, bo
             MovenmentComponent::Move( totalDistance );
 
             //Should make a base class for the enemies
-            if ( GetOwner()->GetComponent<Coily>() )
+            if ( GetOwner()->GetComponent<Coily>() != nullptr )
             {
                 GetOwner()->GetComponent<Coily>().get()->Moved( m_Direction );
+                return;
             }
-            if ( GetOwner()->GetComponent<SlickSam>() )
+            if ( GetOwner()->GetComponent<SlickSam>() != nullptr )
             {
                 GetOwner()->GetComponent<SlickSam>().get()->Moved( m_Direction );
+                return;
             }
-            if ( GetOwner()->GetComponent<UggWrongWay>() )
+            if ( GetOwner()->GetComponent<UggWrongWay>() != nullptr )
             {
 				GetOwner()->GetComponent<UggWrongWay>().get()->Moved( m_Direction );
+				return;
 			}
             return;
         }

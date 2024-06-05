@@ -20,8 +20,22 @@ void EnemyHandeler::Update()
 {
 	for ( auto enemy : m_EnemiesGameObjects )
 	{
-		if ( enemy != nullptr ) {
-			enemy->Update();
+		if ( enemy != nullptr ) 
+		{
+			if ( enemy->GetComponent<SlickSam>() )
+			{
+				if ( enemy->GetComponent<SlickSam>()->IsAlive() )
+				{
+					enemy->Update();
+				}
+			}
+			else if ( enemy->GetComponent<UggWrongWay>() )
+			{
+				if ( enemy->GetComponent<UggWrongWay>()->IsAlive() )
+				{
+					enemy->Update();
+				}
+			}
 		}
 	}
 
@@ -128,6 +142,8 @@ void EnemyHandeler::SetCanMove( bool move )
 {
 	for ( auto enemy : m_EnemiesGameObjects )
 	{
+		if( enemy == nullptr ) continue;
+
 		if ( enemy->GetComponent<SlickSam>() ) {
 			enemy->GetComponent<SlickSam>()->SetCanMove( move );
 		}

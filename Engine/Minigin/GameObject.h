@@ -35,8 +35,12 @@ namespace dae
 		template<typename T>
 		std::shared_ptr<T> GetComponent()
 		{
+			if( this == nullptr ) { return nullptr; }
+			if( m_pComponents.empty() ) { return nullptr; }
+
 			for ( auto& component : m_pComponents )
 			{
+				if ( component == nullptr ) { continue; }
 				if ( auto castedComponent = std::dynamic_pointer_cast< T >( component ) )
 				{
 					return castedComponent;
@@ -51,6 +55,7 @@ namespace dae
 
 			for ( auto& component : m_pComponents )
 			{
+				if ( component == nullptr ) { continue; }
 				if ( auto castedComponent = std::dynamic_pointer_cast< T >( component ) )
 				{
 					components.push_back( castedComponent );

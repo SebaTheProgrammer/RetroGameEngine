@@ -15,6 +15,7 @@ void SlickSam::Update()
 {
 	if(!m_IsAlive ) return;
 	if(!m_CanMove ) return;
+
 	m_Timer += dae::GameTime::GetInstance().GetDeltaTime();
 
 	switch ( m_CurrentState )

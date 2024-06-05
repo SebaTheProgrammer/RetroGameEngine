@@ -81,6 +81,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::COILY_DEAD:
 
 		GetOwner()->GetComponent<Level>()->CoilyDied();
+		m_Score += 500;
 
 		break;
 

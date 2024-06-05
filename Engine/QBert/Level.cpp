@@ -232,7 +232,6 @@ void Level::Update()
 			if ( m_Player1Moved && m_Player2Moved || !m_IsMultiplayer && m_Player1Moved )
 			{
 				m_EnemyHandeler->GetComponent<EnemyHandeler>()->SpawnEnemies();
-
 				m_SpawnEnemyTime = m_MaxSpawnEnemyTime;
 			}
 			m_Timer = 0;
