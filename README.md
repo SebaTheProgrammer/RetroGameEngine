@@ -25,7 +25,7 @@ Contributions are welcome! If you have any ideas for improvements or new feature
 
 ## Acknowledgments
 
-Special thanks to [Programming 4 Course Instructors] for their guidance and support throughout the development of this project.
+Special thanks to my Programming 4 Course Instructors for their guidance and support throughout the development of this project.
 
 ---
 
