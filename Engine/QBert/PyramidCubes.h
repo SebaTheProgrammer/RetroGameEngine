@@ -40,8 +40,6 @@ public:
 	int GetActiveRow2() const;
 	int GetActiveColumn2() const;
 
-	int GetRowStartIndex( int col ) const;
-	int GetRowEndIndex( int col ) const;
 	int GetSize() const { return m_Size; }
 
 	std::vector<std::shared_ptr<Cube>> GetCubes() const { return m_pCubes; }

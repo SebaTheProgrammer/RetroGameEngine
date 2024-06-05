@@ -2,6 +2,7 @@
 #include <GameTime.h>
 #include <iostream>
 #include "PlayerCommands.h"
+#include "Utilities.h"
 
 Coily::Coily( dae::GameObject* parentGameObject, 
 	std::shared_ptr<dae::Texture2D> textureCoily, int levelSize, PyramidCubes* pyramid, bool hasPlayer2Control ):
@@ -282,16 +283,6 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 	m_Col = newCol;
 	Jump( direction );
 	m_PrevDirection = direction;
-}
-
-int Coily::GetRowStartIndex(int col) const
-{
-	return ( ( col - 1 ) * ( col ) ) / 2;
-}
-
-int Coily::GetRowEndIndex( int col ) const
-{
-	return  GetRowStartIndex( col ) + col - 1;
 }
 
 void Coily::IdleSnake()

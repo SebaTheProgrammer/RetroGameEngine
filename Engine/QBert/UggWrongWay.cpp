@@ -1,6 +1,7 @@
 #include "UggWrongWay.h"
 #include <GameTime.h>
 #include <iostream>
+#include "Utilities.h"
 
 UggWrongWay::UggWrongWay( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureUggWrongWay, int levelSize, PyramidCubes* pyramid ) :
 	BaseComponent( parentGameObject ),
@@ -145,16 +146,6 @@ void UggWrongWay::Moved( SingleMovementComponent::Direction dir )
 		m_IsAlive = false;
 		return;
 	}
-}
-
-int UggWrongWay::GetRowStartIndex( int col ) const
-{
-	return ( ( col - 1 ) * ( col ) ) / 2;
-}
-
-int UggWrongWay::GetRowEndIndex( int col ) const
-{
-	return  GetRowStartIndex( col ) + col - 1;
 }
 
 void UggWrongWay::SetStartPos()

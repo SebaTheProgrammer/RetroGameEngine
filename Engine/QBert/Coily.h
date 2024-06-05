@@ -38,8 +38,6 @@ public:
 	void FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int playerCol2 );
 
 private:
-	int GetRowStartIndex(int col) const;
-	int GetRowEndIndex(int col) const;
 	void IdleSnake();
 	void IdleBackSnake();
 	void Egged();

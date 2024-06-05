@@ -37,8 +37,6 @@ class UggWrongWay : public dae::BaseComponent, public dae::GameActor
 	bool IsAlive() const { return m_IsAlive; }
 
 private:
-	int GetRowStartIndex( int col ) const;
-	int GetRowEndIndex( int col ) const;
 	void SetStartPos();
 
 	const float m_FrameTime = 0.5f;

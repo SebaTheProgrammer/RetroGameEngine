@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include "GameTime.h"
+#include "Utilities.h"
 
 FloatingDisc::FloatingDisc( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureDisc, int levelSize, bool isLeftDisc )
 	: BaseComponent( parentGameObject )
@@ -126,14 +127,4 @@ void FloatingDisc::ResetPosition()
 
 		GetOwner()->AddLocalTransform( glm::vec3{ m_Offset.x, m_Offset.y, 0.0f } );
 	}
-}
-
-int FloatingDisc::GetRowStartIndex( int col ) const
-{
-	return ( ( col - 1 ) * ( col ) ) / 2;
-}
-
-int FloatingDisc::GetRowEndIndex( int col ) const
-{
-	return  GetRowStartIndex( col ) + col - 1;
 }

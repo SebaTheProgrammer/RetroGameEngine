@@ -27,8 +27,6 @@ public:
 	glm::vec2 GetRowCol() const;
 
 	void ResetPosition();
-	int GetRowStartIndex( int col )const;
-	int GetRowEndIndex( int col ) const;
 
 	bool IsAlive() const { return m_IsAlive; }
 

@@ -207,6 +207,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
     <ClCompile Include="QBert.cpp" />
     <ClCompile Include="SlickSam.cpp" />
     <ClCompile Include="UggWrongWay.cpp" />
+    <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Minigin\SingleMovementComponent.h" />
@@ -216,6 +217,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
     <ClInclude Include="EnemyHandeler.h" />
     <ClInclude Include="FloatingDisc.h" />
     <ClInclude Include="HealthComponentQbert.h" />
+    <ClInclude Include="Utilities.h" />
     <ClInclude Include="HighScoreScreen.h" />
     <ClInclude Include="PlayerCommands.h" />
     <ClInclude Include="Level.h" />

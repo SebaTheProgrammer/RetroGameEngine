@@ -5,6 +5,7 @@
 #include <iostream>
 #include <GameTime.h>
 #include <iostream>
+#include "Utilities.h"
 
 PyramidCubes::PyramidCubes( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, int size, int wichLevel, int howManuJumpsNeeded )
 	: BaseComponent( parentGameObject )
@@ -252,15 +253,6 @@ int PyramidCubes::GetActiveColumn2() const
     {
         return 0;
     }
-}
-
-int PyramidCubes::GetRowStartIndex( int col ) const
-{
-    return ( ( col - 1 ) * ( col ) ) / 2;
-}
-int PyramidCubes::GetRowEndIndex( int col ) const
-{
-    return  GetRowStartIndex( col ) + col - 1;
 }
 
 void PyramidCubes::KilledEnemy()

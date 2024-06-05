@@ -35,9 +35,6 @@ public:
 	bool IsAlive() const { return m_IsAlive; }
 
 private:
-	int GetRowStartIndex( int col ) const;
-	int GetRowEndIndex( int col ) const;
-
 	const float m_FrameTime = 0.5f;
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureCoily;
 

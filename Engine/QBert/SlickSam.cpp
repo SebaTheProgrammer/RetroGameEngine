@@ -1,6 +1,7 @@
 #include "SlickSam.h"
 #include <GameTime.h>
 #include <iostream>
+#include "Utilities.h"
 
 SlickSam::SlickSam( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureUgg, int levelSize, PyramidCubes* pyramid ) :
 	BaseComponent( parentGameObject ), m_pPyramid( pyramid )
@@ -104,14 +105,4 @@ void SlickSam::Moved( SingleMovementComponent::Direction dir )
 	}
 
 	m_pPyramid->ReverseCube( m_Row );
-}
-
-int SlickSam::GetRowStartIndex( int col ) const
-{
-	return ( ( col - 1 ) * ( col ) ) / 2;
-}
-
-int SlickSam::GetRowEndIndex( int col ) const
-{
-	return  GetRowStartIndex( col ) + col - 1;
 }

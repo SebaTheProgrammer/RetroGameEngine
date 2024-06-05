@@ -4,6 +4,7 @@
 #include "SlickSam.h"
 #include "UggWrongWay.h"
 #include "Level.h"
+#include "Utilities.h"
 
 EnemyHandeler::EnemyHandeler( dae::GameObject* parentGameObject, PyramidCubes* pyramid, Level::allTextures textures, int maxScoreEnemies, int levelsize ):
 	BaseComponent( parentGameObject ), m_pPyramid( pyramid ), m_MaxScoreEnemies( maxScoreEnemies )
@@ -87,8 +88,8 @@ void EnemyHandeler::SpawnSam()
 
 void EnemyHandeler::SpawnUggWrongway()
 {
-	if ( m_pPyramid->GetActiveRow() != m_pPyramid->GetRowStartIndex( m_pPyramid->GetSize() ) &&
-		m_pPyramid->GetActiveRow() != m_pPyramid->GetRowEndIndex( m_pPyramid->GetSize() ) )
+	if ( m_pPyramid->GetActiveRow() != GetRowStartIndex( m_pPyramid->GetSize() ) &&
+		m_pPyramid->GetActiveRow() != GetRowEndIndex( m_pPyramid->GetSize() ) )
 	{
 		m_EnemiesGameObjects.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() ) );
 		m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );

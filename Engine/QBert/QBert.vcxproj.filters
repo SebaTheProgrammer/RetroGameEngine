@@ -87,6 +87,9 @@
     <ClCompile Include="FloatingDisc.cpp">
       <Filter>Level\Disc</Filter>
     </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PyramidCubes.h">
@@ -139,6 +142,9 @@
     </ClInclude>
     <ClInclude Include="FloatingDisc.h">
       <Filter>Level\Disc</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
