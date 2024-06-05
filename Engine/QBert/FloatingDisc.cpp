@@ -1,5 +1,7 @@
 #include "FloatingDisc.h"
 #include <iostream>
+#include <cmath>
+#include "GameTime.h"
 
 FloatingDisc::FloatingDisc( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureDisc, int levelSize, bool isLeftDisc )
 	: BaseComponent( parentGameObject )
@@ -12,6 +14,11 @@ FloatingDisc::FloatingDisc( dae::GameObject* parentGameObject, std::shared_ptr<d
 	m_pSingleMovenment->SetPlayAudio( false );
 }
 
+glm::vec2 Lerp( const glm::vec2& start, const glm::vec2& end, float t )
+{
+	return start + t * ( end - start );
+}
+
 void FloatingDisc::Update()
 {
 	if ( m_IsAlive ) {
@@ -22,6 +29,35 @@ void FloatingDisc::Update()
 		if ( m_pTextureDisc )
 		{
 			m_pTextureDisc->Update();
+		}
+
+		if ( m_FloatingToTop ) 
+		{
+			glm::vec2 currentPosition = GetOwner()->GetLocalTransform().GetPosition();
+
+			glm::vec2 direction = m_StartPos - currentPosition;
+			float distance = glm::length( direction );
+
+			if ( distance > 0.0f ) 
+			{
+				direction /= distance;
+
+				float moveDistance = m_Speed * dae::GameTime::GetInstance().GetDeltaTime();
+
+				glm::vec2 newPosition;
+				if ( moveDistance < distance ) {
+					newPosition = currentPosition + direction * moveDistance;
+				}
+				else {
+					newPosition = m_StartPos;
+					m_FloatingToTop = false;
+					m_IsAlive = false;
+
+					NotifyObservers( dae::EventType::DISC_FLOAT_TO_TOP, GetOwner() );
+				}
+
+				GetOwner()->SetLocalTransform( newPosition );
+			}
 		}
 	}
 }
@@ -38,14 +74,27 @@ void FloatingDisc::Render() const
 
 void FloatingDisc::FloatToTop()
 {
-	m_IsAlive = false;
+	m_FloatingToTop = true;
+}
+
+glm::vec2 FloatingDisc::GetRowCol() const
+{
+	if ( m_IsAlive ) {
+		return glm::vec2( m_Row, m_Col );
+	}
+	else {
+		return glm::vec2( -1, -1 );
+	}
 }
 
 void FloatingDisc::ResetPosition()
 {
-	if ( !m_SettetStartPos ) {
+	if ( !m_SettetStartPos ) 
+	{
 		m_Row = 0;
 		m_Col = 0;
+
+		m_StartPos = GetOwner()->GetLocalTransform().GetPosition();
 
 		m_IsLeftDisc = ( rand() % 2 == 0 );
 
@@ -76,8 +125,6 @@ void FloatingDisc::ResetPosition()
 		m_SettetStartPos = true;
 
 		GetOwner()->AddLocalTransform( glm::vec3{ m_Offset.x, m_Offset.y, 0.0f } );
-
-		std::cout<<m_Row<<" "<<m_Col<<std::endl;
 	}
 }
 

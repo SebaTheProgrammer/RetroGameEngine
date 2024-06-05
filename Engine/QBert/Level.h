@@ -43,11 +43,15 @@ public:
 	void RestartLevel();
 	void Player1Moved();
 	void Player2Moved();
+	void Player1OnDisc();
+	void Player2OnDisc();
+
 	void SetMultiplayer( bool isMultiplayer );
 	void SetVersus( bool isVersus );
 	void SinglePlayer();
 	void SetBottomLeft();
 	void SetBottomRight();
+	void SetTop();
 
 	void CoilyDied();
 
@@ -103,4 +107,7 @@ private:
 
 	bool m_StartSound{ true };
 	bool m_UpdatedDisks{ false };
+
+	bool m_Player1OnDisc{ false };
+	bool m_Player2OnDisc{ false };
 };

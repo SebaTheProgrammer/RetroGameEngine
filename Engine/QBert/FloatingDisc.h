@@ -24,7 +24,7 @@ public:
 	int GetRow() const { return m_Row; }
 	int GetCol() const { return m_Col; }
 
-	glm::vec2 GetRowCol() const { return glm::vec2( m_Row, m_Col ); }
+	glm::vec2 GetRowCol() const;
 
 	void ResetPosition();
 	int GetRowStartIndex( int col )const;
@@ -33,11 +33,13 @@ public:
 	bool IsAlive() const { return m_IsAlive; }
 
 private:
-	const float m_FrameTime = 0.5f;
+	const float m_FrameTime{ 0.5f };
+
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureDisc;
 	std::shared_ptr <SingleMovementComponent> m_pSingleMovenment;
 	glm::vec2 m_Direction;
 	glm::vec2 m_Offset{15, -20};
+	glm::vec2 m_StartPos;
 
 	int m_LevelSize;
 	int m_Row{ 0 };
@@ -45,6 +47,8 @@ private:
 
 	bool m_IsAlive{ true };
 	bool m_SettetStartPos = false;
+	bool m_FloatingToTop = false;
+
 	bool m_IsLeftDisc;
 	float m_StepSize{ 1.2f };
 	const float m_Speed = 47.f;

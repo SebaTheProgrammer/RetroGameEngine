@@ -141,6 +141,7 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir, int wic
             {
                 if ( m_QBert1RowIndex == GetRowStartIndex( int(discPos.x) ) || discPos.x+ m_QBert1RowIndex== GetRowStartIndex( int( discPos.x ) ) )
                 {
+                    m_Disc1 = discPos;
                     NotifyObservers( dae::EventType::PLAYER1_ON_DISC, GetOwner() );
 					return;
 				}
@@ -186,6 +187,7 @@ void PyramidCubes::WalkedOnCube( SingleMovementComponent::Direction dir, int wic
             {
                 if ( m_QBert2RowIndex == GetRowStartIndex( int( discPos.x ) ) || discPos.x + m_QBert2RowIndex == GetRowStartIndex( int( discPos.x ) ) )
                 {
+                    m_Disc2 = discPos;
                     NotifyObservers( dae::EventType::PLAYER2_ON_DISC, GetOwner() );
                     return;
                 }

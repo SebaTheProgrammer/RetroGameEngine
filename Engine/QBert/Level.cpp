@@ -120,6 +120,7 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	{
 		m_FloatingDisc.push_back( std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() ) );
 		auto disc = std::make_shared<FloatingDisc>( m_FloatingDisc[ m_FloatingDisc.size() - 1 ].get(), m_Textures.m_DiscTexture, m_LevelSize, true );
+		disc->AddObserver( levelHandeler.get() );
 		m_FloatingDisc[ m_FloatingDisc.size() - 1 ]->AddComponent( disc );
 		m_FloatingDisc[ m_FloatingDisc.size() - 1 ]->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x, parentGameObject->GetLocalTransform().GetPosition().y - 40 } );
 	}
@@ -400,6 +401,36 @@ void Level::Player2Moved()
 	}
 }
 
+void Level::Player1OnDisc()
+{
+	for ( auto& disc : m_FloatingDisc )
+	{
+		if ( disc->GetComponent<FloatingDisc>()->GetRowCol() == m_pPyramidCubes->GetDisc1() )
+		{
+			disc->GetComponent<FloatingDisc>()->FloatToTop();
+			//m_QbertGameObject[ 0 ]->SetParent( disc.get() );
+			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetCanMove( false );
+			m_Player1OnDisc = true;
+		}
+	}
+
+
+}
+
+void Level::Player2OnDisc()
+{
+	for ( auto& disc : m_FloatingDisc )
+	{
+		if ( disc->GetComponent<FloatingDisc>()->GetRowCol() == m_pPyramidCubes->GetDisc2() )
+		{
+			disc->GetComponent<FloatingDisc>()->FloatToTop();
+			//m_QbertGameObject[ 1 ]->SetParent( disc.get() );
+			m_QbertGameObject[ 1 ]->GetComponent<QBert>()->SetCanMove( false );
+			m_Player2OnDisc = true;
+		}
+	}
+}
+
 void Level::SetMultiplayer( bool isMultiplayer )
 {
 	if ( !m_IsMultiplayer && isMultiplayer )
@@ -505,5 +536,22 @@ void Level::SetBottomRight()
 				}
 			}
 		}
+	}
+}
+
+void Level::SetTop()
+{
+	if ( m_Player1OnDisc ) {
+		m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetCanMove( true );
+		m_QbertGameObject[ 0 ]->GetComponent<QBert>()->ResetQBert();
+		m_pPyramidCubes->ResetIndex1();
+		m_Player1OnDisc = false;
+	}
+	else if ( m_Player2OnDisc )
+	{
+		m_QbertGameObject[ 1 ]->GetComponent<QBert>()->SetCanMove( true );
+		m_QbertGameObject[ 1 ]->GetComponent<QBert>()->ResetQBert();
+		m_pPyramidCubes->ResetIndex2();
+		m_Player2OnDisc = false;
 	}
 }

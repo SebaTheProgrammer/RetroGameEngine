@@ -84,6 +84,18 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 
 		break;
 
+	case dae::EventType::PLAYER1_ON_DISC:
+
+		GetOwner()->GetComponent<Level>()->Player1OnDisc();
+
+		break;
+
+	case dae::EventType::PLAYER2_ON_DISC:
+
+		GetOwner()->GetComponent<Level>()->Player2OnDisc();
+
+		break;
+
 	case dae::EventType::PLAYER1_OUT_OF_BOUNDS:
 		ss.AddSound( "QBertFall", "Sounds/QBertFall.wav" );
 		ss.Play( ss.GetSoundId( "QBertFall" ), m_Volume );
@@ -152,7 +164,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::KILL_ENEMY:
 		m_Score += 300;
 		break;
-		
+
 	case dae::EventType::PLAYER_WON:
 		ss.AddSound( "CompleteRound", "Sounds/CompleteRound.wav" );
 		ss.Play( ss.GetSoundId( "CompleteRound" ), m_Volume );
@@ -178,7 +190,6 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 				m_pQbert2 = qbert;
 				GetOwner()->GetComponent<Level>()->Player2Moved();
 			}
-			GetOwner()->GetComponent<Level>()->GetDiscPos();
 			GetOwner()->GetComponent<PyramidCubes>()->WalkedOnCube( qbert->GetDirection(), qbert->GetWichPlayer(), GetOwner()->GetComponent<Level>()->GetDiscPos() );
 		}
 		break;
@@ -186,6 +197,10 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::NEW_CUBE_COMPLETED:
 		m_Score += 25;
 		break;
+
+		case dae::EventType::DISC_FLOAT_TO_TOP:
+			GetOwner()->GetComponent<Level>()->SetTop();
+			break;
 
 	case dae::EventType::LEVEL_RESTART:
 		for ( unsigned i = 0; i < maxScenes; ++i )

@@ -58,6 +58,9 @@ public:
 	void SetLeftBottom();
 	void SetRightBottom();
 
+	glm::vec2 GetDisc1() const { return m_Disc1; }
+	glm::vec2 GetDisc2() const { return m_Disc2; }
+
 private:
 	std::shared_ptr<dae::Texture2D> m_pTexture;
 	int m_Size;
@@ -66,6 +69,8 @@ private:
 
 	std::vector<std::shared_ptr<Cube>> m_pCubes;
 	std::shared_ptr<Cube> m_EndGoalCube;
+	glm::vec2 m_Disc1;
+	glm::vec2 m_Disc2;
 
 	float m_Scale = 1.5f;
 
