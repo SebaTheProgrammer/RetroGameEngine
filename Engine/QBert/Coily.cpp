@@ -250,7 +250,7 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 
 	if ( targetCol <= m_Col )
 	{
-		if ( targetRow < m_Row - m_Col )
+		if ( targetRow <= m_Row )
 		{
 			newRow = m_Row - oldActiveCol;
 			newCol = m_Col - 1;
@@ -265,7 +265,7 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 	}
 	else
 	{
-		if ( targetRow <= m_Row + m_Col )
+		if ( targetRow < m_Row + oldActiveCol + 1 )
 		{
 			newRow = m_Row + oldActiveCol;
 			newCol = m_Col + 1;
