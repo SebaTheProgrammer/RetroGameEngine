@@ -82,6 +82,7 @@ public:
     }
 
     void SetName( std::string name ) { m_Name = name; };
+    std::string GetName() const { return m_Name; };
 
 private:
     ScoreFile() = default;
