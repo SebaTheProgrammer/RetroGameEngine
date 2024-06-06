@@ -111,6 +111,24 @@ bool dae::InputManager::ProcessInput()
 	return true;
 }
 
+int dae::InputManager::GetHowManyControllersConnected()
+{
+	int connectedControllers = 0;
+
+	for ( DWORD i = 0; i < XUSER_MAX_COUNT; ++i ) {
+		XINPUT_STATE state;
+		ZeroMemory( &state, sizeof( XINPUT_STATE ) );
+
+		DWORD result = XInputGetState( i, &state );
+
+		if ( result == ERROR_SUCCESS ) {
+			++connectedControllers;
+		}
+	}
+
+	return connectedControllers;
+}
+
 bool dae::InputManager::IsDownThisFrameGP( unsigned int button ) const
 {
 	return m_ButtonsPressedThisFrameGP & button;

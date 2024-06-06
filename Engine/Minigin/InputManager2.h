@@ -40,6 +40,12 @@ namespace dae
 			m_InputBindingsKeyBoard.emplace_back( inputBinding );
 		}
 
+		void ClearKeyBinds()
+		{
+			m_InputBindingsGamePad.clear();
+			m_InputBindingsKeyBoard.clear();
+		}
+
 	private:
 
 		std::vector<InputBindingGamePad> m_InputBindingsGamePad{};

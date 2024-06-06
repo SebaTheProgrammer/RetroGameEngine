@@ -452,6 +452,17 @@ void Level::SetMultiplayer( bool isMultiplayer )
 		qbert->SetCanMove( true );
 		m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->AddComponent( qbert );
 
+		if ( dae::InputManager::GetInstance().GetHowManyControllersConnected() == 1 )
+		{
+			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputKeyBoard( true );
+			m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->GetComponent<QBert>()->SetInputController( true );
+		}
+		else 
+		{
+			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController( true );
+			m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->GetComponent<QBert>()->SetInputController2( true );
+		}
+
 		m_pPyramidCubes->SetCoop( true );
 		m_pPyramidCubes->ResetLevel();
 
@@ -488,6 +499,15 @@ void Level::SetVersus( bool isVersus )
 	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->ResetQBert();
 	m_pPyramidCubes->ResetLevel();
 	RestartLevel();
+
+	if ( dae::InputManager::GetInstance().GetHowManyControllersConnected() == 1 )
+	{
+		m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputKeyBoard( true );
+	}
+	else
+	{
+		m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController( true );
+	}
 }
 
 void Level::SinglePlayer()
@@ -498,6 +518,9 @@ void Level::SinglePlayer()
 	m_pPyramidCubes->ResetLevel();
 	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->ResetQBert();
 	RestartLevel();
+
+	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputKeyBoard( true );
+	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController( false );
 }
 
 void Level::SetBottomLeft()
