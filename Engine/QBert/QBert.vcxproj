@@ -196,7 +196,10 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
     <ClCompile Include="..\Minigin\SingleMovementComponent.cpp" />
     <ClCompile Include="ChangeNameScreen.cpp" />
     <ClCompile Include="Coily.cpp" />
+    <ClCompile Include="CoilyState.cpp" />
+    <ClCompile Include="CoilyStateHandeler.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="EggState.cpp" />
     <ClCompile Include="EnemyHandeler.cpp" />
     <ClCompile Include="FloatingDisc.cpp" />
     <ClCompile Include="HealthComponentQbert.cpp" />
@@ -208,6 +211,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
     <ClCompile Include="PyramidCubes.cpp" />
     <ClCompile Include="QBert.cpp" />
     <ClCompile Include="SlickSam.cpp" />
+    <ClCompile Include="SnakeState.cpp" />
     <ClCompile Include="UggWrongWay.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
@@ -215,12 +219,16 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
     <ClInclude Include="..\Minigin\SingleMovementComponent.h" />
     <ClInclude Include="ChangeNameScreen.h" />
     <ClInclude Include="Coily.h" />
+    <ClInclude Include="CoilyState.h" />
+    <ClInclude Include="CoilyStateHandeler.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="EggState.h" />
     <ClInclude Include="EnemyHandeler.h" />
     <ClInclude Include="FloatingDisc.h" />
     <ClInclude Include="HealthComponentQbert.h" />
     <ClInclude Include="MainMenuScreen.h" />
+    <ClInclude Include="SnakeState.h" />
     <ClInclude Include="Utilities.h" />
     <ClInclude Include="HighScoreScreen.h" />
     <ClInclude Include="PlayerCommands.h" />

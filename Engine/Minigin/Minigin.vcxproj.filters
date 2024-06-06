@@ -131,6 +131,9 @@
     <ClInclude Include="ButtonManagerComponent.h">
       <Filter>Objects\Components\Rest</Filter>
     </ClInclude>
+    <ClInclude Include="InputManager2.h">
+      <Filter>InputSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -203,6 +206,9 @@
       <Filter>Objects\Components\Rest</Filter>
     </ClCompile>
     <ClCompile Include="InputCommands.cpp">
+      <Filter>InputSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager2.cpp">
       <Filter>InputSystem</Filter>
     </ClCompile>
   </ItemGroup>

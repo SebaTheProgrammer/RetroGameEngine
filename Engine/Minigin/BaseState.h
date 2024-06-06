@@ -12,7 +12,7 @@ namespace dae
 
 		virtual void Update() = 0;
 
-	private:
+	protected:
 		BaseState() = default;
 	};
 }

@@ -13,7 +13,7 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 {
 	public:
 	QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureIdle, std::shared_ptr<dae::Texture2D> textureIdleBack,
-		bool keyboardinput);
+		int wichPlayer );
 	virtual ~QBert() = default;
 
 	void Update() override;
@@ -49,8 +49,6 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 	void SetRightBottom( int levelsize );
 private:
 	AnimationState m_CurrentState = AnimationState::Idle;
-
-	bool m_KeyBoardInput;
 
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdle;
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureIdleBack;

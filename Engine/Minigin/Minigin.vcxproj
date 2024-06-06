@@ -248,6 +248,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="InputCommands.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="InputManager2.h" />
     <ClInclude Include="InputStructs.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MovenmentComponent.h" />
@@ -277,6 +278,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2\include\SDL2_mixer\lib\$(PlatformTarget)\*.dl
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="InputCommands.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="InputManager2.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="MovenmentComponent.cpp" />

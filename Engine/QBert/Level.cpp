@@ -80,7 +80,7 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x, parentGameObject->GetLocalTransform().GetPosition().y - 40 } );
 	auto qbert = std::shared_ptr<QBert>{};
 
-	qbert = ( std::make_shared<QBert>( m_QbertGameObject[ m_QbertGameObject.size() - 1 ].get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle, true) );
+	qbert = ( std::make_shared<QBert>( m_QbertGameObject[ m_QbertGameObject.size() - 1 ].get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle, 0) );
 	m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->AddComponent( qbert );
 
 	//Levelhandeler
@@ -446,7 +446,7 @@ void Level::SetMultiplayer( bool isMultiplayer )
 		m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->SetLocalTransform( { GetOwner()->GetLocalTransform().GetPosition().x,  GetOwner()->GetLocalTransform().GetPosition().y - 40 } );
 		auto qbert = std::shared_ptr<QBert>{};
 
-		qbert = ( std::make_shared<QBert>( m_QbertGameObject[ m_QbertGameObject.size() - 1 ].get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle, false ) );
+		qbert = ( std::make_shared<QBert>( m_QbertGameObject[ m_QbertGameObject.size() - 1 ].get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle, 1 ) );
 		qbert->SetWichPlayer( 2 );
 		qbert->AddObserver( GetOwner()->GetComponent<LevelHandeler>().get() );
 		qbert->SetCanMove( true );

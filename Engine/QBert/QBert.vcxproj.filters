@@ -35,6 +35,9 @@
     <Filter Include="UI">
       <UniqueIdentifier>{2c8363ad-288c-4c1c-af6b-4be73a25af0a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Level\Enemies\Coily">
+      <UniqueIdentifier>{ac690bc9-d9a5-4a7b-9218-1c6b9fa2b176}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,9 +57,6 @@
     </ClCompile>
     <ClCompile Include="HealthComponentQbert.cpp">
       <Filter>Level\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Coily.cpp">
-      <Filter>Level\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="HighScoreScreen.cpp">
       <Filter>UI</Filter>
@@ -88,6 +88,21 @@
     <ClCompile Include="MainMenuScreen.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Coily.cpp">
+      <Filter>Level\Enemies\Coily</Filter>
+    </ClCompile>
+    <ClCompile Include="CoilyState.cpp">
+      <Filter>Level\Enemies\Coily</Filter>
+    </ClCompile>
+    <ClCompile Include="CoilyStateHandeler.cpp">
+      <Filter>Level\Enemies\Coily</Filter>
+    </ClCompile>
+    <ClCompile Include="EggState.cpp">
+      <Filter>Level\Enemies\Coily</Filter>
+    </ClCompile>
+    <ClCompile Include="SnakeState.cpp">
+      <Filter>Level\Enemies\Coily</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PyramidCubes.h">
@@ -107,9 +122,6 @@
     </ClInclude>
     <ClInclude Include="HealthComponentQbert.h">
       <Filter>Level\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Coily.h">
-      <Filter>Level\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="LevelFile.h">
       <Filter>Files</Filter>
@@ -149,6 +161,21 @@
     </ClInclude>
     <ClInclude Include="MainMenuScreen.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Coily.h">
+      <Filter>Level\Enemies\Coily</Filter>
+    </ClInclude>
+    <ClInclude Include="CoilyState.h">
+      <Filter>Level\Enemies\Coily</Filter>
+    </ClInclude>
+    <ClInclude Include="CoilyStateHandeler.h">
+      <Filter>Level\Enemies\Coily</Filter>
+    </ClInclude>
+    <ClInclude Include="EggState.h">
+      <Filter>Level\Enemies\Coily</Filter>
+    </ClInclude>
+    <ClInclude Include="SnakeState.h">
+      <Filter>Level\Enemies\Coily</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
