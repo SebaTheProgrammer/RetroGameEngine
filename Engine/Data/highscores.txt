@@ -1,9 +1,9 @@
 RandomPlayer 900
+RandomPlayer 575
 RandomPlayer 550
 RandomPlayer 300
 RandomPlayer 100
 RandomPlayer 75
-RandomPlayer 25
 RandomPlayer 25
 RandomPlayer 25
 RandomPlayer 25

@@ -250,32 +250,36 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 
 	if ( targetCol <= m_Col )
 	{
-		if ( targetRow <= m_Row )
+		if ( targetRow <= m_Row - m_Col || m_Col == targetCol && targetRow < m_Row )
 		{
 			newRow = m_Row - oldActiveCol;
 			newCol = m_Col - 1;
 			direction = SingleMovementComponent::Direction::LeftUp;
+			std::cout << "LeftUp" << std::endl;
 		}
 		else
 		{
 			newRow = m_Row - oldActiveCol + 1;
 			newCol = m_Col - 1;
 			direction = SingleMovementComponent::Direction::RightUp;
+			std::cout << "RightUp" << std::endl;
 		}
 	}
 	else
 	{
-		if ( targetRow < m_Row + oldActiveCol + 1 )
+		if ( targetRow <= m_Row + m_Col + 1 )
 		{
 			newRow = m_Row + oldActiveCol;
 			newCol = m_Col + 1;
 			direction = SingleMovementComponent::Direction::LeftDown;
+			std::cout << "LeftDown" << std::endl;
 		}
 		else
 		{
 			newRow = m_Row + oldActiveCol + 1;
 			newCol = m_Col + 1;
 			direction = SingleMovementComponent::Direction::RightDown;
+			std::cout << "RightDown" << std::endl;
 		}
 	}
 
