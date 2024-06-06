@@ -25,6 +25,7 @@
 #include "Commands.h"
 #include "ButtonComponent.h"
 #include "ButtonManagerComponent.h"
+#include "ChangeNameScreen.h"
 
 void load()
 {
@@ -42,31 +43,48 @@ void load()
 	auto go = std::make_shared<dae::GameObject>( 0 );
 	auto texture = std::make_shared < dae::TextureComponent>( go.get(), "background.tga" );
 	auto title = std::make_shared < dae::TextureComponent>( go.get(), "Game Title.png" );
-	title->SetLocalPosition( 80, 50 );
+	title->SetLocalPosition( 80, 10 );
 	go->AddComponent( texture );
 	go->AddComponent( title );
 	mainMenu.Add( go );
 
-	//buttons
+	//ChangeNameScreen
 	auto selectionArrow = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Selection Arrow.png" ) };
+	auto& changeNameScene = dae::SceneManager::GetInstance().CreateScene( "ChangeName" );
+	auto screenOb = std::make_shared<dae::GameObject>( 1 );
+	auto changeNameScreen = std::make_shared < ChangeNameScreen>( screenOb.get(), selectionArrow, font );
+	screenOb->AddComponent( texture );
+	screenOb->AddComponent( changeNameScreen );
+	changeNameScene.Add( screenOb );
+
+	//buttons
+	ScoreFile::GetInstance().ReadName();
+
+	auto changeNameGo = std::make_shared<dae::GameObject>( 0 );
+	std::shared_ptr<dae::Command> myCommand = std::make_shared< OpenSceneWithIndex>( changeNameGo.get(), 1 );
+	auto buttonChangeName = std::make_shared<dae::ButtonComponent>( changeNameGo.get(), "Player: " + ScoreFile::GetInstance().GetName(), font, myCommand);
+	changeNameGo->SetLocalTransform( {(640-buttonChangeName->GetTextComponent()->GetTexture()->GetWidth())/2, 185 } );
+	changeNameGo->AddComponent( buttonChangeName );
+	mainMenu.Add( changeNameGo );
+
 	auto buttonGo = std::make_shared<dae::GameObject>( 0 );
-	std::shared_ptr<dae::Command> myCommand = std::make_shared< SinglePlayer>( buttonGo.get() );
+	//std::shared_ptr<dae::Command> myCommand = std::make_shared< SinglePlayer>( buttonGo.get() );
 	auto button = std::make_shared<dae::ButtonComponent>( buttonGo.get(), "Solo", font, myCommand );
-	buttonGo->SetLocalTransform( { 275, 200 } );
+	buttonGo->SetLocalTransform( { ( 640 - button->GetTextComponent()->GetTexture()->GetWidth() ) / 2, 250 } );
 	buttonGo->AddComponent( button );
 	mainMenu.Add( buttonGo );
 
 	auto buttonGo2 = std::make_shared<dae::GameObject>( 0 );
 	std::shared_ptr<dae::Command> myCommand2 = std::make_shared< MultiplayerCommand>( buttonGo2.get() );
 	auto button2 = std::make_shared<dae::ButtonComponent>( buttonGo2.get(), "Two players", font, myCommand2 );
-	buttonGo2->SetLocalTransform( { 225, 250 } );
+	buttonGo2->SetLocalTransform( { ( 640 - button2->GetTextComponent()->GetTexture()->GetWidth() ) / 2, 300 } );
 	buttonGo2->AddComponent( button2 );
 	mainMenu.Add( buttonGo2 );
 
 	auto buttonGo3 = std::make_shared<dae::GameObject>( 0 );
 	std::shared_ptr<dae::Command> myCommand3 = std::make_shared<VersusCommand>( buttonGo3.get() );
 	auto button3 = std::make_shared<dae::ButtonComponent>( buttonGo3.get(), "Versus", font, myCommand3 );
-	buttonGo3->SetLocalTransform( { 260, 300 } );
+	buttonGo3->SetLocalTransform( { ( 640 - button3->GetTextComponent()->GetTexture()->GetWidth() ) / 2, 350 } );
 	buttonGo3->AddComponent( button3 );
 	mainMenu.Add( buttonGo3 );
 
@@ -129,7 +147,6 @@ void load()
 	score->AddComponent( highscore );
 	highScore.Add( score );
 
-	ScoreFile::GetInstance().ReadName();
 	std::cout << "!Welcome "<<ScoreFile::GetInstance().GetName() <<" and enjoy QBert!" << std::endl;
 	std::cout << "Made by Vryens Sebastiaan, 2GD18 " << std::endl;
 
@@ -142,11 +159,11 @@ void load()
 	auto buttonGo4 = std::make_shared<dae::GameObject>( 0 );
 	std::shared_ptr<dae::Command> myCommand4 = std::make_shared< OpenHighScoreCommand>( buttonGo4.get(), max, highscore.get() );
 	auto button4 = std::make_shared<dae::ButtonComponent>( buttonGo4.get(), "Highscores", font, myCommand4 );
-	buttonGo4->SetLocalTransform( { 225, 350 } );
+	buttonGo4->SetLocalTransform( { 225, 400 } );
 	buttonGo4->AddComponent( button4 );
 	mainMenu.Add( buttonGo4 );
 
-	std::vector<std::shared_ptr<dae::ButtonComponent>> allButtons = { button,button2,button3, button4 };
+	std::vector<std::shared_ptr<dae::ButtonComponent>> allButtons = { buttonChangeName, button, button2, button3, button4 };
 	auto buttonManager = std::make_shared<dae::ButtonManagerComponent>( buttonGo.get(), selectionArrow, allButtons );
 	buttonGo->AddComponent( buttonManager );
 

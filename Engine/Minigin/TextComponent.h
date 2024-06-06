@@ -31,6 +31,8 @@ namespace dae
 		virtual void SetPosition( float x, float y );
 		const glm::vec3& GetLocalPosition() const { return m_Transform.GetPosition(); }
 
+		std::shared_ptr<Texture2D> GetTexture() const { if ( m_TextTexture ) return m_TextTexture; else return nullptr; }
+
 	private:
 		bool m_NeedsUpdate;
 		bool m_StandStill;

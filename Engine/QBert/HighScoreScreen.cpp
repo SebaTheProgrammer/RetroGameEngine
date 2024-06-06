@@ -27,14 +27,14 @@ HighScoreScreen::HighScoreScreen( dae::GameObject* parentGameObject, std::shared
 	{
 		std::string text = m_Scores[index].first + " " + std::to_string( m_Scores[index].second );
 		m_TextComponents[index] = std::make_shared<dae::TextComponent>(parentGameObject, text, font2, true);
-		m_TextComponents[ index ]->SetLocalPosition( 225, 100.f+ index*30.f );
+		m_TextComponents[ index ]->SetLocalPosition( ( 640 - m_TextComponents[ index ]->GetTexture()->GetWidth() ) / 2, 100.f+ index*30.f );
 		parentGameObject->AddComponent( m_TextComponents[index]);
 	}
 
 	m_ButtonsHandeler = std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() );
 	std::shared_ptr<dae::Command> back = std::make_shared< OpenMainMenuCommand>( m_ButtonsHandeler.get() );
 	auto buttonB = std::make_shared<dae::ButtonComponent>( m_ButtonsHandeler.get(), "Back", font1, back );
-	m_ButtonsHandeler->SetLocalTransform( { 550, 425 } );
+	m_ButtonsHandeler->SetLocalTransform( { 540, 425 } );
 	m_ButtonsHandeler->AddComponent( buttonB );
 
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_SPACE, InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );

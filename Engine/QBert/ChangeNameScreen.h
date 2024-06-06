@@ -7,7 +7,7 @@
 class ChangeNameScreen : public dae::BaseComponent
 {
 	public:
-	ChangeNameScreen( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> texture, std::shared_ptr<dae::Font> font );
+	ChangeNameScreen( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> arrow, std::shared_ptr<dae::Font> font );
 	virtual ~ChangeNameScreen() = default;
 
 	void Update() override;
@@ -17,6 +17,7 @@ class ChangeNameScreen : public dae::BaseComponent
 	std::string GetName() const { return  ScoreFile::GetInstance().GetName(); };
 
 	private:
-
+		std::shared_ptr<dae::GameObject> m_ButtonsHandeler;
+		std::vector< std::shared_ptr <dae::GameObject>> m_Buttons;
 };
 

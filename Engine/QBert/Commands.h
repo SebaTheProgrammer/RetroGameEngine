@@ -102,12 +102,6 @@ public:
 			}
 
 			dae::SceneManager::GetInstance().SetCurrentScene( 1 );
-
-			//std::string playerName;
-			//std::cout << "Enter your name: ";
-			//std::getline( std::cin, playerName );
-			//ScoreFile::GetInstance().SetName( playerName );
-			//std::cout << "Hello, " << playerName << "!" << std::endl;
 		}
 	}
 };
@@ -155,4 +149,19 @@ public:
 private:
 	int m_Level{};
 	HighScoreScreen* m_pHighScore{};
+};
+
+class OpenSceneWithIndex : public dae::GameObjectCommand
+{
+	public:
+	OpenSceneWithIndex( dae::GameObject* gameObject, int level) : GameObjectCommand( gameObject )
+	{
+		m_Level = level;
+	}
+	virtual void Execute() override
+	{
+		dae::SceneManager::GetInstance().SetCurrentScene( m_Level );
+	}
+private:
+		int m_Level{};
 };
