@@ -57,45 +57,48 @@ void dae::ButtonManagerComponent::SetSelectedButton( std::shared_ptr<ButtonCompo
 	m_SelectedButton = button;
 }
 
-void dae::ButtonManagerComponent::SelectNextButton()
+void dae::ButtonManagerComponent::SelectNextButton( int howMany )
 {
 	if ( m_SelectedButton )
 	{
-		auto it = std::find( m_Buttons.begin(), m_Buttons.end(), m_SelectedButton );
-		if ( it != m_Buttons.end() )
-		{
-			++it;
-			if ( it == m_Buttons.end() )
+		for ( int i{}; i < howMany; ++i ) {
+			auto it = std::find( m_Buttons.begin(), m_Buttons.end(), m_SelectedButton );
+			if ( it != m_Buttons.end() )
 			{
-				it = m_Buttons.begin();
+				++it;
+				if ( it == m_Buttons.end() )
+				{
+					it = m_Buttons.begin();
+				}
+				m_SelectedButton = *it;
 			}
-			m_SelectedButton = *it;
-
-			auto& ss = dae::ServiceLocator::GetSoundSystem();
-			ss.AddSound( "Change", "Sounds/Change Selection.wav" );
-			ss.Play( ss.GetSoundId( "Change" ), 50 );
 		}
+		auto& ss = dae::ServiceLocator::GetSoundSystem();
+		ss.AddSound( "Change", "Sounds/Change Selection.wav" );
+		ss.Play( ss.GetSoundId( "Change" ), 50 );
 	}
 }
 
-void dae::ButtonManagerComponent::SelectPreviousButton()
+void dae::ButtonManagerComponent::SelectPreviousButton( int howMany )
 {
 	if ( m_SelectedButton )
 	{
-		auto it = std::find( m_Buttons.begin(), m_Buttons.end(), m_SelectedButton );
-		if ( it != m_Buttons.end() )
-		{
-			if ( it == m_Buttons.begin() )
+		for ( int i{}; i < howMany; ++i ) {
+			auto it = std::find( m_Buttons.begin(), m_Buttons.end(), m_SelectedButton );
+			if ( it != m_Buttons.end() )
 			{
-				it = m_Buttons.end();
-			}
-			--it;
-			m_SelectedButton = *it;
+				if ( it == m_Buttons.begin() )
+				{
+					it = m_Buttons.end();
+				}
+				--it;
+				m_SelectedButton = *it;
 
-			auto& ss = dae::ServiceLocator::GetSoundSystem();
-			ss.AddSound( "Change", "Sounds/Change Selection.wav" );
-			ss.Play( ss.GetSoundId( "Change" ), 50 );
+			}
 		}
+		auto& ss = dae::ServiceLocator::GetSoundSystem();
+		ss.AddSound( "Change", "Sounds/Change Selection.wav" );
+		ss.Play( ss.GetSoundId( "Change" ), 50 );
 	}
 }
 

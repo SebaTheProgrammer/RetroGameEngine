@@ -13,11 +13,14 @@ class ChangeNameScreen : public dae::BaseComponent
 	void Update() override;
 	void Render() const override;
 
-	void SetName( std::string name ) { ScoreFile::GetInstance().SetName( name ); };
+	void SetName( std::string name );
 	std::string GetName() const { return  ScoreFile::GetInstance().GetName(); };
 
 	private:
 		std::shared_ptr<dae::GameObject> m_ButtonsHandeler;
 		std::vector< std::shared_ptr <dae::GameObject>> m_Buttons;
+
+		std::string m_Name;
+		std::shared_ptr<dae::TextComponent > m_NameText;
 };
 

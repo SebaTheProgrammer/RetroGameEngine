@@ -38,6 +38,12 @@ void load()
 	auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 );
 	auto font2 = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 );
 
+	ScoreFile::GetInstance().ReadName();
+	if ( ScoreFile::GetInstance().GetName() == "" )
+	{
+		ScoreFile::GetInstance().SetName( "Random Player" );
+	}
+
 	//MAIN MENU
 	auto& mainMenu = dae::SceneManager::GetInstance().CreateScene( "MainMenu" );
 	auto go = std::make_shared<dae::GameObject>( 0 );
@@ -48,27 +54,9 @@ void load()
 	go->AddComponent( title );
 	mainMenu.Add( go );
 
-	//ChangeNameScreen
-	auto selectionArrow = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Selection Arrow.png" ) };
-	auto& changeNameScene = dae::SceneManager::GetInstance().CreateScene( "ChangeName" );
-	auto screenOb = std::make_shared<dae::GameObject>( 1 );
-	auto changeNameScreen = std::make_shared < ChangeNameScreen>( screenOb.get(), selectionArrow, font );
-	screenOb->AddComponent( texture );
-	screenOb->AddComponent( changeNameScreen );
-	changeNameScene.Add( screenOb );
-
 	//buttons
-	ScoreFile::GetInstance().ReadName();
-
-	auto changeNameGo = std::make_shared<dae::GameObject>( 0 );
-	std::shared_ptr<dae::Command> myCommand = std::make_shared< OpenSceneWithIndex>( changeNameGo.get(), 1 );
-	auto buttonChangeName = std::make_shared<dae::ButtonComponent>( changeNameGo.get(), "Player: " + ScoreFile::GetInstance().GetName(), font, myCommand);
-	changeNameGo->SetLocalTransform( {(640-buttonChangeName->GetTextComponent()->GetTexture()->GetWidth())/2, 185 } );
-	changeNameGo->AddComponent( buttonChangeName );
-	mainMenu.Add( changeNameGo );
-
 	auto buttonGo = std::make_shared<dae::GameObject>( 0 );
-	//std::shared_ptr<dae::Command> myCommand = std::make_shared< SinglePlayer>( buttonGo.get() );
+	std::shared_ptr<dae::Command> myCommand = std::make_shared< SinglePlayer>( buttonGo.get() );
 	auto button = std::make_shared<dae::ButtonComponent>( buttonGo.get(), "Solo", font, myCommand );
 	buttonGo->SetLocalTransform( { ( 640 - button->GetTextComponent()->GetTexture()->GetWidth() ) / 2, 250 } );
 	buttonGo->AddComponent( button );
@@ -89,12 +77,12 @@ void load()
 	mainMenu.Add( buttonGo3 );
 
 	//ButtonSwitching
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, InputTypeKeyBoard::IsDownThisFrame, dae::PreviousButtonCommand{ buttonGo.get() } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsDownThisFrame, dae::NextButtonCommand{ buttonGo.get() } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, InputTypeKeyBoard::IsDownThisFrame, dae::PreviousButtonCommand{ buttonGo.get() ,1 } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsDownThisFrame, dae::NextButtonCommand{ buttonGo.get() ,1 } );
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_SPACE, InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ buttonGo.get() } );
 
-	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsUpThisFrame, dae::PreviousButtonCommand{ buttonGo.get() } );
-	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsUpThisFrame, dae::NextButtonCommand{ buttonGo.get() } );
+	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsUpThisFrame, dae::PreviousButtonCommand{ buttonGo.get(),1 } );
+	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsUpThisFrame, dae::NextButtonCommand{ buttonGo.get(),1 } );
 	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ buttonGo.get() } );
 
 	//Resources
@@ -140,6 +128,8 @@ void load()
 	}
 
 	//HIGHSCORE
+	auto selectionArrow = std::shared_ptr<dae::Texture2D>{ dae::ResourceManager::GetInstance().LoadTexture( "Selection Arrow.png" ) };
+
 	auto& highScore = dae::SceneManager::GetInstance().CreateScene( "Highscores" );
 	int max = static_cast< int >( dae::SceneManager::GetInstance().GetMaxScenes() - 1 );
 	auto score = std::make_shared<dae::GameObject>( max );
@@ -147,12 +137,9 @@ void load()
 	score->AddComponent( highscore );
 	highScore.Add( score );
 
-	std::cout << "!Welcome "<<ScoreFile::GetInstance().GetName() <<" and enjoy QBert!" << std::endl;
-	std::cout << "Made by Vryens Sebastiaan, 2GD18 " << std::endl;
-
+	//Levelswitcher
 	auto levelswitcher = std::make_shared<dae::GameObject>( -1 );
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_0, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 0 } );
-
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_F1, InputTypeKeyBoard::IsDownThisFrame, dae::OpenNextLevelCommand{ levelswitcher.get() } );
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_M, InputTypeKeyBoard::IsDownThisFrame, SoundCommand{} );
 
@@ -163,11 +150,30 @@ void load()
 	buttonGo4->AddComponent( button4 );
 	mainMenu.Add( buttonGo4 );
 
+	//ChangeNameScreen
+	auto& changeNameScene = dae::SceneManager::GetInstance().CreateScene( "ChangeName" );
+	max = static_cast< int >( dae::SceneManager::GetInstance().GetMaxScenes() - 1 );
+	auto screenOb = std::make_shared<dae::GameObject>( max );
+	auto changeNameScreen = std::make_shared < ChangeNameScreen>( screenOb.get(), selectionArrow, font );
+	screenOb->AddComponent( texture );
+	screenOb->AddComponent( changeNameScreen );
+	changeNameScene.Add( screenOb );
+
+	auto changeNameGo = std::make_shared<dae::GameObject>( max );
+	std::shared_ptr<dae::Command> changeNameCommand = std::make_shared< OpenSceneWithIndex>( changeNameGo.get(), max );
+	auto buttonChangeName = std::make_shared<dae::ButtonComponent>( changeNameGo.get(), "Player: " + ScoreFile::GetInstance().GetName(), font, changeNameCommand );
+	changeNameGo->SetLocalTransform( { ( 640 - buttonChangeName->GetTextComponent()->GetTexture()->GetWidth() ) / 2, 185 } );
+	changeNameGo->AddComponent( buttonChangeName );
+	mainMenu.Add( changeNameGo );
+
 	std::vector<std::shared_ptr<dae::ButtonComponent>> allButtons = { buttonChangeName, button, button2, button3, button4 };
 	auto buttonManager = std::make_shared<dae::ButtonManagerComponent>( buttonGo.get(), selectionArrow, allButtons );
 	buttonGo->AddComponent( buttonManager );
 
 	dae::SceneManager::GetInstance().SetCurrentScene( 0 );
+
+	std::cout << "!Welcome " << ScoreFile::GetInstance().GetName() << " and enjoy QBert!" << std::endl;
+	std::cout << "Made by Vryens Sebastiaan, 2GD18 " << std::endl;
 }
 
 int main( int, char* [] ) 

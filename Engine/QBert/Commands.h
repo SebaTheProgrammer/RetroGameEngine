@@ -7,6 +7,7 @@
 #include <iostream>
 #include "HighScoreScreen.h"
 #include <ServiceLocator.h>
+#include "ChangeNameScreen.h"
 
 class OpenMainMenuCommand : public dae::GameObjectCommand
 {
@@ -164,4 +165,41 @@ class OpenSceneWithIndex : public dae::GameObjectCommand
 	}
 private:
 		int m_Level{};
+};
+
+class AddLetterCommand : public dae::GameObjectCommand
+{
+public:
+	AddLetterCommand( dae::GameObject* gameObject, char letter ) : GameObjectCommand( gameObject )
+	{
+		m_Letter = letter;
+	}
+
+	virtual void Execute() override
+	{
+		auto changeNameScreen = GetGameObject()->GetComponent<ChangeNameScreen>();
+		if ( changeNameScreen )
+		{
+			changeNameScreen->SetName( changeNameScreen->GetName() + m_Letter );
+		}
+	}
+
+private:
+	char m_Letter{};
+};
+
+class ClearLettersCommand : public dae::GameObjectCommand
+{
+public:
+	ClearLettersCommand( dae::GameObject* gameObject ) : GameObjectCommand( gameObject ) {}
+
+	virtual void Execute() override
+	{
+		auto changeNameScreen = GetGameObject()->GetComponent<ChangeNameScreen>();
+		if ( changeNameScreen )
+		{
+			changeNameScreen->SetName( " " );
+		}
+	}
+
 };

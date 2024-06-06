@@ -27,8 +27,8 @@ namespace dae
 		void SetSelectedButton( std::shared_ptr<ButtonComponent> button );
 		std::shared_ptr<ButtonComponent> GetSelectedButton() const { return m_SelectedButton; }
 
-		void SelectNextButton();
-		void SelectPreviousButton();
+		void SelectNextButton(int howMany);
+		void SelectPreviousButton( int howMany );
 
 		void PressSelectedButton();
 

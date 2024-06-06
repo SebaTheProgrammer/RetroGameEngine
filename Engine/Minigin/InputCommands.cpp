@@ -3,7 +3,7 @@
 #include "ButtonManagerComponent.h"
 #include <iostream>
 
-void dae::NextButtonCommand::Execute()
+void dae::NextButtonCommand::Execute( )
 {
 	if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
 	{
@@ -11,12 +11,12 @@ void dae::NextButtonCommand::Execute()
 
 		for ( auto& buttonmanager : buttonmanagers )
 		{
-			buttonmanager->SelectNextButton();
+			buttonmanager->SelectNextButton( m_HowMany );
 		}
 	}
 }
 
-void dae::PreviousButtonCommand::Execute()
+void dae::PreviousButtonCommand::Execute( )
 {
 	if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
 	{
@@ -24,7 +24,7 @@ void dae::PreviousButtonCommand::Execute()
 
 		for ( auto& buttonmanager : buttonmanagers )
 		{
-			buttonmanager->SelectPreviousButton();
+			buttonmanager->SelectPreviousButton( m_HowMany );
 		}
 	}
 }

@@ -191,18 +191,24 @@ namespace dae
 	{
 	public:
 
-		NextButtonCommand( GameObject* gameObject ) : GameObjectCommand( gameObject ) {}
+		NextButtonCommand( GameObject* gameObject, int howMany ) : GameObjectCommand( gameObject ) { m_HowMany = howMany; }
 
 		virtual void Execute() override;
+
+	private:
+		int m_HowMany{};
 	};
 
 	class PreviousButtonCommand : public GameObjectCommand
 	{
 	public:
 
-		PreviousButtonCommand( GameObject* gameObject ) : GameObjectCommand( gameObject ) {}
+		PreviousButtonCommand( GameObject* gameObject, int howMany ) : GameObjectCommand( gameObject ) { m_HowMany = howMany; }
 
 		virtual void Execute() override;
+
+		private:
+			int m_HowMany{};
 	};
 
 	class PressButtonCommand : public GameObjectCommand
