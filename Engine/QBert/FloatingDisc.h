@@ -36,7 +36,7 @@ private:
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureDisc;
 	std::shared_ptr <SingleMovementComponent> m_pSingleMovenment;
 	glm::vec2 m_Direction;
-	glm::vec2 m_Offset{7.5, -15};
+	glm::vec2 m_Offset{10, -15};
 	glm::vec2 m_StartPos;
 
 	int m_LevelSize;

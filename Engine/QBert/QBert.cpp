@@ -84,7 +84,7 @@ void QBert::Update()
 	{
 		glm::vec2 currentPosition = GetOwner()->GetLocalTransform().GetPosition();
 
-		glm::vec2 direction = glm::vec2{ 300, 85 } - currentPosition;
+		glm::vec2 direction = glm::vec2{ 300, 50 } - currentPosition;
 		float distance = glm::length( direction );
 
 		if ( distance > 0.0f )

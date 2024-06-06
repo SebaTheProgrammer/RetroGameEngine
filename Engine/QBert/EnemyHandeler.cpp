@@ -153,7 +153,9 @@ void EnemyHandeler::SetCanMove( bool move )
 		}
 	}
 
-	m_pCoily->GetComponent<Coily>()->SetCanMove( move );
+	if ( m_pCoily != nullptr ) {
+		m_pCoily->GetComponent<Coily>()->SetCanMove( move );
+	}
 }
 
 void EnemyHandeler::SetHasCoily( bool hasCoily )

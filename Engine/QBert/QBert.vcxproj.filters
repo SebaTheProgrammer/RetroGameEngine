@@ -5,14 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Level">
       <UniqueIdentifier>{d2e55c4f-cb48-4cd0-8e17-d6c5b7029d8d}</UniqueIdentifier>
     </Filter>
@@ -37,11 +29,11 @@
     <Filter Include="Handelers">
       <UniqueIdentifier>{c716f887-7208-4586-9cc1-7935ea1d946e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HighScore">
-      <UniqueIdentifier>{2c8363ad-288c-4c1c-af6b-4be73a25af0a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Level\Disc">
       <UniqueIdentifier>{12b8f635-7c9a-4c09-9409-158be582e7b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Score">
+      <UniqueIdentifier>{2c8363ad-288c-4c1c-af6b-4be73a25af0a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -67,7 +59,7 @@
       <Filter>Level\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="HighScoreScreen.cpp">
-      <Filter>HighScore</Filter>
+      <Filter>Score</Filter>
     </ClCompile>
     <ClCompile Include="SlickSam.cpp">
       <Filter>Level\Enemies</Filter>
@@ -89,6 +81,9 @@
     </ClCompile>
     <ClCompile Include="Utilities.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeNameScreen.cpp">
+      <Filter>Score</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -120,7 +115,7 @@
       <Filter>Files</Filter>
     </ClInclude>
     <ClInclude Include="HighScoreScreen.h">
-      <Filter>HighScore</Filter>
+      <Filter>Score</Filter>
     </ClInclude>
     <ClInclude Include="SlickSam.h">
       <Filter>Level\Enemies</Filter>
@@ -145,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="Utilities.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeNameScreen.h">
+      <Filter>Score</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

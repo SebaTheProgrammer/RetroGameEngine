@@ -81,11 +81,31 @@ public:
         WriteHighScores( highScores );
     }
 
-    void SetName( std::string name ) { m_Name = name; };
+    void SetName( std::string name ) { m_Name = name; WriteName(); };
     std::string GetName() const { return m_Name; };
+
+    void ReadName()
+    {
+		std::ifstream file( "../Data/Name.txt" );
+        if ( file.is_open() )
+        {
+			file >> m_Name;
+			file.close();
+		}
+	}
+
+    void WriteName()
+    {
+		std::ofstream file( "../Data/Name.txt" );
+        if ( file.is_open() )
+        {
+			file << m_Name;
+			file.close();
+		}
+	}
 
 private:
     ScoreFile() = default;
-    std::string m_Name{"RandomPlayer"};
+    std::string m_Name{};
     std::string m_Path{"../Data/highscores.txt"};
 };

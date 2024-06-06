@@ -129,13 +129,8 @@ void load()
 	score->AddComponent( highscore );
 	highScore.Add( score );
 
-
-	//std::string playerName;
-	//std::cout << "Enter your name: ";
-	//std::getline( std::cin, playerName );
-	//ScoreFile::GetInstance().SetName( playerName );
-	//std::cout << "Hello, " << playerName << "!" << std::endl;
-	std::cout << "!Welcome and enjoy QBert!" << std::endl;
+	ScoreFile::GetInstance().ReadName();
+	std::cout << "!Welcome "<<ScoreFile::GetInstance().GetName() <<" and enjoy QBert!" << std::endl;
 	std::cout << "Made by Vryens Sebastiaan, 2GD18 " << std::endl;
 
 	auto levelswitcher = std::make_shared<dae::GameObject>( -1 );
