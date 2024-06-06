@@ -43,14 +43,14 @@ ChangeNameScreen::ChangeNameScreen( dae::GameObject* parentGameObject, std::shar
     m_Buttons.push_back( std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() ) );
     auto clear = std::make_shared<ClearLettersCommand>( parentGameObject );
     auto buttonC = std::make_shared<dae::ButtonComponent>( m_Buttons.back().get(), "Clear", font, clear );
-    m_Buttons.back().get()->SetLocalTransform( { 440, 425 } );
+    m_Buttons.back().get()->SetLocalTransform( { 530, 375 } );
     m_Buttons.back().get()->AddComponent( buttonC );
     allButtons.push_back( buttonC );
 
     m_ButtonsHandeler = std::make_shared<dae::GameObject>(parentGameObject->GetSceneIndex());
     auto back = std::make_shared<OpenMainMenuCommand>(m_ButtonsHandeler.get());
     auto buttonB = std::make_shared<dae::ButtonComponent>(m_ButtonsHandeler.get(), "Back", font, back);
-    m_ButtonsHandeler->SetLocalTransform({540, 425});
+    m_ButtonsHandeler->SetLocalTransform({ 530, 425});
     m_ButtonsHandeler->AddComponent(buttonB);
     allButtons.push_back(buttonB);
 

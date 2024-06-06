@@ -32,7 +32,7 @@
     <Filter Include="Level\Disc">
       <UniqueIdentifier>{12b8f635-7c9a-4c09-9409-158be582e7b8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Score">
+    <Filter Include="UI">
       <UniqueIdentifier>{2c8363ad-288c-4c1c-af6b-4be73a25af0a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -59,7 +59,7 @@
       <Filter>Level\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="HighScoreScreen.cpp">
-      <Filter>Score</Filter>
+      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="SlickSam.cpp">
       <Filter>Level\Enemies</Filter>
@@ -83,7 +83,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChangeNameScreen.cpp">
-      <Filter>Score</Filter>
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuScreen.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,7 +118,7 @@
       <Filter>Files</Filter>
     </ClInclude>
     <ClInclude Include="HighScoreScreen.h">
-      <Filter>Score</Filter>
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="SlickSam.h">
       <Filter>Level\Enemies</Filter>
@@ -142,7 +145,10 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="ChangeNameScreen.h">
-      <Filter>Score</Filter>
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuScreen.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
