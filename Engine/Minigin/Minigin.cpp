@@ -14,7 +14,6 @@
 #include "GameTime.h"
 #include <thread>
 #include "ServiceLocator.h"
-#include "InputManager2.h"
 
 SDL_Window* g_window{};
 
@@ -88,7 +87,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
-	auto& input2 = InputManager2::GetInstance();
 
 	bool loop = true;
 	auto last_time = std::chrono::high_resolution_clock::now();
@@ -105,7 +103,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		last_time = current_time;
 		lag += delta_time;
 
-		loop = input.ProcessInput() && input2.ProcessInput();
+		loop = input.ProcessInput();
 
 		while ( lag >= fixed_time_step )
 		{

@@ -17,7 +17,9 @@ bool dae::InputManager::ProcessInput()
 
 	CopyMemory( &m_PreviousState, &m_CurrentState, sizeof( XINPUT_STATE ) );
 	ZeroMemory( &m_CurrentState, sizeof( XINPUT_STATE ) );
+
 	XInputGetState( 0, &m_CurrentState );
+	XInputGetState( 1, &m_CurrentState );
 
 	int buttonChanges{ m_CurrentState.Gamepad.wButtons ^ m_PreviousState.Gamepad.wButtons };
 	m_ButtonsPressedThisFrameGP = buttonChanges & m_CurrentState.Gamepad.wButtons;
@@ -76,40 +78,47 @@ bool dae::InputManager::ProcessInput()
 		if ( !inputBinding.command )
 			continue;
 
-		switch ( inputBinding.inputType )
-		{
-		case InputTypeGamePad::IsPressed:
-		{
-			if ( IsPressedGP( inputBinding.key ) )
-			{
-				inputBinding.command->Execute();
-			}
-			break;
+		XINPUT_STATE controllerState0;
+		if ( XInputGetState( 0, &controllerState0 ) == ERROR_SUCCESS ) {
+			CheckInputBinding( inputBinding, controllerState0, 0 );
 		}
-		case InputTypeGamePad::IsDownThisFrame:
-		{
-			if ( IsDownThisFrameGP( inputBinding.key ) )
-			{
-				inputBinding.command->Execute();
-			}
-			break;
-		}
-		case InputTypeGamePad::IsUpThisFrame:
-		{
-			if ( IsUpThisFrameGP( inputBinding.key ) )
-			{
-				inputBinding.command->Execute();
-			}
-			break;
-		}
-		default:
-			break;
+
+		XINPUT_STATE controllerState1;
+		if ( XInputGetState( 1, &controllerState1 ) == ERROR_SUCCESS ) {
+			CheckInputBinding( inputBinding, controllerState1, 1 );
 		}
 	}
 
 	memcpy( m_PreviousKeyboardState, currentKeyboardState, SDL_NUM_SCANCODES );
 	return true;
 }
+
+void dae::InputManager::CheckInputBinding( InputBindingGamePad inputBinding, XINPUT_STATE controllerState, int controllerIndex ) {
+	if ( inputBinding.wichPlayer != controllerIndex ) {
+		return;
+	}
+
+	switch ( inputBinding.inputType ) {
+	case InputTypeGamePad::IsPressed:
+		if ( IsPressedGP( inputBinding.key ) && ( controllerState.Gamepad.wButtons & inputBinding.key ) ) {
+			inputBinding.command->Execute();
+		}
+		break;
+	case InputTypeGamePad::IsDownThisFrame:
+		if ( IsDownThisFrameGP( inputBinding.key ) && ( controllerState.Gamepad.wButtons & inputBinding.key ) ) {
+			inputBinding.command->Execute();
+		}
+		break;
+	case InputTypeGamePad::IsUpThisFrame:
+		if ( IsUpThisFrameGP( inputBinding.key ) && !( controllerState.Gamepad.wButtons & inputBinding.key ) ) {
+			inputBinding.command->Execute();
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 
 int dae::InputManager::GetHowManyControllersConnected()
 {

@@ -27,9 +27,9 @@ namespace dae
 		bool ProcessInput();
 
 		template<typename CommandType>
-		void BindActionGamePad( int key, InputTypeGamePad inputType, CommandType command )
+		void BindActionGamePad( int wichplayer, int key, InputTypeGamePad inputType, CommandType command )
 		{
-			InputBindingGamePad inputBinding{ key, inputType, command };
+			InputBindingGamePad inputBinding{ wichplayer, key, inputType, command };
 			m_InputBindingsGamePad.emplace_back( inputBinding );
 		}
 
@@ -71,6 +71,8 @@ namespace dae
 		bool IsDownThisFrameKB( unsigned int button ) const;
 		bool IsUpThisFrameKB( unsigned int button ) const;
 		bool IsPressedKB( unsigned int button ) const;
+
+		void CheckInputBinding( InputBindingGamePad inputBinding, XINPUT_STATE controllerState, int controllerIndex );
 	};
 
 }

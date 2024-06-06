@@ -12,13 +12,16 @@ enum class InputTypeGamePad
 
 struct InputBindingGamePad
 {
+	int wichPlayer;
 	int key;
 	InputTypeGamePad inputType;
 	std::shared_ptr<dae::Command> command;
 
 	template<typename CommandType>
-	InputBindingGamePad( int keyIn, InputTypeGamePad inputTypeIn, CommandType commandIn )
-		: key{ keyIn }
+	InputBindingGamePad( int wichplayer, int keyIn, InputTypeGamePad inputTypeIn, CommandType commandIn )
+		:
+		wichPlayer{ wichplayer },
+		key{ keyIn }
 		, inputType{ inputTypeIn }
 	{
 		command = std::make_shared<CommandType>( commandIn );

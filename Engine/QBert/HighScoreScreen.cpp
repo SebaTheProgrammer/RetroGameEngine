@@ -38,7 +38,7 @@ HighScoreScreen::HighScoreScreen( dae::GameObject* parentGameObject, std::shared
 	m_ButtonsHandeler->AddComponent( buttonB );
 
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_SPACE, InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
-	dae::InputManager::GetInstance().BindActionGamePad(XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+	dae::InputManager::GetInstance().BindActionGamePad(0,XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
 	std::vector<std::shared_ptr<dae::ButtonComponent>> allButtonsHighscore = { buttonB };
 	auto buttonManagerHighscore = std::make_shared<dae::ButtonManagerComponent>( m_ButtonsHandeler.get(), arrow, allButtonsHighscore );
 	m_ButtonsHandeler->AddComponent( buttonManagerHighscore );
