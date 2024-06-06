@@ -77,7 +77,9 @@ void Coily::Update()
 			m_Timer = 0.f;
 			if ( !m_HasHitPlayer )
 			{
-				FollowPlayer( m_pPyramid->GetActiveRow(), m_pPyramid->GetActiveColumn(), m_pPyramid->GetActiveRow2(), m_pPyramid->GetActiveColumn2() );
+				FollowPlayer( m_pPyramid->GetActiveRow(), m_pPyramid->GetActiveColumn(), 
+					m_pPyramid->GetActiveRow2(), m_pPyramid->GetActiveColumn2(),
+					m_pPyramid->GetDisc1Active(), m_pPyramid->GetDisc2Active() );
 			}
 		}
 		break;
@@ -87,7 +89,9 @@ void Coily::Update()
 			m_Timer = 0.f;
 			if ( !m_HasHitPlayer )
 			{
-				FollowPlayer( m_pPyramid->GetActiveRow(), m_pPyramid->GetActiveColumn(), m_pPyramid->GetActiveRow2(), m_pPyramid->GetActiveColumn2() );
+				FollowPlayer( m_pPyramid->GetActiveRow(), m_pPyramid->GetActiveColumn(),
+					m_pPyramid->GetActiveRow2(), m_pPyramid->GetActiveColumn2(),
+					m_pPyramid->GetDisc1Active(), m_pPyramid->GetDisc2Active() );
 			}
 		}
 		break;
@@ -215,7 +219,7 @@ void Coily::Moved( SingleMovementComponent::Direction dir )
 	}
 }
 
-void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int playerCol2 )
+void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int playerCol2, bool disc1, bool disc2 )
 {
 	int oldActiveCol = m_Col;
 	int targetRow{}, targetCol{};
@@ -224,6 +228,7 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 	{
 		targetRow = playerRow1;
 		targetCol = playerCol1;
+		disc2 = false;
 	}
 	else
 	{
@@ -254,14 +259,12 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 			newRow = m_Row - oldActiveCol;
 			newCol = m_Col - 1;
 			direction = SingleMovementComponent::Direction::LeftUp;
-			std::cout << "LeftUp" << std::endl;
 		}
 		else
 		{
 			newRow = m_Row - oldActiveCol + 1;
 			newCol = m_Col - 1;
 			direction = SingleMovementComponent::Direction::RightUp;
-			std::cout << "RightUp" << std::endl;
 		}
 	}
 	else
@@ -271,22 +274,20 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 			newRow = m_Row + oldActiveCol;
 			newCol = m_Col + 1;
 			direction = SingleMovementComponent::Direction::LeftDown;
-			std::cout << "LeftDown" << std::endl;
 		}
 		else
 		{
 			newRow = m_Row + oldActiveCol + 1;
 			newCol = m_Col + 1;
 			direction = SingleMovementComponent::Direction::RightDown;
-			std::cout << "RightDown" << std::endl;
 		}
 	}
 
 	int rowStartIndex = GetRowStartIndex( newCol );
 	int rowEndIndex = GetRowEndIndex( newCol );
 
-	bool validMove = ( newRow >= 0 && newCol <= m_LevelSize ) &&
-		( newRow >= rowStartIndex && newRow <= rowEndIndex );
+	bool validMove = (( newRow >= 0 && newCol <= m_LevelSize ) &&
+		( newRow >= rowStartIndex && newRow <= rowEndIndex )) || disc1 || disc2;
 
 	if ( validMove )
 	{

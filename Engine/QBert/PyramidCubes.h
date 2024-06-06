@@ -31,14 +31,19 @@ public:
 	void ResetLevel();
 	void ResetIndex1();
 	void ResetIndex2();
+	void SetIndex1Disc();
+	void SetIndex2Disc();
+
 	void GameOver();
 	void WalkedOnCube( SingleMovementComponent::Direction dir, int wichplayer, std::vector < glm::vec2> allDiscPos );
 	void ReverseCube(int row );
 
 	int GetActiveRow() const { return m_QBert1ColIndex; }
 	int GetActiveColumn() const { return m_QBert1RowIndex; }
+	bool GetDisc1Active() const { return m_Disc1Active; }
 	int GetActiveRow2() const;
 	int GetActiveColumn2() const;
+	bool GetDisc2Active() const { return m_Disc2Active; }
 
 	int GetSize() const { return m_Size; }
 
@@ -74,9 +79,11 @@ private:
 
 	int m_QBert1RowIndex = 0;
 	int m_QBert1ColIndex = 1;
+	bool m_Disc1Active = false;
 
 	int m_QBert2RowIndex = 0;
 	int m_QBert2ColIndex = 1;
+	bool m_Disc2Active = false;
 
 	int m_CompletedCubes = 0;
 

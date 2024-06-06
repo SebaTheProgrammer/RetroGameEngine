@@ -90,6 +90,7 @@ void PyramidCubes::ResetLevel()
 void PyramidCubes::ResetIndex1()
 {
     m_CanMove = true;
+    m_Disc1Active = false;
     m_QBert1ColIndex = 1;
     m_QBert1RowIndex = 0;
 }
@@ -97,8 +98,19 @@ void PyramidCubes::ResetIndex1()
 void PyramidCubes::ResetIndex2()
 {
 	m_CanMove = true;
+    m_Disc2Active = false;
 	m_QBert2ColIndex = 1;
 	m_QBert2RowIndex = 0;
+}
+
+void PyramidCubes::SetIndex1Disc()
+{
+    m_Disc1Active = true;
+}
+
+void PyramidCubes::SetIndex2Disc()
+{
+	m_Disc2Active = true;
 }
 
 void PyramidCubes::GameOver()

@@ -35,7 +35,7 @@ public:
 
 	void Mirror( bool mirror ) { m_pTextureCoily->Mirror( mirror ); }
 	void Moved( SingleMovementComponent::Direction dir );
-	void FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int playerCol2 );
+	void FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int playerCol2, bool disc1, bool disc2 );
 
 private:
 	void IdleSnake();

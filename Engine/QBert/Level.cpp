@@ -410,6 +410,8 @@ void Level::Player1OnDisc()
 			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetCanMove( false );
 			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->FloatToTop();
 			m_Player1OnDisc = true;
+
+			m_pPyramidCubes->SetIndex1Disc();
 		}
 	}
 }
@@ -424,6 +426,8 @@ void Level::Player2OnDisc()
 			m_QbertGameObject[ 1 ]->GetComponent<QBert>()->SetCanMove( false );
 			m_QbertGameObject[ 1 ]->GetComponent<QBert>()->FloatToTop();
 			m_Player2OnDisc = true;
+
+			m_pPyramidCubes->SetIndex2Disc();
 		}
 	}
 }
