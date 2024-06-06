@@ -63,11 +63,14 @@ ChangeNameScreen::ChangeNameScreen( dae::GameObject* parentGameObject, std::shar
     dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsDownThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get(),maxColumns } );
     dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_SPACE, InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
 
-    dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsUpThisFrame, dae::PreviousButtonCommand{ m_ButtonsHandeler.get(),1 } );
-    dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsUpThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get(),1 } );
-    dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsUpThisFrame, dae::PreviousButtonCommand{ m_ButtonsHandeler.get(),maxColumns } );
-    dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsUpThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get(),maxColumns } );
-    dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+    for ( int index = 0; index < dae::InputManager::GetInstance().GetHowManyControllersConnected(); ++index )
+    {
+        dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsUpThisFrame, dae::PreviousButtonCommand{ m_ButtonsHandeler.get(),1 } );
+        dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsUpThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get(),1 } );
+        dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsUpThisFrame, dae::PreviousButtonCommand{ m_ButtonsHandeler.get(),maxColumns } );
+        dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsUpThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get(),maxColumns } );
+        dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+	}
 }
 
 void ChangeNameScreen::Update()

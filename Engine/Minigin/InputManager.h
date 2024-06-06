@@ -10,6 +10,7 @@
 #include "InputCommands.h"
 #include "InputStructs.h"
 #include <vector>
+#include <iostream>
 
 namespace dae
 {
@@ -43,7 +44,6 @@ namespace dae
 		void ClearKeyBinds()
 		{
 			m_InputBindingsGamePad.clear();
-			m_InputBindingsKeyBoard.clear();
 		}
 
 		int GetHowManyControllersConnected();

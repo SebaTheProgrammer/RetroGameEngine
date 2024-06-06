@@ -119,7 +119,6 @@ void dae::InputManager::CheckInputBinding( InputBindingGamePad inputBinding, XIN
 	}
 }
 
-
 int dae::InputManager::GetHowManyControllersConnected()
 {
 	int connectedControllers = 0;

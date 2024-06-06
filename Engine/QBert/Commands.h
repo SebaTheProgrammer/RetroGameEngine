@@ -8,6 +8,7 @@
 #include "HighScoreScreen.h"
 #include <ServiceLocator.h>
 #include "ChangeNameScreen.h"
+#include "InputManager.h"
 
 class OpenMainMenuCommand : public dae::GameObjectCommand
 {
@@ -30,6 +31,8 @@ public:
 
 	virtual void Execute() override
 	{
+		dae::InputManager::GetInstance().ClearKeyBinds();
+
 		if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
 		{
 			auto scenes = dae::SceneManager::GetInstance().GetScenes();
@@ -58,6 +61,8 @@ public:
 
 	virtual void Execute() override
 	{
+		dae::InputManager::GetInstance().ClearKeyBinds();
+
 		if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
 		{
 			auto scenes = dae::SceneManager::GetInstance().GetScenes();
@@ -86,6 +91,8 @@ public:
 
 	virtual void Execute() override
 	{
+		dae::InputManager::GetInstance().ClearKeyBinds();
+
 		if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
 		{
 			auto scenes = dae::SceneManager::GetInstance().GetScenes();

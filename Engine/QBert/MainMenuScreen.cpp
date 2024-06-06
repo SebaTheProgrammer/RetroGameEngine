@@ -49,13 +49,7 @@ MainMenuScreen::MainMenuScreen( dae::GameObject* parentGameObject, std::shared_p
 	auto buttonManager = std::make_shared<dae::ButtonManagerComponent>( m_ButtonsHandeler.get(), arrow, allButtons );
 	m_ButtonsHandeler->AddComponent( buttonManager );
 
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, InputTypeKeyBoard::IsDownThisFrame, dae::PreviousButtonCommand{ m_ButtonsHandeler.get() ,1 } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsDownThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get() ,1 } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_SPACE, InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
-
-	dae::InputManager::GetInstance().BindActionGamePad(0, XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsUpThisFrame, dae::PreviousButtonCommand{ m_ButtonsHandeler.get(),1 } );
-	dae::InputManager::GetInstance().BindActionGamePad(0, XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsUpThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get(),1 } );
-	dae::InputManager::GetInstance().BindActionGamePad(0, XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+	SetInput();
 }
 
 void MainMenuScreen::Update()
@@ -79,4 +73,23 @@ void MainMenuScreen::Render() const
 	}
 
 	m_ButtonsHandeler->Render();
+}
+
+void MainMenuScreen::SetInput()
+{
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, InputTypeKeyBoard::IsDownThisFrame, dae::PreviousButtonCommand{ m_ButtonsHandeler.get() ,1 } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsDownThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get() ,1 } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_SPACE, InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+
+	for ( int index = 0; index < dae::InputManager::GetInstance().GetHowManyControllersConnected(); ++index )
+	{
+		dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsUpThisFrame, dae::PreviousButtonCommand{ m_ButtonsHandeler.get(),1 } );
+		dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsUpThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get(),1 } );
+		dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+	}
+
+	auto levelswitcher = std::make_shared<dae::GameObject>( -1 );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_0, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 0 } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_F1, InputTypeKeyBoard::IsDownThisFrame, dae::OpenNextLevelCommand{ levelswitcher.get() } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_M, InputTypeKeyBoard::IsDownThisFrame, SoundCommand{} );
 }

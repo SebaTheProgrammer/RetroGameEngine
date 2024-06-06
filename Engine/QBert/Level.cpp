@@ -82,6 +82,7 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 
 	qbert = ( std::make_shared<QBert>( m_QbertGameObject[ m_QbertGameObject.size() - 1 ].get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle) );
 	m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->AddComponent( qbert );
+	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputKeyBoard();
 
 	//Levelhandeler
 	auto levelHandeler = std::make_shared<LevelHandeler>( parentGameObject, qbertlives, maxLevels );
@@ -454,13 +455,12 @@ void Level::SetMultiplayer( bool isMultiplayer )
 
 		if ( dae::InputManager::GetInstance().GetHowManyControllersConnected() == 1 )
 		{
-			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputKeyBoard();
-			m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->GetComponent<QBert>()->SetInputController();
+			m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->GetComponent<QBert>()->SetInputController(0);
 		}
 		else 
 		{
-			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController();
-			m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->GetComponent<QBert>()->SetInputController2();
+			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController(0);
+			m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->GetComponent<QBert>()->SetInputController(1);
 		}
 
 		m_pPyramidCubes->SetCoop( true );
@@ -502,11 +502,10 @@ void Level::SetVersus( bool isVersus )
 
 	if ( dae::InputManager::GetInstance().GetHowManyControllersConnected() == 1 )
 	{
-		m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputKeyBoard();
 	}
 	else
 	{
-		m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController();
+		m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController(0);
 	}
 }
 
@@ -518,9 +517,7 @@ void Level::SinglePlayer()
 	m_pPyramidCubes->ResetLevel();
 	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->ResetQBert();
 	RestartLevel();
-
-	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputKeyBoard();
-	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController();
+	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController(0);
 }
 
 void Level::SetBottomLeft()

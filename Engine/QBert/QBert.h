@@ -48,8 +48,7 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 	void SetRightBottom( int levelsize );
 
 	void SetInputKeyBoard();
-	void SetInputController();
-	void SetInputController2();
+	void SetInputController( int index );
 
 private:
 	AnimationState m_CurrentState = AnimationState::Idle;
@@ -79,8 +78,4 @@ private:
 	float m_HitTimer = 0;
 
 	int m_WichPlayer = 1;
-
-	bool m_HasKeyBoard = false;
-	bool m_HasController = false;
-	bool m_HasController2 = false;
 };

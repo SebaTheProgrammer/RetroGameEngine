@@ -13,6 +13,8 @@ public:
 	void Update() override;
 	void Render() const override;
 
+	void SetInput();
+
 private:
 	std::vector< std::shared_ptr <dae::GameObject>> m_Buttons;
 	std::shared_ptr<dae::GameObject> m_ButtonsHandeler;

@@ -101,12 +101,6 @@ void load()
 	score->AddComponent( highscore );
 	highScore.Add( score );
 
-	//Levelswitcher
-	auto levelswitcher = std::make_shared<dae::GameObject>( -1 );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_0, InputTypeKeyBoard::IsDownThisFrame, dae::OpenLevelCommand{ levelswitcher.get(), 0 } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_F1, InputTypeKeyBoard::IsDownThisFrame, dae::OpenNextLevelCommand{ levelswitcher.get() } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_M, InputTypeKeyBoard::IsDownThisFrame, SoundCommand{} );
-
 	//ChangeNameScreen
 	auto& changeNameScene = dae::SceneManager::GetInstance().CreateScene( "ChangeName" );
 	max = static_cast< int >( dae::SceneManager::GetInstance().GetMaxScenes() - 1 );
