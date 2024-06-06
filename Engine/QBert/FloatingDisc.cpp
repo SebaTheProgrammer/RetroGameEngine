@@ -4,12 +4,16 @@
 #include "GameTime.h"
 #include "Utilities.h"
 
-FloatingDisc::FloatingDisc( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureDisc, int levelSize, bool isLeftDisc )
+FloatingDisc::FloatingDisc( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureDisc, int levelSize, int wichlevel, bool isLeftDisc )
 	: BaseComponent( parentGameObject )
 	, m_LevelSize( levelSize )
 	, m_IsLeftDisc( isLeftDisc )
 {
 	m_pTextureDisc = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, textureDisc, 2.0f, 1, 30, 1, m_FrameTime );
+	m_pTextureDisc->SetMinColumns( wichlevel * 5 - 5);
+	m_pTextureDisc->SetMaxColumns( wichlevel * 5);
+	m_pTextureDisc->SetCurrentColumn( wichlevel * 5 - 5 );
+
 	m_pSingleMovenment = std::make_shared<SingleMovementComponent>( parentGameObject, m_Speed, m_SpeedBetweenSteps, true );
 	m_pSingleMovenment->SetCanMove( true );
 	m_pSingleMovenment->SetPlayAudio( false );

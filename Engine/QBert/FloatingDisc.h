@@ -8,7 +8,7 @@ class FloatingDisc : public dae::BaseComponent, public dae::GameActor
 {
 public:
 
-	FloatingDisc( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureDisc, int levelSize, bool isLeftDisc );
+	FloatingDisc( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureDisc, int levelSize, int wichlevel, bool isLeftDisc );
 	~FloatingDisc() = default;
 
 	FloatingDisc( const FloatingDisc& other ) = delete;
@@ -36,7 +36,7 @@ private:
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureDisc;
 	std::shared_ptr <SingleMovementComponent> m_pSingleMovenment;
 	glm::vec2 m_Direction;
-	glm::vec2 m_Offset{15, -20};
+	glm::vec2 m_Offset{7.5, -15};
 	glm::vec2 m_StartPos;
 
 	int m_LevelSize;

@@ -71,8 +71,8 @@ void dae::AnimatedTextureComponent::Render() const
 	//mirror
 	SDL_RendererFlip flip = SDL_FLIP_NONE;
 	if ( m_Mirror ) { flip = SDL_FLIP_HORIZONTAL;}
-
-	dae::Renderer::GetInstance().RenderTexture( *m_pTexture, m_X, m_Y, float( wichlevelIndexHeight ) * m_Scale, float( wichlevelIndexWidth ) * m_Scale, &sourceRect, flip );
+	
+	dae::Renderer::GetInstance().RenderTexture( *m_pTexture, m_X, m_Y, float( wichlevelIndexWidth ) * m_Scale, float( wichlevelIndexHeight ) * m_Scale, &sourceRect, flip );
 }
 
 void dae::AnimatedTextureComponent::NextFrame()

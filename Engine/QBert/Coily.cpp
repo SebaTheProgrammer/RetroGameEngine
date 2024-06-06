@@ -237,7 +237,6 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 		int rowDifference2 = std::abs( m_Row - playerRow2 );
 		int colDifference2 = std::abs( m_Col - playerCol2 );
 
-		// Compare the sum of row and column differences to decide the target
 		if ( rowDifference1 + colDifference1 <= rowDifference2 + colDifference2 ) {
 			targetRow = playerRow1;
 			targetCol = playerCol1;

@@ -119,7 +119,7 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	for ( int index=0; index < howManuJumpsNeeded; ++index )
 	{
 		m_FloatingDisc.push_back( std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() ) );
-		auto disc = std::make_shared<FloatingDisc>( m_FloatingDisc[ m_FloatingDisc.size() - 1 ].get(), m_Textures.m_DiscTexture, m_LevelSize, true );
+		auto disc = std::make_shared<FloatingDisc>( m_FloatingDisc[ m_FloatingDisc.size() - 1 ].get(), m_Textures.m_DiscTexture, m_LevelSize, level, true );
 		disc->AddObserver( levelHandeler.get() );
 		m_FloatingDisc[ m_FloatingDisc.size() - 1 ]->AddComponent( disc );
 		m_FloatingDisc[ m_FloatingDisc.size() - 1 ]->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x, parentGameObject->GetLocalTransform().GetPosition().y - 40 } );
