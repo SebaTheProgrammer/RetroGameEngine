@@ -407,13 +407,11 @@ void Level::Player1OnDisc()
 		if ( disc->GetComponent<FloatingDisc>()->GetRowCol() == m_pPyramidCubes->GetDisc1() )
 		{
 			disc->GetComponent<FloatingDisc>()->FloatToTop();
-			//m_QbertGameObject[ 0 ]->SetParent( disc.get() );
 			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetCanMove( false );
+			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->FloatToTop();
 			m_Player1OnDisc = true;
 		}
 	}
-
-
 }
 
 void Level::Player2OnDisc()
@@ -423,8 +421,8 @@ void Level::Player2OnDisc()
 		if ( disc->GetComponent<FloatingDisc>()->GetRowCol() == m_pPyramidCubes->GetDisc2() )
 		{
 			disc->GetComponent<FloatingDisc>()->FloatToTop();
-			//m_QbertGameObject[ 1 ]->SetParent( disc.get() );
 			m_QbertGameObject[ 1 ]->GetComponent<QBert>()->SetCanMove( false );
+			m_QbertGameObject[ 1 ]->GetComponent<QBert>()->FloatToTop();
 			m_Player2OnDisc = true;
 		}
 	}

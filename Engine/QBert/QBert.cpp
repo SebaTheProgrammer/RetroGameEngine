@@ -79,6 +79,34 @@ void QBert::Update()
 			m_GetsHit= false;
 		}
 	}
+
+	if ( m_Floating ) 
+	{
+		glm::vec2 currentPosition = GetOwner()->GetLocalTransform().GetPosition();
+
+		glm::vec2 direction = glm::vec2{ 300, 85 } - currentPosition;
+		float distance = glm::length( direction );
+
+		if ( distance > 0.0f )
+		{
+			direction /= distance;
+
+			float moveDistance = m_Speed * dae::GameTime::GetInstance().GetDeltaTime();
+
+			glm::vec2 newPosition;
+			if ( moveDistance < distance ) 
+			{
+				newPosition = currentPosition + direction * moveDistance;
+			}
+			else 
+			{
+				newPosition = glm::vec2{ 300, 90 };
+				m_Floating = false;
+			}
+
+			GetOwner()->SetLocalTransform( newPosition );
+		}
+	}
 }
 
 void QBert::Render() const
@@ -149,6 +177,11 @@ void QBert::SetMirror( bool mirror )
 	m_pTextureIdleBack->Mirror( mirror );
 }
 
+void QBert::FloatToTop()
+{
+	m_Floating = true;
+}
+
 void QBert::ResetPosition()
 {
 	m_GetsHit = true;
@@ -159,6 +192,7 @@ void QBert::ResetPosition()
 
 void QBert::ResetQBert()
 {
+	m_Floating = false;
 	ResetPosition();
 	m_GetsHit = false;
 	m_HitTimer = 0;

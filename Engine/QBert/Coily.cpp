@@ -250,8 +250,7 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 
 	if ( targetCol <= m_Col )
 	{
-		if ( targetRow <= m_Row - m_Col || m_Col == targetCol && targetRow < m_Row )
-		{
+		if ( targetRow <= m_Row ){
 			newRow = m_Row - oldActiveCol;
 			newCol = m_Col - 1;
 			direction = SingleMovementComponent::Direction::LeftUp;
@@ -267,7 +266,7 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 	}
 	else
 	{
-		if ( targetRow <= m_Row + m_Col + 1 )
+		if ( targetRow < m_Row + oldActiveCol + 1 )
 		{
 			newRow = m_Row + oldActiveCol;
 			newCol = m_Col + 1;
@@ -283,10 +282,66 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 		}
 	}
 
-	m_Row = newRow;
-	m_Col = newCol;
-	Jump( direction );
-	m_PrevDirection = direction;
+	int rowStartIndex = GetRowStartIndex( newCol );
+	int rowEndIndex = GetRowEndIndex( newCol );
+
+	bool validMove = ( newRow >= 0 && newCol <= m_LevelSize ) &&
+		( newRow >= rowStartIndex && newRow <= rowEndIndex );
+
+	if ( validMove )
+	{
+		m_Row = newRow;
+		m_Col = newCol;
+		Jump( direction );
+		m_PrevDirection = direction;
+	}
+	else
+	{
+		if ( targetCol <= m_Col )
+		{
+			if ( direction == SingleMovementComponent::Direction::LeftUp )
+			{
+				newRow = m_Row - oldActiveCol + 1;
+				newCol = m_Col - 1;
+				direction = SingleMovementComponent::Direction::RightUp;
+			}
+			else
+			{
+				newRow = m_Row + oldActiveCol;
+				newCol = m_Col + 1;
+				direction = SingleMovementComponent::Direction::LeftDown;
+			}
+		}
+		else
+		{
+			if ( direction == SingleMovementComponent::Direction::LeftDown )
+			{
+				newRow = m_Row + oldActiveCol + 1;
+				newCol = m_Col + 1;
+				direction = SingleMovementComponent::Direction::RightDown;
+			}
+			else
+			{
+				newRow = m_Row - oldActiveCol + 1;
+				newCol = m_Col - 1;
+				direction = SingleMovementComponent::Direction::RightUp;
+			}
+		}
+
+		rowStartIndex = GetRowStartIndex( newCol );
+		rowEndIndex = GetRowEndIndex( newCol );
+
+		validMove = ( newRow >= 0 && newCol <= m_LevelSize ) &&
+			( newRow >= rowStartIndex && newRow <= rowEndIndex );
+
+		if ( validMove )
+		{
+			m_Row = newRow;
+			m_Col = newCol;
+			Jump( direction );
+			m_PrevDirection = direction;
+		}
+	}
 }
 
 void Coily::IdleSnake()

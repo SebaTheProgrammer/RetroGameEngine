@@ -35,6 +35,7 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 	void SetMirror( bool mirror );
 	bool CanMove() const {return m_pSingleMovenment->GetCanMove();};
 	void SetCanMove( bool canMove ) { m_pSingleMovenment->SetCanMove( canMove ); };
+	void FloatToTop();;
 
 	void ResetPosition();
 	void ResetQBert();
@@ -71,6 +72,7 @@ private:
 	const float m_SpeedBetweenSteps = 0.7f;
 
 	bool m_GetsHit = false;
+	bool m_Floating = false;
 	const float m_HitWaitTime = 2.f;
 	float m_HitTimer = 0;
 

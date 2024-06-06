@@ -96,6 +96,8 @@ void FloatingDisc::ResetPosition()
 		m_Col = 0;
 
 		m_StartPos = GetOwner()->GetLocalTransform().GetPosition();
+		m_StartPos.x+=m_Offset.x;
+		m_StartPos.y-=m_Offset.y;
 
 		m_IsLeftDisc = ( rand() % 2 == 0 );
 
