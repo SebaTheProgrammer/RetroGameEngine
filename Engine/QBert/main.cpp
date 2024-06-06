@@ -125,22 +125,9 @@ void load()
 	auto& highScore = dae::SceneManager::GetInstance().CreateScene( "Highscores" );
 	int max = static_cast< int >( dae::SceneManager::GetInstance().GetMaxScenes() - 1 );
 	auto score = std::make_shared<dae::GameObject>( max );
-	auto highscore = std::make_shared<HighScoreScreen>( score.get(), font, font2 );
+	auto highscore = std::make_shared<HighScoreScreen>( score.get(), selectionArrow, font, font2 );
 	score->AddComponent( highscore );
 	highScore.Add( score );
-
-	auto buttonBackOb = std::make_shared<dae::GameObject>( max );
-	std::shared_ptr<dae::Command> back = std::make_shared< OpenMainMenuCommand>( buttonBackOb.get() );
-	auto buttonB = std::make_shared<dae::ButtonComponent>( buttonBackOb.get(), "Back", font, back );
-	buttonBackOb->SetLocalTransform( { 550, 425 } );
-	buttonBackOb->AddComponent( buttonB );
-	highScore.Add( buttonBackOb );
-
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_SPACE, InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ buttonBackOb.get() } );
-	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ buttonBackOb.get() } );
-	std::vector<std::shared_ptr<dae::ButtonComponent>> allButtonsHighscore = { buttonB };
-	auto buttonManagerHighscore = std::make_shared<dae::ButtonManagerComponent>( buttonBackOb.get(), selectionArrow, allButtonsHighscore );
-	buttonBackOb->AddComponent( buttonManagerHighscore );
 
 
 	//std::string playerName;

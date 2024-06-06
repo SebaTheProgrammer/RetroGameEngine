@@ -6,6 +6,7 @@
 #include "Level.h"
 #include <iostream>
 #include "HighScoreScreen.h"
+#include <ServiceLocator.h>
 
 class OpenMainMenuCommand : public dae::GameObjectCommand
 {

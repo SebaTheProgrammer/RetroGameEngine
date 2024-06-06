@@ -5,8 +5,10 @@
 #include <TextureComponent.h>
 #include "TextComponent.h"
 #include <GameTime.h>
+#include "Commands.h"
+#include <ButtonManagerComponent.h>
 
-HighScoreScreen::HighScoreScreen( dae::GameObject* parentGameObject, std::shared_ptr<dae::Font> font1, std::shared_ptr<dae::Font> font2 )
+HighScoreScreen::HighScoreScreen( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> arrow, std::shared_ptr<dae::Font> font1, std::shared_ptr<dae::Font> font2 )
 	: BaseComponent( parentGameObject )
 {
 	std::string bgFilename = "bg2.png";
@@ -28,6 +30,18 @@ HighScoreScreen::HighScoreScreen( dae::GameObject* parentGameObject, std::shared
 		m_TextComponents[ index ]->SetLocalPosition( 225, 100.f+ index*30.f );
 		parentGameObject->AddComponent( m_TextComponents[index]);
 	}
+
+	m_ButtonsHandeler = std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() );
+	std::shared_ptr<dae::Command> back = std::make_shared< OpenMainMenuCommand>( m_ButtonsHandeler.get() );
+	auto buttonB = std::make_shared<dae::ButtonComponent>( m_ButtonsHandeler.get(), "Back", font1, back );
+	m_ButtonsHandeler->SetLocalTransform( { 550, 425 } );
+	m_ButtonsHandeler->AddComponent( buttonB );
+
+	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_SPACE, InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+	std::vector<std::shared_ptr<dae::ButtonComponent>> allButtonsHighscore = { buttonB };
+	auto buttonManagerHighscore = std::make_shared<dae::ButtonManagerComponent>( m_ButtonsHandeler.get(), arrow, allButtonsHighscore );
+	m_ButtonsHandeler->AddComponent( buttonManagerHighscore );
 }
 
 void HighScoreScreen::GetAllScores()
@@ -43,10 +57,16 @@ void HighScoreScreen::GetAllScores()
 
 void HighScoreScreen::Update()
 {
-	//normally load only when just opened, but therefor i need a button class
 	if ( m_NeedsUpdate )
 	{
 		m_NeedsUpdate = false;
 		GetAllScores();
 	}
+
+	m_ButtonsHandeler->Update();
+}
+
+void HighScoreScreen::Render() const
+{
+	m_ButtonsHandeler->Render();
 }
