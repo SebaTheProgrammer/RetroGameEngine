@@ -250,7 +250,7 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 
 	if ( targetCol <= m_Col )
 	{
-		if ( targetRow <= m_Row ){
+		if ( targetRow <= m_Row - targetCol || m_Col == targetCol && targetRow < m_Row ){
 			newRow = m_Row - oldActiveCol;
 			newCol = m_Col - 1;
 			direction = SingleMovementComponent::Direction::LeftUp;
@@ -266,7 +266,7 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 	}
 	else
 	{
-		if ( targetRow < m_Row + oldActiveCol + 1 )
+		if ( targetRow <= m_Row + m_Col + 1  )
 		{
 			newRow = m_Row + oldActiveCol;
 			newCol = m_Col + 1;
@@ -328,19 +328,10 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 			}
 		}
 
-		rowStartIndex = GetRowStartIndex( newCol );
-		rowEndIndex = GetRowEndIndex( newCol );
-
-		validMove = ( newRow >= 0 && newCol <= m_LevelSize ) &&
-			( newRow >= rowStartIndex && newRow <= rowEndIndex );
-
-		if ( validMove )
-		{
-			m_Row = newRow;
-			m_Col = newCol;
-			Jump( direction );
-			m_PrevDirection = direction;
-		}
+		m_Row = newRow;
+		m_Col = newCol;
+		Jump( direction );
+		m_PrevDirection = direction;
 	}
 }
 
