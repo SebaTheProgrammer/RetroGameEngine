@@ -47,9 +47,9 @@ class QBert : public dae::BaseComponent, public dae::GameActor
 	void SetLeftBottom(int levelsize);
 	void SetRightBottom( int levelsize );
 
-	void SetInputKeyBoard( bool clear );
-	void SetInputController(bool clear);
-	void SetInputController2( bool clear );
+	void SetInputKeyBoard();
+	void SetInputController();
+	void SetInputController2();
 
 private:
 	AnimationState m_CurrentState = AnimationState::Idle;

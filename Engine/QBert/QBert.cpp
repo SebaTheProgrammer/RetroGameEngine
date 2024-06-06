@@ -193,10 +193,8 @@ void QBert::SetRightBottom( int levelsize )
 	GetOwner()->SetLocalTransform( { 300 + totalDistance.x, 85 + totalDistance.y } );
 }
 
-void QBert::SetInputKeyBoard( bool clear )
+void QBert::SetInputKeyBoard()
 {
-	if ( clear ) { dae::InputManager::GetInstance().ClearKeyBinds(); }
-
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, InputTypeKeyBoard::IsPressed,
 		SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
 
@@ -210,10 +208,8 @@ void QBert::SetInputKeyBoard( bool clear )
 		SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp } );
 }
 
-void QBert::SetInputController( bool clear )
+void QBert::SetInputController()
 {
-	if ( clear ) { dae::InputManager::GetInstance().ClearKeyBinds(); }
-
 	dae::InputManager::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed,
 		SingleMoveCommand{ GetOwner(),  glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
 
@@ -227,10 +223,8 @@ void QBert::SetInputController( bool clear )
 		SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown } );
 }
 
-void QBert::SetInputController2( bool clear )
+void QBert::SetInputController2()
 {
-	if ( clear ) { dae::InputManager2::GetInstance().ClearKeyBinds(); }
-
 	dae::InputManager2::GetInstance().BindActionGamePad( XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed,
 		SingleMoveCommand{ GetOwner(),  glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
 

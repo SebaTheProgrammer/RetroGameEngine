@@ -80,7 +80,7 @@ Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, in
 	m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->SetLocalTransform( { parentGameObject->GetLocalTransform().GetPosition().x, parentGameObject->GetLocalTransform().GetPosition().y - 40 } );
 	auto qbert = std::shared_ptr<QBert>{};
 
-	qbert = ( std::make_shared<QBert>( m_QbertGameObject[ m_QbertGameObject.size() - 1 ].get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle, 0) );
+	qbert = ( std::make_shared<QBert>( m_QbertGameObject[ m_QbertGameObject.size() - 1 ].get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle) );
 	m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->AddComponent( qbert );
 
 	//Levelhandeler
@@ -446,7 +446,7 @@ void Level::SetMultiplayer( bool isMultiplayer )
 		m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->SetLocalTransform( { GetOwner()->GetLocalTransform().GetPosition().x,  GetOwner()->GetLocalTransform().GetPosition().y - 40 } );
 		auto qbert = std::shared_ptr<QBert>{};
 
-		qbert = ( std::make_shared<QBert>( m_QbertGameObject[ m_QbertGameObject.size() - 1 ].get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle, 1 ) );
+		qbert = ( std::make_shared<QBert>( m_QbertGameObject[ m_QbertGameObject.size() - 1 ].get(), m_Textures.m_QbertIdle, m_Textures.m_QbertBackfaceIdle ) );
 		qbert->SetWichPlayer( 2 );
 		qbert->AddObserver( GetOwner()->GetComponent<LevelHandeler>().get() );
 		qbert->SetCanMove( true );
@@ -454,13 +454,13 @@ void Level::SetMultiplayer( bool isMultiplayer )
 
 		if ( dae::InputManager::GetInstance().GetHowManyControllersConnected() == 1 )
 		{
-			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputKeyBoard( true );
-			m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->GetComponent<QBert>()->SetInputController( true );
+			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputKeyBoard();
+			m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->GetComponent<QBert>()->SetInputController();
 		}
 		else 
 		{
-			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController( true );
-			m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->GetComponent<QBert>()->SetInputController2( true );
+			m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController();
+			m_QbertGameObject[ m_QbertGameObject.size() - 1 ]->GetComponent<QBert>()->SetInputController2();
 		}
 
 		m_pPyramidCubes->SetCoop( true );
@@ -502,11 +502,11 @@ void Level::SetVersus( bool isVersus )
 
 	if ( dae::InputManager::GetInstance().GetHowManyControllersConnected() == 1 )
 	{
-		m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputKeyBoard( true );
+		m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputKeyBoard();
 	}
 	else
 	{
-		m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController( true );
+		m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController();
 	}
 }
 
@@ -519,8 +519,8 @@ void Level::SinglePlayer()
 	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->ResetQBert();
 	RestartLevel();
 
-	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputKeyBoard( true );
-	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController( false );
+	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputKeyBoard();
+	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController();
 }
 
 void Level::SetBottomLeft()
