@@ -41,6 +41,13 @@ ChangeNameScreen::ChangeNameScreen( dae::GameObject* parentGameObject, std::shar
     }
 
     m_Buttons.push_back( std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() ) );
+    auto pop1 = std::make_shared<RemoveLetterCommand>( parentGameObject );
+    auto buttonPop = std::make_shared<dae::ButtonComponent>( m_Buttons.back().get(), "Back", font, pop1 );
+    m_Buttons.back().get()->SetLocalTransform( { 530, 325 } );
+    m_Buttons.back().get()->AddComponent( buttonPop );
+    allButtons.push_back( buttonPop );
+
+    m_Buttons.push_back( std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() ) );
     auto clear = std::make_shared<ClearLettersCommand>( parentGameObject );
     auto buttonC = std::make_shared<dae::ButtonComponent>( m_Buttons.back().get(), "Clear", font, clear );
     m_Buttons.back().get()->SetLocalTransform( { 530, 375 } );
@@ -49,8 +56,8 @@ ChangeNameScreen::ChangeNameScreen( dae::GameObject* parentGameObject, std::shar
 
     m_ButtonsHandeler = std::make_shared<dae::GameObject>( parentGameObject->GetSceneIndex() );
     auto back = std::make_shared<OpenMainMenuCommand>( m_ButtonsHandeler.get() );
-    auto buttonB = std::make_shared<dae::ButtonComponent>( m_ButtonsHandeler.get(), "Back", font, back );
-    m_ButtonsHandeler->SetLocalTransform( { 530, 425 } );
+    auto buttonB = std::make_shared<dae::ButtonComponent>( m_ButtonsHandeler.get(), "Confirm", font, back );
+    m_ButtonsHandeler->SetLocalTransform( { 470, 425 } );
     m_ButtonsHandeler->AddComponent( buttonB );
     allButtons.push_back( buttonB );
 

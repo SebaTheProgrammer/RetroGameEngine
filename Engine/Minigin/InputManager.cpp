@@ -73,18 +73,17 @@ bool dae::InputManager::ProcessInput()
 	}
 
 	//Controller input handling
+	XINPUT_STATE controllerState0;
+	XINPUT_STATE controllerState1;
 	for ( auto& inputBinding : m_InputBindingsGamePad )
 	{
 		if ( !inputBinding.command )
 			continue;
 
-		XINPUT_STATE controllerState0;
 		if ( XInputGetState( 0, &controllerState0 ) == ERROR_SUCCESS ) {
 			CheckInputBinding( inputBinding, controllerState0, 0 );
 		}
-
-		XINPUT_STATE controllerState1;
-		if ( XInputGetState( 1, &controllerState1 ) == ERROR_SUCCESS ) {
+		else if ( XInputGetState( 1, &controllerState1 ) == ERROR_SUCCESS ) {
 			CheckInputBinding( inputBinding, controllerState1, 1 );
 		}
 	}

@@ -210,3 +210,24 @@ public:
 	}
 
 };
+
+class RemoveLetterCommand : public dae::GameObjectCommand
+{
+	public:
+	RemoveLetterCommand( dae::GameObject* gameObject ) : GameObjectCommand( gameObject ) {}
+
+	virtual void Execute() override
+	{
+		auto changeNameScreen = GetGameObject()->GetComponent<ChangeNameScreen>();
+		if ( changeNameScreen )
+		{
+			auto name = changeNameScreen->GetName();
+			if ( name.size() > 0 )
+			{
+				name.pop_back();
+				changeNameScreen->SetName( name );
+			}
+		}
+	}
+
+};
