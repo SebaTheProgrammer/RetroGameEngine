@@ -377,6 +377,20 @@ void Level::RestartLevel()
 	m_HowManyEnemies = 0;
 	m_AddedHp = false;
 	m_EnemyHandeler->GetComponent<EnemyHandeler>()->Clear();
+
+	if ( 5 != m_LevelSize )
+	{
+		m_CurrentState = LevelState::Normal;
+		m_Timer = 0;
+
+		for ( const auto& players : m_QbertGameObject )
+		{
+			players->GetComponent<QBert>()->SetCanMove( true );
+		}
+	}
+	else {
+		m_CurrentState = LevelState::Begin;
+	}
 }
 
 void Level::CoilyDied()

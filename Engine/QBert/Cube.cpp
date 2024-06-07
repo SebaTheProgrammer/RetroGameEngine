@@ -8,6 +8,8 @@ Cube::Cube( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> t
 																							//hardcoded values bc png is 3x6
 	m_pTexture = std::make_shared<dae::AnimatedTextureComponent>( parentGameObject, texture, scale, 3, 6, m_Level, 0.0f );
 	GetOwner()->AddComponent( m_pTexture );
+
+	Reset();
 }
 
 void Cube::Update()
@@ -58,6 +60,7 @@ void Cube::ReverseOne()
 void Cube::Reset()
 {
 	m_pTexture->Reset();
+	m_pTexture->SetCurrentColumn( m_Level );
 	m_Completed = false;
 	m_CurrentFrame = 0;
 }
