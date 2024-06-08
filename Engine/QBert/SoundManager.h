@@ -42,7 +42,7 @@ public:
 		dae::ServiceLocator::GetSoundSystem().Play( dae::ServiceLocator::GetSoundSystem().GetSoundId( "Jump" ), volume );
 	}
 	void CaughtEnemy( int volume = 50 ) {
-		dae::ServiceLocator::GetSoundSystem().AddSound( "CaughtEnemy", "Sounds/SlickSam Caught" );
+		dae::ServiceLocator::GetSoundSystem().AddSound( "CaughtEnemy", "Sounds/SlickSam Caught.wav" );
 		dae::ServiceLocator::GetSoundSystem().Play( dae::ServiceLocator::GetSoundSystem().GetSoundId( "CaughtEnemy" ), volume );
 	}
 	void CoilyFall( int volume = 50 ) {

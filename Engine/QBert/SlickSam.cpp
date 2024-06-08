@@ -2,6 +2,7 @@
 #include <GameTime.h>
 #include <iostream>
 #include "Utilities.h"
+#include "MovementManager.h"
 
 SlickSam::SlickSam( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureUgg, int levelSize, PyramidCubes* pyramid ) :
 	BaseComponent( parentGameObject ), m_pPyramid( pyramid )
@@ -64,8 +65,8 @@ void SlickSam::Jump()
 	srand( rand() );
 
 	bool random = rand() % 2;
-	if ( random == 1 ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, SingleMovementComponent::Direction::RightDown, true );
-	if ( random == 0 ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, SingleMovementComponent::Direction::LeftDown, true );
+	if ( random == 1 ) m_pSingleMovenment->SingleMove( MovementManager::GetInstance().Rightdown.vector, MovementManager::GetInstance().Rightdown.direction, true);
+	if ( random == 0 ) m_pSingleMovenment->SingleMove( MovementManager::GetInstance().Leftdown.vector, MovementManager::GetInstance().Leftdown.direction, true );
 }
 
 void SlickSam::SetAnimationState( AnimationState state )

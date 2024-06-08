@@ -12,9 +12,8 @@ ChangeNameScreen::ChangeNameScreen( dae::GameObject* parentGameObject, std::shar
     m_NameText->SetLocalPosition( ( 640 - m_NameText->GetTexture()->GetWidth() ) / 2, 50 );
     parentGameObject->AddComponent( m_NameText );
 
-    std::vector<std::shared_ptr<dae::ButtonComponent>> allButtons;
-
     int columnCount = 0;
+    std::vector<std::shared_ptr<dae::ButtonComponent>> allButtons;
 
     for ( char letter = 'A'; letter <= 'Z'; ++letter )
     {

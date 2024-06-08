@@ -183,5 +183,8 @@
     <ClInclude Include="SoundManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
+    <ClInclude Include="MovementManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

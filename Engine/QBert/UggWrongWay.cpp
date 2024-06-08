@@ -2,6 +2,7 @@
 #include <GameTime.h>
 #include <iostream>
 #include "Utilities.h"
+#include "MovementManager.h"
 
 UggWrongWay::UggWrongWay( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureUggWrongWay, int levelSize, PyramidCubes* pyramid ) :
 	BaseComponent( parentGameObject ),
@@ -69,10 +70,12 @@ void UggWrongWay::Render() const
 
 void UggWrongWay::Jump()
 {
+	auto movement = MovementManager::GetInstance();
+
 	if ( m_IsGoingUp ) 
 	{
-		if ( m_IsInLeftCorner ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, SingleMovementComponent::Direction::RightUp, true );
-		if ( !m_IsInLeftCorner ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, -1.2f }, SingleMovementComponent::Direction::LeftUp, true );
+		if ( m_IsInLeftCorner ) m_pSingleMovenment->SingleMove( movement.Rightup.vector, movement.Rightup.direction, true );
+		if ( !m_IsInLeftCorner ) m_pSingleMovenment->SingleMove( movement.Leftup.vector, movement.Leftup.direction, true );
 	}
 	else
 	{
@@ -80,11 +83,11 @@ void UggWrongWay::Jump()
 		{
 			if ( m_IsInLeftCorner )
 			{
-				m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, SingleMovementComponent::Direction::RightUp, true );
+				m_pSingleMovenment->SingleMove( movement.Rightup.vector, movement.Rightup.direction, true );
 			}
 			else
 			{
-				m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, -1.2f }, SingleMovementComponent::Direction::LeftUp, true );
+				m_pSingleMovenment->SingleMove( movement.Leftup.vector, movement.Leftup.direction, true );
 			}
 
 			m_Up = false;
@@ -93,11 +96,11 @@ void UggWrongWay::Jump()
 		{
 			if ( m_IsInLeftCorner )
 			{
-				m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, SingleMovementComponent::Direction::RightDown, true );
+				m_pSingleMovenment->SingleMove( movement.Rightdown.vector, movement.Rightdown.direction, true );
 			}
 			else
 			{
-				m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, SingleMovementComponent::Direction::LeftDown, true );
+				m_pSingleMovenment->SingleMove( movement.Leftdown.vector, movement.Leftdown.direction, true );
 			}
 
 			m_Up = true;
@@ -155,16 +158,19 @@ void UggWrongWay::SetStartPos()
 	srand( rand() );
 
 	bool random = rand() % 2;
+
+	auto movement = MovementManager::GetInstance();
+
 	for ( int i = 0; i < m_LevelSize; ++i )
 	{
 		if ( random == 1 )
 		{
 			m_IsInLeftCorner = true;
-			m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, SingleMovementComponent::Direction::LeftDown, true );
+			m_pSingleMovenment->SingleMove( movement.Leftdown.vector, movement.Leftdown.direction, true );
 		}
 		else 
 		{
-			m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, SingleMovementComponent::Direction::RightDown, true );
+			m_pSingleMovenment->SingleMove( movement.Rightdown.vector, movement.Rightdown.direction, true );
 			Mirror( true );
 		}
 	}

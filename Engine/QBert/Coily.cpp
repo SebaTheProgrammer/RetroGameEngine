@@ -4,6 +4,7 @@
 #include "PlayerCommands.h"
 #include "Utilities.h"
 #include "InputBindsManager.h"
+#include "MovementManager.h"
 
 Coily::Coily( dae::GameObject* parentGameObject, 
 	std::shared_ptr<dae::Texture2D> textureCoily, int levelSize, PyramidCubes* pyramid, bool hasPlayer2Control ):
@@ -22,6 +23,7 @@ Coily::Coily( dae::GameObject* parentGameObject,
 
 	if ( m_Player2Control ) 
 	{
+		auto movement = MovementManager::GetInstance();
 		auto& inputManager = dae::InputManager::GetInstance();
 		auto& inputBindsManager = InputBindsManager::GetInstance();
 
@@ -39,28 +41,28 @@ Coily::Coily( dae::GameObject* parentGameObject,
 			controllerIndex,
 			inputBindsManager.GetControllerGameUp(),
 			InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ parentGameObject, glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp }
+			SingleMoveCommand{ parentGameObject, movement.Leftup.vector, movement.Leftup.direction }
 		);
 
 		inputManager.BindActionGamePad(
 			controllerIndex,
 			inputBindsManager.GetControllerGameLeft(),
 			InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ parentGameObject, glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown }
+			SingleMoveCommand{ parentGameObject, movement.Leftdown.vector, movement.Leftdown.direction }
 		);
 
 		inputManager.BindActionGamePad(
 			controllerIndex,
 			inputBindsManager.GetControllerGameRight(),
 			InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ parentGameObject, glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp }
+			SingleMoveCommand{ parentGameObject, movement.Rightup.vector, movement.Rightup.direction }
 		);
 
 		inputManager.BindActionGamePad(
 			controllerIndex,
 			inputBindsManager.GetControllerGameDown(),
 			InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ parentGameObject, glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown }
+			SingleMoveCommand{ parentGameObject, movement.Rightdown.vector, movement.Rightdown.direction }
 		);
 	}
 }
@@ -154,11 +156,11 @@ void Coily::Render() const
 void Coily::Jump( SingleMovementComponent::Direction dir )
 {
 	if ( m_Player2ControlActive ) return;
-
-	if ( dir == SingleMovementComponent::Direction::LeftUp ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, -1.2f }, dir, true );
-	else if ( dir == SingleMovementComponent::Direction::RightUp ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, -1.2f }, dir, true );
-	else if ( dir == SingleMovementComponent::Direction::RightDown ) m_pSingleMovenment->SingleMove( glm::vec2{ 0.75f, 1.2f }, dir, true );
-	else if ( dir == SingleMovementComponent::Direction::LeftDown ) m_pSingleMovenment->SingleMove( glm::vec2{ -0.75f, 1.2f }, dir, true );
+	auto movement = MovementManager::GetInstance();
+	if ( dir == SingleMovementComponent::Direction::LeftUp ) m_pSingleMovenment->SingleMove( movement.Leftup.vector, dir, true );
+	else if ( dir == SingleMovementComponent::Direction::RightUp ) m_pSingleMovenment->SingleMove( movement.Rightup.vector, dir, true );
+	else if ( dir == SingleMovementComponent::Direction::RightDown ) m_pSingleMovenment->SingleMove( movement.Rightdown.vector, dir, true );
+	else if ( dir == SingleMovementComponent::Direction::LeftDown ) m_pSingleMovenment->SingleMove( movement.Leftdown.vector, dir, true );
 }
 
 void Coily::SetAnimationState( AnimationState state )
