@@ -64,7 +64,7 @@ void EnemyHandeler::SpawnCoily()
 	m_pCoily = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
 	auto coily = std::make_shared<Coily>( m_pCoily.get(), m_Textures.m_Coily, m_LevelSize, m_pPyramid, m_IsVersus );
 	m_pCoily->AddComponent( coily );
-	m_pCoily->SetLocalTransform( { 300, 110 } );
+	m_pCoily->SetLocalTransform( m_CoilyPos );
 }
 
 void EnemyHandeler::SpawnSlick()
@@ -74,7 +74,7 @@ void EnemyHandeler::SpawnSlick()
 	auto slick = std::make_shared<SlickSam>
 		( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Slick, m_LevelSize, m_pPyramid );
 	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( slick );
-	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 105 } );
+	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( m_SlickSamPos );
 }
 
 void EnemyHandeler::SpawnSam()
@@ -83,7 +83,7 @@ void EnemyHandeler::SpawnSam()
 	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
 	auto sam = std::make_shared<SlickSam>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(), m_Textures.m_Sam, m_LevelSize, m_pPyramid );
 	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( sam );
-	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 300, 105 } );
+	m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( m_SlickSamPos );
 }
 
 void EnemyHandeler::SpawnUggWrongway()
@@ -96,7 +96,7 @@ void EnemyHandeler::SpawnUggWrongway()
 		auto uggWrongWay = std::make_shared<UggWrongWay>( m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ].get(),
 			m_Textures.m_UggWrongWay, m_LevelSize, m_pPyramid );
 		m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->AddComponent( uggWrongWay );
-		m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( { 310, 120 } );
+		m_EnemiesGameObjects[ m_EnemiesGameObjects.size() - 1 ]->SetLocalTransform( m_UggWrongwayPos );
 	}
 }
 

@@ -3,6 +3,7 @@
 #include "TextureComponent.h"
 #include "GameTime.h"
 #include "ServiceLocator.h"
+#include "../QBert/SoundManager.h"
 
 dae::ButtonManagerComponent::ButtonManagerComponent( GameObject* const parentGameObject, std::shared_ptr<dae::Texture2D> arrow, std::vector<std::shared_ptr<ButtonComponent>> buttons )
 	: BaseComponent( parentGameObject ),
@@ -73,9 +74,7 @@ void dae::ButtonManagerComponent::SelectNextButton( int howMany )
 				m_SelectedButton = *it;
 			}
 		}
-		auto& ss = dae::ServiceLocator::GetSoundSystem();
-		ss.AddSound( "Change", "Sounds/Change Selection.wav" );
-		ss.Play( ss.GetSoundId( "Change" ), 50 );
+		SoundManager::GetInstance().ButtonChange();
 	}
 }
 
@@ -96,9 +95,7 @@ void dae::ButtonManagerComponent::SelectPreviousButton( int howMany )
 
 			}
 		}
-		auto& ss = dae::ServiceLocator::GetSoundSystem();
-		ss.AddSound( "Change", "Sounds/Change Selection.wav" );
-		ss.Play( ss.GetSoundId( "Change" ), 50 );
+		SoundManager::GetInstance().ButtonChange();
 	}
 }
 
@@ -109,8 +106,6 @@ void dae::ButtonManagerComponent::PressSelectedButton()
 		m_SelectedButton->Clicked();
 		m_CanPressButton = false;
 
-		auto& ss = dae::ServiceLocator::GetSoundSystem();
-		ss.AddSound( "Change", "Sounds/Change Selection.wav" );
-		ss.Play( ss.GetSoundId( "Change" ), 50 );
+		SoundManager::GetInstance().ButtonChange();
 	}
 }

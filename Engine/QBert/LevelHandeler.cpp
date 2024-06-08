@@ -13,6 +13,7 @@
 #include "ScoreFile.h"
 #include "TextureComponent.h"
 #include <ServiceLocator.h>
+#include "SoundManager.h"
 
 LevelHandeler::LevelHandeler( dae::GameObject* parentGameObject, int& lives, int maxLevels ):
 	BaseComponent( parentGameObject ),
@@ -55,7 +56,6 @@ void LevelHandeler::Update()
 
 void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 {
-	auto& ss = dae::ServiceLocator::GetSoundSystem();
 	size_t maxScenes = dae::SceneManager::GetInstance().GetMaxScenes();
 
 	switch ( event )
@@ -80,13 +80,14 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 	case dae::EventType::COILY_DEAD:
 
+		SoundManager::GetInstance().CoilyFall( m_Volume );
 		GetOwner()->GetComponent<Level>()->CoilyDied();
-		m_Score += 500;
+		m_Score += m_ScoreCoily;
 
 		break;
 
 	case dae::EventType::PLAYER1_ON_DISC:
-
+		SoundManager::GetInstance().OnDisc(m_Volume);
 		GetOwner()->GetComponent<Level>()->Player1OnDisc();
 
 		break;
@@ -98,15 +99,13 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 
 	case dae::EventType::PLAYER1_OUT_OF_BOUNDS:
-		ss.AddSound( "QBertFall", "Sounds/QBertFall.wav" );
-		ss.Play( ss.GetSoundId( "QBertFall" ), m_Volume );
+		SoundManager::GetInstance().PlayQbertFall( m_Volume );
 
 		Notify( dae::EventType::PLAYER1_HIT, gameObj );
 		break;
 
 	case dae::EventType::PLAYER2_OUT_OF_BOUNDS:
-		ss.AddSound( "QBertFall", "Sounds/QBertFall.wav" );
-		ss.Play( ss.GetSoundId( "QBertFall" ), m_Volume );
+		SoundManager::GetInstance().PlayQbertFall( m_Volume );
 
 		Notify( dae::EventType::PLAYER2_HIT, gameObj );
 		break;
@@ -114,14 +113,10 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::PLAYER1_HIT:
 		if ( m_Lives1 > 1 )
 		{
-			ss.AddSound( "QbertHit", "Sounds/QbertHit.wav" );
-			ss.Play( ss.GetSoundId( "QbertHit" ), m_Volume );
-
-			ss.AddSound( "Swearing", "Sounds/Swearing.wav" );
-			ss.Play( ss.GetSoundId( "Swearing" ), m_Volume );
+			SoundManager::GetInstance().PlayerHit( m_Volume );
 
 			--m_Lives1;
-			if ( m_Score > 25 ) { m_Score -= 25; }
+			if ( m_Score > m_ScoreCube ) { m_Score -= m_ScoreCube; }
 			if ( m_pQbert ) {
 				m_pQbert->ResetPosition();
 			}
@@ -139,14 +134,10 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::PLAYER2_HIT:
 		if ( m_Lives2 > 1 )
 		{
-			ss.AddSound( "QbertHit", "Sounds/QbertHit.wav" );
-			ss.Play( ss.GetSoundId( "QbertHit" ), m_Volume );
-
-			ss.AddSound( "Swearing", "Sounds/Swearing.wav" );
-			ss.Play( ss.GetSoundId( "Swearing" ), m_Volume );
+			SoundManager::GetInstance().PlayerHit( m_Volume );
 
 			--m_Lives2;
-			if ( m_Score > 25 ) { m_Score -= 25; }
+			if ( m_Score > m_ScoreCube ) { m_Score -= m_ScoreCube; }
 
 			if ( m_pQbert2 ) {
 				m_pQbert2->ResetPosition();
@@ -163,12 +154,12 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 
 	case dae::EventType::KILL_ENEMY:
-		m_Score += 300;
+		m_Score += m_ScoreSlickSam;
+		SoundManager::GetInstance().CaughtEnemy( m_Volume );
 		break;
 
 	case dae::EventType::PLAYER_WON:
-		ss.AddSound( "CompleteRound", "Sounds/CompleteRound.wav" );
-		ss.Play( ss.GetSoundId( "CompleteRound" ), m_Volume );
+		SoundManager::GetInstance().CompleteRound( m_Volume );
 
 		GetOwner()->GetComponent<PyramidCubes>()->CompleteLevel();
 		GetOwner()->GetComponent<Level>()->CompletedLevel();
@@ -178,8 +169,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 	case dae::EventType::PLAYER_MOVED:
 		if ( auto qbert = gameObj->GetComponent<QBert>() )
 		{
-			ss.AddSound( "QbertJump", "Sounds/QBertJump.wav" );
-			ss.Play( ss.GetSoundId( "QbertJump" ), m_Volume );
+			SoundManager::GetInstance().PlayerJump( m_Volume );
 
 			if ( qbert->GetWichPlayer() == 1 )
 			{
@@ -196,10 +186,11 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 
 	case dae::EventType::NEW_CUBE_COMPLETED:
-		m_Score += 25;
+		m_Score += m_ScoreCube;
 		break;
 
 		case dae::EventType::DISC_FLOAT_TO_TOP:
+			SoundManager::GetInstance().DiscLand( m_Volume );
 			GetOwner()->GetComponent<Level>()->SetTop();
 			break;
 
@@ -257,6 +248,7 @@ void LevelHandeler::ChangeLevel()
 	else
 	{
 		int nextscene = dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1;
+		m_Score += int(GetOwner()->GetComponent<Level>()->GetDiscPos().size() * m_ScoreDisc);
 
 		if ( nextscene < m_MaxLevels )
 		{

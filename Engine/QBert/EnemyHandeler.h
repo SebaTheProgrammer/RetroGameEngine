@@ -43,5 +43,9 @@ private:
 
 	bool m_HasCoily{ false };
 	bool m_IsVersus{ false };
+
+	glm::vec2 m_CoilyPos{ 300, 110 };
+	glm::vec2 m_SlickSamPos{ 300, 105 };
+	glm::vec2 m_UggWrongwayPos{ 310, 120 };
 };
 

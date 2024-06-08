@@ -24,6 +24,11 @@ public:
 
 private:
 	const int m_Volume = 50;
+	const int m_ScoreCube = 25;
+	const int m_ScoreCoily = 500;
+	const int m_ScoreSlickSam = 300;
+	const int m_ScoreDisc = 50;
+
 	bool m_NeedsUpdate{ false };
 	int m_Lives1;
 	int m_Lives2;

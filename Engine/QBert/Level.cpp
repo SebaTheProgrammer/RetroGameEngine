@@ -21,6 +21,7 @@
 #include "FloatingDisc.h"
 #include "HighScoreScreen.h"
 #include "Scene.h"
+#include "SoundManager.h"
 
 Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, int howManuJumpsNeeded, int maxLevels,
 	allTextures textures, int qbertlives )
@@ -141,9 +142,7 @@ void Level::Update()
 		if ( m_StartSound )
 		{
 			m_StartSound = false;
-			auto& ss = dae::ServiceLocator::GetSoundSystem();
-			ss.AddSound( "Start", "Sounds/Start.wav" );
-			ss.Play( ss.GetSoundId( "Start" ), 50 );
+			SoundManager::GetInstance().StartRound();
 		}
 
 		if ( m_Timer > m_BeginTime )

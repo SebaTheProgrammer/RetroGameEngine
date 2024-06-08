@@ -27,14 +27,13 @@
 #include "ButtonManagerComponent.h"
 #include "ChangeNameScreen.h"
 #include "MainMenuScreen.h"
+#include "SoundManager.h"
 
 void load()
 {
 	//Sound
 	dae::ServiceLocator::RegisterSoundSystem( std::make_unique<dae::SDLSoundSystem>() );
-	auto& ss = dae::ServiceLocator::GetSoundSystem();
-	ss.AddSound( "Start", "Sounds/Start.wav" );
-	ss.Play( ss.GetSoundId( "Start" ), 50 );
+	SoundManager::GetInstance().StartRound();
 
 	auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 );
 	auto font2 = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 );

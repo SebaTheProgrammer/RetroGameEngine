@@ -26,9 +26,6 @@
     <Filter Include="Commands">
       <UniqueIdentifier>{853e7f2f-3d25-41de-8340-3650f72ef225}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Handelers">
-      <UniqueIdentifier>{c716f887-7208-4586-9cc1-7935ea1d946e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Level\Disc">
       <UniqueIdentifier>{12b8f635-7c9a-4c09-9409-158be582e7b8}</UniqueIdentifier>
     </Filter>
@@ -37,6 +34,9 @@
     </Filter>
     <Filter Include="Level\Enemies\Coily">
       <UniqueIdentifier>{ac690bc9-d9a5-4a7b-9218-1c6b9fa2b176}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{c716f887-7208-4586-9cc1-7935ea1d946e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -71,10 +71,10 @@
       <Filter>Level\Components</Filter>
     </ClCompile>
     <ClCompile Include="EnemyHandeler.cpp">
-      <Filter>Handelers</Filter>
+      <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="LevelHandeler.cpp">
-      <Filter>Handelers</Filter>
+      <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="FloatingDisc.cpp">
       <Filter>Level\Disc</Filter>
@@ -145,10 +145,10 @@
       <Filter>Level\Components</Filter>
     </ClInclude>
     <ClInclude Include="EnemyHandeler.h">
-      <Filter>Handelers</Filter>
+      <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="LevelHandeler.h">
-      <Filter>Handelers</Filter>
+      <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="FloatingDisc.h">
       <Filter>Level\Disc</Filter>
@@ -178,7 +178,10 @@
       <Filter>Level\Enemies\Coily</Filter>
     </ClInclude>
     <ClInclude Include="InputBindsManager.h">
-      <Filter>Handelers</Filter>
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
