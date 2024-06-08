@@ -353,7 +353,11 @@ void Coily::FollowPlayer( int playerRow1, int playerCol1, int playerRow2, int pl
 
 void Coily::IdleSnake()
 {
-	m_pCoilyStateHandeler->SetState( 1 );
+	m_pTextureCoily->SetCurrentColumn( 1 );
+	m_pTextureCoily->SetMinColumns( 0 );
+	m_pTextureCoily->SetMaxColumns( 4 );
+	m_pTextureCoily->SetMinRows( 0 );
+	m_pTextureCoily->SetMaxRows( 1 );
 	SetAnimationState( AnimationState::IdleSnake );
 }
 
@@ -369,5 +373,10 @@ void Coily::IdleBackSnake()
 
 void Coily::Egged()
 {
-	m_pCoilyStateHandeler->SetState( 0 );
+	m_pTextureCoily->SetCurrentColumn( 0 );
+	m_pTextureCoily->SetCurrentRow( 1 );
+	m_pTextureCoily->SetMinColumns( 0 );
+	m_pTextureCoily->SetMaxColumns( 4 );
+	m_pTextureCoily->SetMinRows( 1 );
+	m_pTextureCoily->SetMaxRows( 2 );
 }

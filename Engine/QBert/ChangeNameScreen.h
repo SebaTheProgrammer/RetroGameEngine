@@ -16,6 +16,8 @@ class ChangeNameScreen : public dae::BaseComponent
 	void SetName( std::string name );
 	std::string GetName() const { return  ScoreFile::GetInstance().GetName(); };
 
+	void AssignControllerInput();
+
 	private:
 		std::shared_ptr<dae::GameObject> m_ButtonsHandeler;
 		std::vector< std::shared_ptr <dae::GameObject>> m_Buttons;

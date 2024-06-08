@@ -9,6 +9,7 @@
 #include <ServiceLocator.h>
 #include "ChangeNameScreen.h"
 #include "InputManager.h"
+#include "MainMenuScreen.h"
 
 class OpenMainMenuCommand : public dae::GameObjectCommand
 {
@@ -20,6 +21,16 @@ public:
 		if ( dae::SceneManager::GetInstance().GetCurrentSceneIndex() == GetGameObject()->GetSceneIndex() || dae::SceneManager::GetInstance().GetCurrentSceneIndex() == -1 )
 		{
 			dae::SceneManager::GetInstance().SetCurrentScene( 0 );
+
+			auto objects = dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects();
+			for ( auto& object : objects )
+			{
+				auto menu = object->GetComponent<MainMenuScreen>();
+				if ( menu )
+				{
+					menu->AssignControllerInput();
+				}
+			}
 		}
 	}
 };
@@ -152,6 +163,16 @@ public:
 	{
 		dae::SceneManager::GetInstance().SetCurrentScene( m_Level );
 		m_pHighScore->GetAllScores();
+		auto objects = dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects();
+
+		for ( auto& object : objects )
+		{
+			auto highscore = object->GetComponent<HighScoreScreen>();
+			if ( highscore )
+			{
+				highscore->AssignControllerInput();
+			}
+		}
 	}
 
 private:
@@ -169,11 +190,28 @@ class OpenSceneWithIndex : public dae::GameObjectCommand
 	virtual void Execute() override
 	{
 		dae::SceneManager::GetInstance().SetCurrentScene( m_Level );
+
+		auto objects = dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects();
+		for ( auto& object : objects )
+		{
+			auto menu = object->GetComponent<MainMenuScreen>();
+			if ( menu )
+			{
+				menu->AssignControllerInput();
+			}
+
+			auto changeName = object->GetComponent<ChangeNameScreen>();
+			if ( changeName )
+			{
+				changeName->AssignControllerInput();
+			}
+		}
 	}
 private:
 		int m_Level{};
 };
 
+//Letter commands
 class AddLetterCommand : public dae::GameObjectCommand
 {
 public:
@@ -194,7 +232,6 @@ public:
 private:
 	char m_Letter{};
 };
-
 class ClearLettersCommand : public dae::GameObjectCommand
 {
 public:
@@ -210,7 +247,6 @@ public:
 	}
 
 };
-
 class RemoveLetterCommand : public dae::GameObjectCommand
 {
 	public:

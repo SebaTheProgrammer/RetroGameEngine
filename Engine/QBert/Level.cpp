@@ -19,6 +19,8 @@
 #include "EnemyHandeler.h"
 #include <ServiceLocator.h>
 #include "FloatingDisc.h"
+#include "HighScoreScreen.h"
+#include "Scene.h"
 
 Level::Level( dae::GameObject* parentGameObject, int howLongLevel, int level, int howManuJumpsNeeded, int maxLevels,
 	allTextures textures, int qbertlives )
@@ -211,6 +213,15 @@ void Level::Update()
 				players->GetComponent<QBert>()->SetCanMove( true );
 			}
 			dae::SceneManager::GetInstance().SetCurrentScene( dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 1 );
+			auto objects = dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects();
+			for ( auto& object : objects )
+			{
+				auto highscore = object->GetComponent<HighScoreScreen>();
+				if ( highscore )
+				{
+					highscore->AssignControllerInput();
+				}
+			}
 			RestartLevel();
 		}
 		m_pWinObject->Update();

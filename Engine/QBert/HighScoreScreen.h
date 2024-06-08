@@ -21,6 +21,8 @@ class HighScoreScreen : public dae::BaseComponent
 
 		void Render() const override;
 
+		void AssignControllerInput();
+
 private:
 
 	std::vector < std::pair<std::string, int>> m_Scores;
