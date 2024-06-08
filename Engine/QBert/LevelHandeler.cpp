@@ -214,6 +214,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 				}
 			}
 		}
+		dae::SceneManager::GetInstance().SetCurrentScene( 0 );
 		ResetLevel();
 		break;
 	case dae::EventType::REMOVE_PLAYER:
