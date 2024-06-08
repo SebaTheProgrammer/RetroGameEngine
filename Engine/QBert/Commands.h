@@ -261,6 +261,9 @@ class RemoveLetterCommand : public dae::GameObjectCommand
 			if ( name.size() > 0 )
 			{
 				name.pop_back();
+				if ( name.size() == 0 ) {
+					name = " ";
+				}
 				changeNameScreen->SetName( name );
 			}
 		}
