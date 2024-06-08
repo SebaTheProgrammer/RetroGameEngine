@@ -465,6 +465,8 @@ void Level::SetMultiplayer( bool isMultiplayer )
 		m_IsMultiplayer = isMultiplayer;
 		RestartLevel();
 
+		m_EnemyHandeler->GetComponent<EnemyHandeler>()->SetVersus( false );
+
 		//add extra player
 		m_QbertGameObject.push_back( std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex()));
 		m_QbertGameObject[ m_QbertGameObject.size() - 1 ] = std::make_shared<dae::GameObject>( GetOwner()->GetSceneIndex() );
@@ -540,6 +542,7 @@ void Level::SinglePlayer()
 	m_IsVersus = false;
 	SetMultiplayer( false );
 	m_pPyramidCubes->ResetLevel();
+	m_EnemyHandeler->GetComponent<EnemyHandeler>()->SetVersus( false );
 	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->ResetQBert();
 	RestartLevel();
 	m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController(0);

@@ -19,33 +19,35 @@ Coily::Coily( dae::GameObject* parentGameObject,
 	m_LevelSize = levelSize;
 	Egged();
 
-	if ( dae::InputManager::GetInstance().GetHowManyControllersConnected() > 1 )
-	{
-		dae::InputManager::GetInstance().BindActionGamePad(1, XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ parentGameObject,  glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
+	if ( m_Player2Control ) {
+		if ( dae::InputManager::GetInstance().GetHowManyControllersConnected() > 1 )
+		{
+			dae::InputManager::GetInstance().BindActionGamePad( 1, XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed,
+				SingleMoveCommand{ parentGameObject,  glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
 
-		dae::InputManager::GetInstance().BindActionGamePad( 1, XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ parentGameObject, glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown } );
+			dae::InputManager::GetInstance().BindActionGamePad( 1, XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsPressed,
+				SingleMoveCommand{ parentGameObject, glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown } );
 
-		dae::InputManager::GetInstance().BindActionGamePad( 1, XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ parentGameObject, glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp } );
+			dae::InputManager::GetInstance().BindActionGamePad( 1, XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed,
+				SingleMoveCommand{ parentGameObject, glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp } );
 
-		dae::InputManager::GetInstance().BindActionGamePad( 1, XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ parentGameObject, glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown } );
-	}
-	else
-	{
-		dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ parentGameObject,  glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
+			dae::InputManager::GetInstance().BindActionGamePad( 1, XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed,
+				SingleMoveCommand{ parentGameObject, glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown } );
+		}
+		else
+		{
+			dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed,
+				SingleMoveCommand{ parentGameObject,  glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
 
-		dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ parentGameObject, glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown } );
+			dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsPressed,
+				SingleMoveCommand{ parentGameObject, glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown } );
 
-		dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ parentGameObject, glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp } );
+			dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed,
+				SingleMoveCommand{ parentGameObject, glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp } );
 
-		dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed,
-			SingleMoveCommand{ parentGameObject, glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown } );
+			dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed,
+				SingleMoveCommand{ parentGameObject, glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown } );
+		}
 	}
 }
 

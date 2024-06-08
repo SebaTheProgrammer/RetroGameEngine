@@ -10,7 +10,7 @@ EnemyHandeler::EnemyHandeler( dae::GameObject* parentGameObject, PyramidCubes* p
 	BaseComponent( parentGameObject ), m_pPyramid( pyramid ), m_MaxScoreEnemies( maxScoreEnemies )
 {
 	m_Textures = textures;
-	m_LevelSize = levelsize;
+	m_LevelSize = levelsize; 
 }
 
 EnemyHandeler::~EnemyHandeler()

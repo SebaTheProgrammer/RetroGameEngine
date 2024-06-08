@@ -63,7 +63,7 @@ public:
 		Normal
 	};
 
-
+	bool GetIsVersus() { return m_IsVersus; }
 	std::vector < glm::vec2> GetDiscPos() { return m_DiscPos; }
 
 private:
