@@ -15,7 +15,7 @@ This game engine provides a foundation for creating 2D grid-based games seen in 
 - **Observers**
 - **Sound with threading**
 
-## Examples + Controlls
+## Examples + Controls
 
 I will make the retro game Q-bert with this engine!
 
