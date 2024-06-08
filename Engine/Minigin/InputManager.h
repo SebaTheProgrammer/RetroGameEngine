@@ -58,7 +58,10 @@ namespace dae
 
 		void ClearKeyBinds()
 		{
-			m_InputBindingsGamePad.clear();
+			for ( auto& inputBinding : m_InputBindingsGamePad )
+			{
+				inputBinding.command = nullptr;
+			}
 		}
 
 		int GetHowManyControllersConnected();
