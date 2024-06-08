@@ -90,7 +90,7 @@ void MainMenuScreen::AssignControllerInput()
 {
 	dae::InputManager::GetInstance().ClearKeyBinds();
 
-	for ( int index = 0; index < dae::InputManager::GetInstance().GetHowManyControllersConnected(); ++index )
+	for ( int index = 0; index <= dae::InputManager::GetInstance().GetHowManyControllersConnected(); ++index )
 	{
 		dae::InputManager::GetInstance().BindActionGamePad( index, InputBindsManager::GetInstance().GetControllerMenuUp(), InputTypeGamePad::IsUpThisFrame, dae::PreviousButtonCommand{m_ButtonsHandeler.get(),1});
 		dae::InputManager::GetInstance().BindActionGamePad( index, InputBindsManager::GetInstance().GetControllerMenuDown(), InputTypeGamePad::IsUpThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get(),1 } );

@@ -526,10 +526,7 @@ void Level::SetVersus( bool isVersus )
 	m_pPyramidCubes->ResetLevel();
 	RestartLevel();
 
-	if ( dae::InputManager::GetInstance().GetHowManyControllersConnected() == 1 )
-	{
-	}
-	else
+	if ( dae::InputManager::GetInstance().GetHowManyControllersConnected() != 1 )
 	{
 		m_QbertGameObject[ 0 ]->GetComponent<QBert>()->SetInputController(0);
 	}
