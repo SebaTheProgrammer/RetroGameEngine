@@ -3,6 +3,7 @@
 #include <ButtonComponent.h>
 #include <ButtonManagerComponent.h>
 #include <InputManager.h>
+#include "InputBindsManager.h"
 
 MainMenuScreen::MainMenuScreen( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> arrow, std::shared_ptr<dae::Font> font, HighScoreScreen* score, int max ) :
 	BaseComponent( parentGameObject )
@@ -57,9 +58,9 @@ MainMenuScreen::MainMenuScreen( dae::GameObject* parentGameObject, std::shared_p
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_F1, InputTypeKeyBoard::IsDownThisFrame, dae::OpenNextLevelCommand{ levelswitcher.get() } );
 	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_M, InputTypeKeyBoard::IsDownThisFrame, SoundCommand{} );
 
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, InputTypeKeyBoard::IsDownThisFrame, dae::PreviousButtonCommand{ m_ButtonsHandeler.get() ,1 } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsDownThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get() ,1 } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_SPACE, InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( InputBindsManager::GetInstance().GetKeyboardMenuUp(), InputTypeKeyBoard::IsDownThisFrame, dae::PreviousButtonCommand{m_ButtonsHandeler.get() ,1});
+	dae::InputManager::GetInstance().BindActionKeyBoard( InputBindsManager::GetInstance().GetKeyboardMenuDown(), InputTypeKeyBoard::IsDownThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get() ,1 } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( InputBindsManager::GetInstance().GetKeyboardMenuSelect(), InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
 }
 
 void MainMenuScreen::Update()
@@ -91,8 +92,8 @@ void MainMenuScreen::AssignControllerInput()
 
 	for ( int index = 0; index < dae::InputManager::GetInstance().GetHowManyControllersConnected(); ++index )
 	{
-		dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsUpThisFrame, dae::PreviousButtonCommand{ m_ButtonsHandeler.get(),1 } );
-		dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsUpThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get(),1 } );
-		dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+		dae::InputManager::GetInstance().BindActionGamePad( index, InputBindsManager::GetInstance().GetControllerMenuUp(), InputTypeGamePad::IsUpThisFrame, dae::PreviousButtonCommand{m_ButtonsHandeler.get(),1});
+		dae::InputManager::GetInstance().BindActionGamePad( index, InputBindsManager::GetInstance().GetControllerMenuDown(), InputTypeGamePad::IsUpThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get(),1 } );
+		dae::InputManager::GetInstance().BindActionGamePad( index, InputBindsManager::GetInstance().GetControllerMenuSelect(), InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{m_ButtonsHandeler.get()});
 	}
 }

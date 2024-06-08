@@ -177,5 +177,8 @@
     <ClInclude Include="SnakeState.h">
       <Filter>Level\Enemies\Coily</Filter>
     </ClInclude>
+    <ClInclude Include="InputBindsManager.h">
+      <Filter>Handelers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

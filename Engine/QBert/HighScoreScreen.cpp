@@ -7,6 +7,7 @@
 #include <GameTime.h>
 #include "Commands.h"
 #include <ButtonManagerComponent.h>
+#include "InputBindsManager.h"
 
 HighScoreScreen::HighScoreScreen( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> arrow, std::shared_ptr<dae::Font> font1, std::shared_ptr<dae::Font> font2 )
 	: BaseComponent( parentGameObject )
@@ -37,7 +38,7 @@ HighScoreScreen::HighScoreScreen( dae::GameObject* parentGameObject, std::shared
 	m_ButtonsHandeler->SetLocalTransform( { 540, 425 } );
 	m_ButtonsHandeler->AddComponent( buttonB );
 
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_SPACE, InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+	dae::InputManager::GetInstance().BindActionKeyBoard( InputBindsManager::GetInstance().GetKeyboardMenuSelect(), InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
 	std::vector<std::shared_ptr<dae::ButtonComponent>> allButtonsHighscore = { buttonB };
 	auto buttonManagerHighscore = std::make_shared<dae::ButtonManagerComponent>( m_ButtonsHandeler.get(), arrow, allButtonsHighscore );
 	m_ButtonsHandeler->AddComponent( buttonManagerHighscore );
@@ -72,6 +73,6 @@ void HighScoreScreen::Render() const
 
 void HighScoreScreen::AssignControllerInput()
 {
-	dae::InputManager::GetInstance().BindActionGamePad( 0, XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
-	dae::InputManager::GetInstance().BindActionGamePad( 1, XINPUT_GAMEPAD_A, InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+	dae::InputManager::GetInstance().BindActionGamePad( 0, InputBindsManager::GetInstance().GetControllerMenuSelect(), InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+	dae::InputManager::GetInstance().BindActionGamePad( 1, InputBindsManager::GetInstance().GetControllerMenuSelect(), InputTypeGamePad::IsUpThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
 }

@@ -2,6 +2,7 @@
 #include "Commands.h"
 #include <ButtonManagerComponent.h>
 #include <ButtonComponent.h>
+#include "InputBindsManager.h"
 
 ChangeNameScreen::ChangeNameScreen( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> arrow, std::shared_ptr<dae::Font> font )
     : BaseComponent( parentGameObject )
@@ -61,11 +62,35 @@ ChangeNameScreen::ChangeNameScreen( dae::GameObject* parentGameObject, std::shar
     auto buttonManager = std::make_shared<dae::ButtonManagerComponent>( m_ButtonsHandeler.get(), arrow, allButtons );
     m_ButtonsHandeler->AddComponent( buttonManager );
 
-    dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_A, InputTypeKeyBoard::IsDownThisFrame, dae::PreviousButtonCommand{ m_ButtonsHandeler.get(),1 } );
-    dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_D, InputTypeKeyBoard::IsDownThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get(),1 } );
-    dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, InputTypeKeyBoard::IsDownThisFrame, dae::PreviousButtonCommand{ m_ButtonsHandeler.get(), m_MaxColumns } );
-    dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsDownThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get(),m_MaxColumns } );
-    dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_SPACE, InputTypeKeyBoard::IsDownThisFrame, dae::PressButtonCommand{ m_ButtonsHandeler.get() } );
+    dae::InputManager::GetInstance().BindActionKeyBoard(
+        InputBindsManager::GetInstance().GetKeyboardMenuLeft(),
+        InputTypeKeyBoard::IsDownThisFrame,
+        dae::PreviousButtonCommand{ m_ButtonsHandeler.get(), 1 }
+    );
+
+    dae::InputManager::GetInstance().BindActionKeyBoard(
+        InputBindsManager::GetInstance().GetKeyboardMenuRight(),
+        InputTypeKeyBoard::IsDownThisFrame,
+        dae::NextButtonCommand{ m_ButtonsHandeler.get(), 1 }
+    );
+
+    dae::InputManager::GetInstance().BindActionKeyBoard(
+        InputBindsManager::GetInstance().GetKeyboardMenuUp(),
+        InputTypeKeyBoard::IsDownThisFrame,
+        dae::PreviousButtonCommand{ m_ButtonsHandeler.get(), m_MaxColumns }
+    );
+
+    dae::InputManager::GetInstance().BindActionKeyBoard(
+        InputBindsManager::GetInstance().GetKeyboardMenuDown(),
+        InputTypeKeyBoard::IsDownThisFrame,
+        dae::NextButtonCommand{ m_ButtonsHandeler.get(), m_MaxColumns }
+    );
+
+    dae::InputManager::GetInstance().BindActionKeyBoard(
+        InputBindsManager::GetInstance().GetKeyboardMenuSelect(),
+        InputTypeKeyBoard::IsDownThisFrame,
+        dae::PressButtonCommand{ m_ButtonsHandeler.get() }
+    );
 }
 
 void ChangeNameScreen::Update()

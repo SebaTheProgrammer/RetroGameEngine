@@ -6,6 +6,7 @@
 #include "TextureComponent.h"
 #include <iostream>
 #include <ServiceLocator.h>
+#include "InputBindsManager.h"
 
 QBert::QBert( dae::GameObject* parentGameObject, std::shared_ptr<dae::Texture2D> textureIdle, std::shared_ptr<dae::Texture2D> textureIdleBack )
 	:BaseComponent( parentGameObject )
@@ -194,30 +195,62 @@ void QBert::SetRightBottom( int levelsize )
 
 void QBert::SetInputKeyBoard()
 {
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_W, InputTypeKeyBoard::IsPressed,
-		SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
+	dae::InputManager::GetInstance().BindActionKeyBoard(
+		InputBindsManager::GetInstance().GetKeyboardGameUp(),
+		InputTypeKeyBoard::IsPressed,
+		SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp }
+	);
 
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_A, InputTypeKeyBoard::IsPressed,
-		SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown } );
+	dae::InputManager::GetInstance().BindActionKeyBoard(
+		InputBindsManager::GetInstance().GetKeyboardGameLeft(),
+		InputTypeKeyBoard::IsPressed,
+		SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown }
+	);
 
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_S, InputTypeKeyBoard::IsPressed,
-		SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown } );
+	dae::InputManager::GetInstance().BindActionKeyBoard(
+		InputBindsManager::GetInstance().GetKeyboardGameDown(),
+		InputTypeKeyBoard::IsPressed,
+		SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown }
+	);
 
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_D, InputTypeKeyBoard::IsPressed,
-		SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp } );
+	dae::InputManager::GetInstance().BindActionKeyBoard(
+		InputBindsManager::GetInstance().GetKeyboardGameRight(),
+		InputTypeKeyBoard::IsPressed,
+		SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp }
+	);
+
 }
 
 void QBert::SetInputController(int index)
 {
-	dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_DPAD_UP, InputTypeGamePad::IsPressed,
-		SingleMoveCommand{ GetOwner(),  glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp } );
+	auto& inputManager = dae::InputManager::GetInstance();
+	auto& inputBindsManager = InputBindsManager::GetInstance();
 
-	dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_DPAD_LEFT, InputTypeGamePad::IsPressed,
-		SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown } );
+	inputManager.BindActionGamePad(
+		index,
+		inputBindsManager.GetControllerGameUp(),
+		InputTypeGamePad::IsPressed,
+		SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, -1.2f}, SingleMovementComponent::Direction::LeftUp }
+	);
 
-	dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_DPAD_RIGHT, InputTypeGamePad::IsPressed,
-		SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp } );
+	inputManager.BindActionGamePad(
+		index,
+		inputBindsManager.GetControllerGameLeft(),
+		InputTypeGamePad::IsPressed,
+		SingleMoveCommand{ GetOwner(), glm::vec2{-0.75f, 1.2f}, SingleMovementComponent::Direction::LeftDown }
+	);
 
-	dae::InputManager::GetInstance().BindActionGamePad( index, XINPUT_GAMEPAD_DPAD_DOWN, InputTypeGamePad::IsPressed,
-		SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown } );
+	inputManager.BindActionGamePad(
+		index,
+		inputBindsManager.GetControllerGameRight(),
+		InputTypeGamePad::IsPressed,
+		SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, -1.2f}, SingleMovementComponent::Direction::RightUp }
+	);
+
+	inputManager.BindActionGamePad(
+		index,
+		inputBindsManager.GetControllerGameDown(),
+		InputTypeGamePad::IsPressed,
+		SingleMoveCommand{ GetOwner(), glm::vec2{0.75f, 1.2f}, SingleMovementComponent::Direction::RightDown }
+	);
 }
