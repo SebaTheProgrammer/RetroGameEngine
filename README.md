@@ -15,9 +15,13 @@ This game engine provides a foundation for creating 2D grid-based games seen in 
 - **Observers**
 - **Sound with threading**
 
-## Examples
+## Examples + Controls
 
 I will make the retro game Q-bert with this engine!
+
+In Q-bert, you can use WASD to move and press space to select something.
+Or you can use the d-pad from a controller and press 'A' to select things!
+Enjoy!
 
 ## Contributing
 
