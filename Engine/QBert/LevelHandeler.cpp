@@ -14,6 +14,7 @@
 #include "TextureComponent.h"
 #include <ServiceLocator.h>
 #include "SoundManager.h"
+#include "MainMenuScreen.h"
 
 LevelHandeler::LevelHandeler( dae::GameObject* parentGameObject, int& lives, int maxLevels ):
 	BaseComponent( parentGameObject ),
@@ -87,7 +88,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		break;
 
 	case dae::EventType::PLAYER1_ON_DISC:
-		SoundManager::GetInstance().OnDisc(m_Volume);
+		SoundManager::GetInstance().OnDisc( m_Volume );
 		GetOwner()->GetComponent<Level>()->Player1OnDisc();
 
 		break;
@@ -189,10 +190,10 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 		m_Score += m_ScoreCube;
 		break;
 
-		case dae::EventType::DISC_FLOAT_TO_TOP:
-			SoundManager::GetInstance().DiscLand( m_Volume );
-			GetOwner()->GetComponent<Level>()->SetTop();
-			break;
+	case dae::EventType::DISC_FLOAT_TO_TOP:
+		SoundManager::GetInstance().DiscLand( m_Volume );
+		GetOwner()->GetComponent<Level>()->SetTop();
+		break;
 
 	case dae::EventType::LEVEL_RESTART:
 		for ( unsigned i = 0; i < maxScenes; ++i )
@@ -206,6 +207,15 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 			}
 		}
 		dae::SceneManager::GetInstance().SetCurrentScene( 0 );
+		for ( auto& object : dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects() )
+		{
+			auto menu = object->GetComponent<MainMenuScreen>();
+			if ( menu )
+			{
+				menu->AssignControllerInput();
+			}
+		}
+
 		ResetLevel();
 		break;
 	case dae::EventType::REMOVE_PLAYER:

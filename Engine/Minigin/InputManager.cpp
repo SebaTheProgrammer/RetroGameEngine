@@ -99,17 +99,17 @@ void dae::InputManager::CheckInputBinding( InputBindingGamePad inputBinding, XIN
 
 	switch ( inputBinding.inputType ) {
 	case InputTypeGamePad::IsPressed:
-		if ( IsPressedGP( inputBinding.key ) && ( controllerState.Gamepad.wButtons & inputBinding.key ) ) {
+		if ( IsPressedGP( inputBinding.key ) && ( controllerState.Gamepad.wButtons & inputBinding.key ) && inputBinding.command !=nullptr) {
 			inputBinding.command->Execute();
 		}
 		break;
 	case InputTypeGamePad::IsDownThisFrame:
-		if ( IsDownThisFrameGP( inputBinding.key ) && ( controllerState.Gamepad.wButtons & inputBinding.key ) ) {
+		if ( IsDownThisFrameGP( inputBinding.key ) && ( controllerState.Gamepad.wButtons & inputBinding.key && inputBinding.command != nullptr ) ) {
 			inputBinding.command->Execute();
 		}
 		break;
 	case InputTypeGamePad::IsUpThisFrame:
-		if ( IsUpThisFrameGP( inputBinding.key ) && !( controllerState.Gamepad.wButtons & inputBinding.key ) ) {
+		if ( IsUpThisFrameGP( inputBinding.key ) && !( controllerState.Gamepad.wButtons & inputBinding.key && inputBinding.command != nullptr ) ) {
 			inputBinding.command->Execute();
 		}
 		break;
