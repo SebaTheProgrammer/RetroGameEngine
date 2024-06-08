@@ -22,5 +22,13 @@ class ChangeNameScreen : public dae::BaseComponent
 
 		std::string m_Name;
 		std::shared_ptr<dae::TextComponent > m_NameText;
+
+		const int m_MaxColumns = 9;
+
+		float m_StartXOffset = 150.0f;
+		float m_XOffset = m_StartXOffset;
+		float m_YOffset = 150.0f;
+		float m_AddXOffset = 45.0f;
+		float m_AddYOffset = 45.0f;
 };
 

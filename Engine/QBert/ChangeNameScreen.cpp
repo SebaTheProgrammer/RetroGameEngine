@@ -13,10 +13,7 @@ ChangeNameScreen::ChangeNameScreen( dae::GameObject* parentGameObject, std::shar
 
     std::vector<std::shared_ptr<dae::ButtonComponent>> allButtons;
 
-    float xOffset = 150.0f;
-    float yOffset = 150.0f;
     int columnCount = 0;
-    const int maxColumns = 9;
 
     for ( char letter = 'A'; letter <= 'Z'; ++letter )
     {
@@ -26,17 +23,17 @@ ChangeNameScreen::ChangeNameScreen( dae::GameObject* parentGameObject, std::shar
         std::string label( 1, letter );
         auto button = std::make_shared<dae::ButtonComponent>( m_Buttons.back().get(), label, font, myCommand );
 
-        m_Buttons.back()->SetLocalTransform( { xOffset, yOffset } );
+        m_Buttons.back()->SetLocalTransform( { m_XOffset, m_YOffset } );
         m_Buttons.back()->AddComponent( button );
         allButtons.push_back( button );
 
-        xOffset += 45.0f;
+        m_XOffset += m_AddXOffset;
         columnCount++;
 
-        if ( columnCount >= maxColumns ) {
+        if ( columnCount >= m_MaxColumns ) {
             columnCount = 0;
-            xOffset = 150.0f;
-            yOffset += 45.0f;
+            m_XOffset = m_StartXOffset;
+            m_YOffset += m_AddYOffset;
         }
     }
 
