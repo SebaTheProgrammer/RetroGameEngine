@@ -49,7 +49,7 @@ void Cube::LandedOnThisCube()
 
 void Cube::ReverseOne()
 {
-	if ( m_CurrentFrame > 0 )
+	if ( m_CurrentFrame > 0 || m_CurrentFrame >=0 && m_Completed == true)
 	{
 		m_pTexture->PreviousFrame();
 		--m_CurrentFrame;
