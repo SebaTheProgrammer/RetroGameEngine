@@ -4,6 +4,8 @@
 #include <AnimatedTextureComponent.h>
 #include "SingleMovementComponent.h"
 #include "PyramidCubes.h"
+#include "CoilyStateHandeler.h"
+
 class Coily : public dae::BaseComponent, public dae::GameActor
 {
 public:
@@ -44,6 +46,7 @@ private:
 
 	const float m_FrameTime = 0.5f;
 	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureCoily;
+	std::shared_ptr <CoilyStateHandeler> m_pCoilyStateHandeler;
 
 	AnimationState m_CurrentState = AnimationState::Egg;
 

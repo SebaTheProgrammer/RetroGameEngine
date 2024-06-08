@@ -1,19 +1,17 @@
 #pragma once
 #include "BaseState.h"
-#include "Coily.h"
+#include <AnimatedTextureComponent.h>
 
 class CoilyState : public dae::BaseState
 {
 public:
-	explicit CoilyState(Coily* coily);
+	explicit CoilyState( std::shared_ptr<dae::AnimatedTextureComponent> textureCoily );
 
 	virtual void OnEnter() override {};
 	virtual void OnExit() override {};
 
 	virtual void Update() override {};
 
-	Coily* GetCoily() const { return m_pCoily; }
-
 protected:
-	Coily* m_pCoily;
+	std::shared_ptr<dae::AnimatedTextureComponent> m_pTextureCoily;
 };

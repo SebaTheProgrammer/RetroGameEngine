@@ -5,9 +5,9 @@
 class SnakeState : CoilyState
 {
 	public:
-	explicit SnakeState(Coily* coily);
+	explicit SnakeState( std::shared_ptr<dae::AnimatedTextureComponent> textureCoily );
 	virtual void OnEnter() override;
 	virtual void OnExit() override;
-	virtual void Update() override;
+	virtual void Update() override {};
 };
 

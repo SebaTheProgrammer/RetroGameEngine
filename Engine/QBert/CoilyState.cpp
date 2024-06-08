@@ -1,9 +1,9 @@
 #include "CoilyState.h"
 #include "Coily.h"
 
-CoilyState::CoilyState( Coily* coily )
+CoilyState::CoilyState( std::shared_ptr<dae::AnimatedTextureComponent> textureCoily )
 	: BaseState(),
-	m_pCoily( coily )
+	m_pTextureCoily( textureCoily )
 {
 }
 
