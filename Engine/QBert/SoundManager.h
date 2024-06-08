@@ -13,8 +13,8 @@ public:
 
 	//Player
 	void PlayQbertFall( int volume = 50) {
-		dae::ServiceLocator::GetSoundSystem().AddSound( "QbertHit", "Sounds/QbertHit.wav" );
-		dae::ServiceLocator::GetSoundSystem().Play( dae::ServiceLocator::GetSoundSystem().GetSoundId( "QbertHit" ), volume );
+		dae::ServiceLocator::GetSoundSystem().AddSound( "QBertFall", "Sounds/QBertFall.wav" );
+		dae::ServiceLocator::GetSoundSystem().Play( dae::ServiceLocator::GetSoundSystem().GetSoundId( "QBertFall" ), volume );
 	}
 	void PlayerHit( int volume = 50 ) {
 		dae::ServiceLocator::GetSoundSystem().AddSound( "QbertHit", "Sounds/QbertHit.wav" );
