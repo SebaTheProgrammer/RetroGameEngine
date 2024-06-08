@@ -29,6 +29,10 @@ public:
 	int GetControllerGameLeft() const { return GAMEPAD_DPAD_LEFT; }
 	int GetControllerGameRight() const { return GAMEPAD_DPAD_RIGHT; }
 
+	SDL_Scancode GetShortKeyMenu() const { return SDL_SCANCODE_0; }
+	SDL_Scancode GetShortSkipLevel() const { return SDL_SCANCODE_F1; }
+	SDL_Scancode MuteSound() const { return SDL_SCANCODE_M; }
+
 	//Keyboard Menu
 	SDL_Scancode GetKeyboardMenuUp() const { return SDL_SCANCODE_W; }
 	SDL_Scancode GetKeyboardMenuDown() const { return SDL_SCANCODE_S; }

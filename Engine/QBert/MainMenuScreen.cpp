@@ -54,9 +54,9 @@ MainMenuScreen::MainMenuScreen( dae::GameObject* parentGameObject, std::shared_p
 	AssignControllerInput();
 
 	auto levelswitcher = std::make_shared<dae::GameObject>( -1 );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_0, InputTypeKeyBoard::IsDownThisFrame, OpenSceneWithIndex{ levelswitcher.get(), 0 } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_F1, InputTypeKeyBoard::IsDownThisFrame, dae::OpenNextLevelCommand{ levelswitcher.get() } );
-	dae::InputManager::GetInstance().BindActionKeyBoard( SDL_SCANCODE_M, InputTypeKeyBoard::IsDownThisFrame, SoundCommand{} );
+	dae::InputManager::GetInstance().BindActionKeyBoard( InputBindsManager::GetInstance().GetShortKeyMenu(), InputTypeKeyBoard::IsDownThisFrame, OpenSceneWithIndex{levelswitcher.get(), 0});
+	dae::InputManager::GetInstance().BindActionKeyBoard( InputBindsManager::GetInstance().GetShortSkipLevel(), InputTypeKeyBoard::IsDownThisFrame, dae::OpenNextLevelCommand{levelswitcher.get()});
+	dae::InputManager::GetInstance().BindActionKeyBoard( InputBindsManager::GetInstance().MuteSound(), InputTypeKeyBoard::IsDownThisFrame, SoundCommand{});
 
 	dae::InputManager::GetInstance().BindActionKeyBoard( InputBindsManager::GetInstance().GetKeyboardMenuUp(), InputTypeKeyBoard::IsDownThisFrame, dae::PreviousButtonCommand{m_ButtonsHandeler.get() ,1});
 	dae::InputManager::GetInstance().BindActionKeyBoard( InputBindsManager::GetInstance().GetKeyboardMenuDown(), InputTypeKeyBoard::IsDownThisFrame, dae::NextButtonCommand{ m_ButtonsHandeler.get() ,1 } );
