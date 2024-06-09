@@ -40,6 +40,7 @@ public:
 	void GameOver( int score );
 	void CompletedLevel();
 	void WinGame( int score );
+	void Lost();
 	void RestartLevel();
 	void Player1Moved();
 	void Player2Moved();

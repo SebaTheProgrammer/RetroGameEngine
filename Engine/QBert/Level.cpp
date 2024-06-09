@@ -374,6 +374,12 @@ void Level::WinGame( int score )
 	}
 }
 
+void Level::Lost()
+{
+	m_Timer = 0;
+	m_CurrentState = LevelState::GameOver;
+}
+
 void Level::RestartLevel()
 {
 	m_Timer = 0;

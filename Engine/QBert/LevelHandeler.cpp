@@ -206,8 +206,7 @@ void LevelHandeler::Notify( dae::EventType event, dae::GameObject* gameObj )
 				}
 			}
 		}
-		dae::SceneManager::GetInstance().SetCurrentScene( 0 );
-		for ( auto& object : dae::SceneManager::GetInstance().GetCurrentScene()->GetObjects() )
+		for ( auto& object : dae::SceneManager::GetInstance().GetScene(0)->GetObjects() )
 		{
 			auto menu = object->GetComponent<MainMenuScreen>();
 			if ( menu )
@@ -292,7 +291,7 @@ void LevelHandeler::ResetLevel()
 	m_CompletedLevel = false;
 	m_EndTimer = 0.0f;
 	GetOwner()->GetComponent<PyramidCubes>()->ResetLevel();
-	GetOwner()->GetComponent<Level>()->RestartLevel();
+	GetOwner()->GetComponent<Level>()->Lost();
 
 	if ( m_pQbert )
 	{
